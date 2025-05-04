@@ -44,7 +44,7 @@ export default function AlertBox({
     const { icon: Icon, iconColor, bgColor, buttonColor } = iconMap[type];
 
     return (
-        <Dialog open={isOpen} onClose={onClose} className="relative z-50">
+        <Dialog open={isOpen} onClose={onClose} className="relative z-50 select-none">
             <DialogBackdrop
                 transition
                 className="fixed inset-0 bg-light-surface/70 dark:bg-dark-bg/70 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"

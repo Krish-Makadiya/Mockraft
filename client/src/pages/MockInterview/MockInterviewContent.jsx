@@ -572,7 +572,6 @@ const MockInterviewCard = ({ interview }) => {
     const { user } = useUser();
     const [isBookmarked, setIsBookmarked] = useState(interview.isBookmarked);
     const [isUpdating, setIsUpdating] = useState(false);
-
     const navigate = useNavigate();
 
     const bookmarkHandler = async () => {
@@ -615,10 +614,18 @@ const MockInterviewCard = ({ interview }) => {
         }
     };
 
+    const interviewCardHandler = () => {
+        if (interview.isCompleted) {
+            navigate(`/${user.id}/mock-interview/${interview.id}/analysis`);
+        } else {
+            navigate(`/${user.id}/mock-interview/${interview.id}`);
+        }
+    };
+
     return (
         <div
-            onClick={() => navigate(`/mock-interview/${user.id}/${interview.id}`)}
-            className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface p-4 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] ">
+            onClick={() => interviewCardHandler()}
+            className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface p-4 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer">
             <div className="flex items-start gap-4">
                 <div className="bg-light-primary/10 dark:bg-dark-primary/10 p-3 rounded-lg">
                     <Briefcase className="w-5 h-5 text-light-primary dark:text-dark-primary" />
@@ -656,18 +663,30 @@ const MockInterviewCard = ({ interview }) => {
                                 </span>
                             </div>
 
-                            <div className="flex items-center mt-3 text-xs text-light-secondary-text/50 dark:text-dark-secondary-text/50">
-                                <Clock className="w-3 h-3 mr-1" />
-                                Created{" "}
-                                {interview.createdAt?.seconds
-                                    ? new Date(
-                                          interview.createdAt.seconds * 1000
-                                      ).toLocaleDateString("en-US", {
-                                          year: "numeric",
-                                          month: "short",
-                                          day: "numeric",
-                                      })
-                                    : "recently"}
+                            <div className="flex items-center mt-3 gap-3">
+                                <div className="flex items-center text-xs text-light-secondary-text/50 dark:text-dark-secondary-text/50">
+                                    <Clock className="w-3 h-3 mr-1" />
+                                    Created{" "}
+                                    {interview.createdAt?.seconds
+                                        ? new Date(
+                                              interview.createdAt.seconds * 1000
+                                          ).toLocaleDateString("en-US", {
+                                              year: "numeric",
+                                              month: "short",
+                                              day: "numeric",
+                                          })
+                                        : "recently"}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <div className={`h-2 w-2 rounded-full ${
+                                        interview.isCompleted 
+                                            ? "bg-green-500" 
+                                            : "bg-yellow-500"
+                                    }`} />
+                                    <span className="text-xs text-light-secondary-text dark:text-dark-secondary-text">
+                                        {interview.isCompleted ? "Completed" : "In Progress"}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div className="px-5">

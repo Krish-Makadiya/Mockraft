@@ -7,6 +7,8 @@ import Homepage from "./pages/Homepage";
 import ErrorPage from "./pages/ErrorPage";
 import Dashboard from "./pages/Dashboard";
 import ChatMockInterview from "./pages/MockInterview/ChatMockInterview";
+import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 const App = () => {
     const { isLoaded } = useAuth();
@@ -27,8 +29,30 @@ const App = () => {
                         </div>
                     }
                 />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/mock-interview/:user_id/:id" element={<ChatMockInterview />} />
+                <Route 
+                    path="/dashboard" 
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/:user_id/mock-interview/:id" 
+                    element={
+                        <ProtectedRoute>
+                            <ChatMockInterview />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/:user_id/mock-interview/:id/analysis" 
+                    element={
+                        <ProtectedRoute>
+                            <GetAllQuestionInfo />
+                        </ProtectedRoute>
+                    } 
+                />
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
         </div>

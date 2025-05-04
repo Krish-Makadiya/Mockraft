@@ -1,15 +1,3 @@
-/**
- * ChatMockInterview Component
- * 
- * A comprehensive interview interface that:
- * - Loads and displays interview questions
- * - Handles user answers and analysis
- * - Manages question navigation
- * - Provides real-time AI feedback
- * - Persists interview progress
- */
-
-// Import necessary dependencies
 import { useUser } from "@clerk/clerk-react";
 import { doc, getDoc, updateDoc } from "@firebase/firestore";
 import axios from "axios";
@@ -23,6 +11,8 @@ import {
     HardHat,
     Info,
     Layers,
+    Maximize2,
+    Minimize2,
     Moon,
     Sparkles,
     Star,
@@ -31,6 +21,8 @@ import {
     Users,
     WandSparkles,
     X,
+    ChevronDown,
+    ChevronUp,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -38,299 +30,78 @@ import { useParams } from "react-router-dom";
 import Loader from "../../components/main/Loader";
 import { db } from "../../config/firebase";
 import { useTheme } from "../../context/ThemeProvider";
+import { useNavigate } from "react-router-dom";
+import { useAlert } from "../../hooks/useAlert"; // adjust path as needed
+import Drawer from "../../components/MockInterview/Drawer";
 
-/**
- * Drawer Component
- * Displays interview details and settings in a slide-out panel
- * 
- * @param {Object} interviewDetails - Contains interview configuration and metadata
- * @param {boolean} isInfoOpen - Controls drawer visibility
- * @param {Function} setIsInfoOpen - Toggle drawer state
- */
-const Drawer = ({ interviewDetails, isInfoOpen, setIsInfoOpen }) => {
-    const [isBookmarked, setIsBookmarked] = useState(
-        interviewDetails.isBookmarked
-    );
-    const [isUpdating, setIsUpdating] = useState(false);
-    const { user } = useUser();
+const ChatMockInterview = () => {
+    const { user_id, id } = useParams();
+    const navigate = useNavigate();
 
-    // if (!isInfoOpen) return null;
+    useEffect(() => {
+        const checkInterviewStatus = async () => {
+            try {
+                const interviewRef = doc(
+                    db,
+                    "users",
+                    user_id,
+                    "mock-interviews",
+                    id
+                );
+                const interviewDoc = await getDoc(interviewRef);
 
-    const bookmarkHandler = async () => {
-        if (isUpdating) return;
+                if (!interviewDoc.exists()) {
+                    toast.error("Interview not found!");
+                    navigate("/dashboard");
+                    return;
+                }
 
-        try {
-            setIsUpdating(true);
-            const interviewRef = doc(
-                db,
-                `users/${user.id}/mock-interviews`,
-                interviewDetails.id
-            );
+                const interviewData = interviewDoc.data();
 
-            await updateDoc(interviewRef, {
-                isBookmarked: !isBookmarked,
-            });
-            setIsBookmarked(!isBookmarked);
+                if (interviewData.isCompleted) {
+                    toast.success("This interview is already completed!");
+                    navigate("/dashboard");
+                    return;
+                }
+            } catch (error) {
+                console.error("Error checking interview status:", error);
+                toast.error("Failed to check interview status");
+                navigate("/dashboard");
+            }
+        };
 
-            toast.success(
-                !isBookmarked ? "Added to favorites" : "Removed from favorites"
-            );
-        } catch (error) {
-            console.error("Error updating bookmark:", error);
-            toast.error("Failed to update bookmark. Please try again.");
-
-            setIsBookmarked(isBookmarked);
-        } finally {
-            setIsUpdating(false);
+        if (user_id && id) {
+            checkInterviewStatus();
         }
-    };
+    }, [user_id, id, navigate]);
 
-    return (
-        <div
-            className={`fixed inset-0 overflow-hidden z-10 ${
-                !isInfoOpen && "pointer-events-none"
-            }`}>
-            {/* Backdrop */}
-            <div
-                className={`fixed inset-0 bg-light-secondary-text/50 dark:bg-gray-500/50 transition-opacity duration-300 ${
-                    isInfoOpen ? "opacity-100" : "opacity-0"
-                }`}
-                onClick={() => setIsInfoOpen(false)}
-            />
-
-            {/* Drawer panel */}
-            <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
-                <div
-                    className={`w-screen max-w-md transform transition-transform duration-300 ease-in-out ${
-                        isInfoOpen ? "translate-x-0" : "translate-x-full"
-                    }`}>
-                    {/* Close button */}
-                    <div
-                        className={`absolute top-0 left-0 -ml-8 pt-4 pr-2 sm:-ml-10 sm:pr-4 ${
-                            !isInfoOpen && "hidden"
-                        }`}>
-                        <button
-                            type="button"
-                            onClick={() => setIsInfoOpen(false)}
-                            className="relative rounded-md text-light-fail hover:text-light-fail-hover dark:text-dark-fail dark:hover:text-dark-fail-hover focus:outline-none">
-                            <span className="absolute -inset-2.5" />
-                            <span className="sr-only">Close panel</span>
-                            <X className="h-8 w-8" aria-hidden="true" />
-                        </button>
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex h-full flex-col overflow-y-auto bg-light-bg dark:bg-dark-bg shadow-xl">
-                        <div className="p-6">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-2xl font-bold text-light-primary-text dark:text-dark-primary-text">
-                                    {interviewDetails.interviewName}
-                                </h2>
-
-                                <Star
-                                    onClick={bookmarkHandler}
-                                    size={25}
-                                    className={`text-yellow-500 dark:text-yellow-400 cursor-pointer transition-all duration-200 ${
-                                        isUpdating
-                                            ? "opacity-50"
-                                            : "hover:scale-110"
-                                    } ${
-                                        isBookmarked &&
-                                        "fill-yellow-500 dark:fill-yellow-400 opacity-100"
-                                    }`}
-                                />
-                            </div>
-
-                            <div className="mt-8 space-y-6">
-                                {/* Basic Information */}
-                                <div className="space-y-4">
-                                    <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text flex items-center">
-                                        <Briefcase className="h-5 w-5 mr-2 text-light-primary dark:text-dark-primary" />
-                                        Position Details
-                                    </h3>
-                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                        <div>
-                                            <p className="text-sm font-medium text-light-secondary-text dark:text-dark-primary-text/80">
-                                                Experience Level
-                                            </p>
-                                            <p className="mt-1 text-sm  capitalize">
-                                                {interviewDetails.experienceLevel.toLowerCase()}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-medium text-light-secondary-text dark:text-dark-primary-text/80">
-                                                Primary Language
-                                            </p>
-                                            <p className="mt-1 text-sm  capitalize">
-                                                {
-                                                    interviewDetails.programmingLanguage
-                                                }
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-medium text-light-secondary-text dark:text-dark-primary-text/80">
-                                                Technology Stack
-                                            </p>
-                                            <p className="mt-1 text-sm capitalize">
-                                                {
-                                                    interviewDetails.technologyStack
-                                                }
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-medium text-light-secondary-text dark:text-dark-primary-text/80">
-                                                Created On
-                                            </p>
-                                            <p className="mt-1 text-sm">
-                                                {interviewDetails.createdAt
-                                                    ?.seconds
-                                                    ? new Date(
-                                                          interviewDetails
-                                                              .createdAt
-                                                              .seconds * 1000
-                                                      ).toLocaleDateString(
-                                                          "en-US",
-                                                          {
-                                                              year: "numeric",
-                                                              month: "short",
-                                                              day: "numeric",
-                                                          }
-                                                      )
-                                                    : "recently"}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="border-t border-light-surface dark:border-dark-surface my-6" />
-
-                                {/* Job Description */}
-                                <div>
-                                    <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text flex items-center">
-                                        <Gauge className="h-5 w-5 mr-2 text-green-500" />
-                                        Job Description
-                                    </h3>
-                                    <p className="mt-2 text-sm text-light-secondary-text dark:text-dark-secondary-text/80  whitespace-pre-line">
-                                        {interviewDetails.jobDescription}
-                                    </p>
-                                </div>
-
-                                <div className="border-t border-light-surface dark:border-dark-surface my-6" />
-
-                                {/* Notifications */}
-                                <div>
-                                    <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text flex items-center">
-                                        <Layers className="h-5 w-5 mr-2 text-purple-500" />
-                                        Notification Settings
-                                    </h3>
-                                    <div className="mt-4 space-y-3">
-                                        <NotificationItem
-                                            icon={<User className="h-4 w-4" />}
-                                            label="Candidates"
-                                            enabled={
-                                                interviewDetails.notifications
-                                                    ?.candidates
-                                            }
-                                        />
-                                        <NotificationItem
-                                            icon={<Code className="h-4 w-4" />}
-                                            label="Comments"
-                                            enabled={
-                                                interviewDetails.notifications
-                                                    ?.comments
-                                            }
-                                        />
-                                        <NotificationItem
-                                            icon={
-                                                <Calendar className="h-4 w-4" />
-                                            }
-                                            label="Offers"
-                                            enabled={
-                                                interviewDetails.notifications
-                                                    ?.offers
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+    return <MockInterviewTest user_id={user_id} id={id} />;
 };
 
-/**
- * NotificationItem Component
- * Renders individual notification settings with icons and status
- * 
- * @param {ReactNode} icon - Icon component to display
- * @param {string} label - Notification category name
- * @param {boolean} enabled - Current notification state
- */
-const NotificationItem = ({ icon, label, enabled }) => (
-    <div className="flex items-center">
-        <span
-            className={`h-4 w-4 mr-2 ${
-                enabled
-                    ? "text-light-success dark:text-dark-success"
-                    : "text-light-secondary-text dark:text-dark-secondary-text"
-            }`}>
-            {icon}
-        </span>
-        <span className="text-sm font-medium text-light-primary-text dark:text-dark-primary-text/80">
-            {label}
-        </span>
-        <span className="ml-auto text-sm text-light-secondary-text dark:text-dark-secondary-text/80">
-            {enabled ? "Enabled" : "Disabled"}
-        </span>
-    </div>
-);
-
-/**
- * Main ChatMockInterview Component
- * Manages the entire interview process including:
- * - Question generation and management
- * - Answer analysis
- * - Progress tracking
- * - State persistence
- */
-const ChatMockInterview = () => {
-    // State Management
-    const { user_id, id } = useParams();
-    
-    /**
-     * Core States:
-     * - currentQuestionIndex: Tracks current question position
-     * - answer: Current user's answer
-     * - analysis: AI-generated analysis of current answer
-     * - questions: Array of all interview questions
-     * - analyzedAnswers: Map of analyzed questions and their results
-     */
+const MockInterviewTest = ({ user_id, id }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answer, setAnswer] = useState("");
     const [interviewDetails, setInterviewDetails] = useState(null);
     const [analysis, setAnalysis] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isAnalysing, setIsAnalysing] = useState(false);
-    const { theme, setTheme } = useTheme();
     const [isInfoOpen, setIsInfoOpen] = useState(true);
     const [questions, setQuestions] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState(null);
     const [analyzedAnswers, setAnalyzedAnswers] = useState({});
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
-    /**
-     * Effect Hooks:
-     * 1. Initial data fetch
-     * 2. Question generation when interview details load
-     * 3. Current question updates
-     * 4. Analysis state restoration
-     */
+    const { showAlert, AlertComponent } = useAlert();
+    const { theme, setTheme } = useTheme();
+    const navigate = useNavigate();
+
     useEffect(() => {
+        if (!user_id || !id) {
+            toast.error("Invalid interview URL");
+            return;
+        }
         fetchMockInterviewDetails();
-    }, []);
+    }, [user_id, id]);
 
     useEffect(() => {
         if (interviewDetails) {
@@ -347,28 +118,73 @@ const ChatMockInterview = () => {
     useEffect(() => {
         if (interviewDetails?.questions) {
             const analyzed = {};
+
             interviewDetails.questions.forEach((question, index) => {
                 if (question.isAnalyzed) {
+                    // Reconstruct analysis object from stored data
+                    const analysisData = {
+                        evaluation: {
+                            score: question.analysis.score,
+                            feedback: {
+                                improvements: question.analysis.improvements,
+                                strengths: question.analysis.strengths,
+                                suggestions: question.analysis.suggestions,
+                            },
+                        },
+                        generated_ideal_keywords: question.analysis.keywords,
+                    };
+
                     analyzed[index] = {
                         answer: question.answer,
-                        analysis: question.analysis,
+                        analysis: analysisData,
                     };
                 }
             });
+
             setAnalyzedAnswers(analyzed);
 
-            // Set initial question's answer and analysis if available
-            if (analyzed[0]) {
-                setAnswer(analyzed[0].answer);
-                setAnalysis(analyzed[0].analysis);
+            // Set initial question's data if it exists
+            if (analyzed[currentQuestionIndex]) {
+                const currentAnalyzed = analyzed[currentQuestionIndex];
+                setAnswer(currentAnalyzed.answer);
+                setAnalysis(currentAnalyzed.analysis);
+            } else {
+                // Reset states if question hasn't been analyzed
+                setAnswer("");
+                setAnalysis(null);
             }
         }
-    }, [interviewDetails]);
+    }, [interviewDetails, currentQuestionIndex]);
 
-    /**
-     * Fetches interview details from Firebase
-     * Initializes the interview session with metadata
-     */
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
+        return () =>
+            document.removeEventListener(
+                "fullscreenchange",
+                handleFullscreenChange
+            );
+    }, []);
+
+    useEffect(() => {
+        // Show the rule only once when interview starts
+        if (currentQuestionIndex === 0) {
+            showAlert({
+                title: "Important Analysis Rule",
+                message:
+                    "You can only analyze each answer ONCE. Make sure your answers are complete before analysis as this action cannot be undone.",
+                type: "info",
+                onConfirm: () => {},
+                onCancel: () => {},
+                confirmText: "I Understand",
+                cancelText: "Don't Show Again",
+            });
+        }
+    }, []);
+
     const fetchMockInterviewDetails = async () => {
         if (!user_id || !id) {
             console.error("Missing userId or interviewId");
@@ -404,12 +220,6 @@ const ChatMockInterview = () => {
         }
     };
 
-    /**
-     * Persists generated questions to Firebase
-     * Updates interview completion status
-     * 
-     * @param {Array} questions - Array of generated interview questions
-     */
     const addQuestionsToUser = async (questions) => {
         console.log(questions);
         try {
@@ -431,12 +241,13 @@ const ChatMockInterview = () => {
             // Update the document with questions
             await updateDoc(interviewRef, {
                 questions: questions,
-                isComplete: true,
                 updatedAt: new Date(),
             });
 
-            console.log("Questions added successfully");
-            toast.success("Questions generated successfully");
+            if (!interviewDetails.questions) {
+                console.log("Questions added successfully");
+                toast.success("Questions generated successfully");
+            }
         } catch (error) {
             console.error("Error updating interview:", error);
             toast.error("Failed to save questions");
@@ -444,21 +255,21 @@ const ChatMockInterview = () => {
         }
     };
 
-    /**
-     * Generates interview questions using AI
-     * Questions are based on job requirements and experience level
-     * 
-     * @param {Object} interview - Interview configuration details
-     */
     const generateQuestions = async (interview) => {
-        if (interview.isComplete) {
+        if (interview.questions) {
             setQuestions(interview.questions);
             addQuestionsToUser(interview.questions);
             setCurrentQuestion(interview.questions[0]);
+            if (!document.fullscreenElement) {
+                toggleFullscreen();
+            }
             return;
         }
 
         try {
+            if (!document.fullscreenElement) {
+                toggleFullscreen();
+            }
             const prompt = `Act as a senior technical interviewer. Generate exactly 10 interview    questions based on these parameters:
 
 - Primary Language: ${interview.programmingLanguage}
@@ -521,12 +332,6 @@ Example of the exact output format you must use:
         }
     };
 
-    /**
-     * Saves answer analysis to Firebase and local state
-     * Updates question status and analysis results
-     * 
-     * @param {Object} analysis - AI-generated analysis results
-     */
     const addAnalyzeQuestions = async (analysis) => {
         try {
             const interviewRef = doc(
@@ -581,10 +386,10 @@ Example of the exact output format you must use:
         }
     };
 
-    /**
-     * Handles answer analysis using AI
-     * Processes the current answer and updates analysis state
-     */
+    const onHandlePermission = () => {
+        handleAnalyze();
+    };
+
     const handleAnalyze = async () => {
         try {
             setIsAnalysing(true);
@@ -648,17 +453,33 @@ Example of the exact output format you must use:
         }
     };
 
-    /**
-     * Navigation Handlers:
-     * Manage question transitions and state updates
-     */
     const nextQuestion = () => {
+        if (answer && !analyzedAnswers[currentQuestionIndex]) {
+            showAlert({
+                title: "Analyze Answer First?",
+                message:
+                    "Moving forward without analysis will permanently lose your answer and feedback opportunity.",
+                type: "warning",
+                onConfirm: () => {
+                    moveToNextQuestion();
+                },
+                confirmText: "Skip Analysis (Data will be lost)",
+                cancelText: "Stay & Analyze",
+            });
+        } else {
+            moveToNextQuestion();
+        }
+    };
+
+    const moveToNextQuestion = () => {
         if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
-            const nextAnalyzed = analyzedAnswers[currentQuestionIndex + 1];
-            if (nextAnalyzed) {
-                setAnswer(nextAnalyzed.answer);
-                setAnalysis(nextAnalyzed.analysis);
+            const nextIndex = currentQuestionIndex + 1;
+            setCurrentQuestionIndex(nextIndex);
+
+            // Set answer and analysis from analyzedAnswers if available
+            if (analyzedAnswers[nextIndex]) {
+                setAnswer(analyzedAnswers[nextIndex].answer);
+                setAnalysis(analyzedAnswers[nextIndex].analysis);
             } else {
                 setAnswer("");
                 setAnalysis(null);
@@ -668,11 +489,13 @@ Example of the exact output format you must use:
 
     const prevQuestion = () => {
         if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex(currentQuestionIndex - 1);
-            const prevAnalyzed = analyzedAnswers[currentQuestionIndex - 1];
-            if (prevAnalyzed) {
-                setAnswer(prevAnalyzed.answer);
-                setAnalysis(prevAnalyzed.analysis);
+            const prevIndex = currentQuestionIndex - 1;
+            setCurrentQuestionIndex(prevIndex);
+
+            // Set answer and analysis from analyzedAnswers if available
+            if (analyzedAnswers[prevIndex]) {
+                setAnswer(analyzedAnswers[prevIndex].answer);
+                setAnalysis(analyzedAnswers[prevIndex].analysis);
             } else {
                 setAnswer("");
                 setAnalysis(null);
@@ -680,10 +503,6 @@ Example of the exact output format you must use:
         }
     };
 
-    /**
-     * UI Helper Functions:
-     * Generate consistent UI elements
-     */
     const getDifficultyStars = (difficulty) => {
         return (
             <div className="flex items-center gap-0.5">
@@ -719,13 +538,75 @@ Example of the exact output format you must use:
         setIsInfoOpen(!isInfoOpen);
     };
 
-    // Main render
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+            setIsFullscreen(true);
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+                setIsFullscreen(false);
+            }
+        }
+    };
+
+    const interviewSubmitHandler = () => {
+        const unanalyzedCount = questions.filter(
+            (q, idx) => !analyzedAnswers[idx]
+        ).length;
+        console.log(unanalyzedCount);
+
+        showAlert({
+            title: "Submit Interview?",
+            message: `
+            ${
+                unanalyzedCount > 0
+                    ? `You have ${unanalyzedCount} unanalyzed answer${
+                          unanalyzedCount > 1 ? "s" : ""
+                      }. 
+                   Submitting now will permanently lose this data and analysis won't be possible later.`
+                    : "Are you sure you want to submit this interview? You won't be able to modify your answers after submission."
+            }
+        `,
+            type: "warning",
+            onConfirm: async () => {
+                try {
+                    const interviewRef = doc(
+                        db,
+                        "users",
+                        user_id,
+                        "mock-interviews",
+                        id
+                    );
+
+                    // Update interview status in Firebase
+                    await updateDoc(interviewRef, {
+                        isCompleted: true,
+                        completedAt: new Date(),
+                        totalQuestions: questions.length,
+                        analyzedQuestions: Object.keys(analyzedAnswers).length,
+                    });
+
+                    toast.success("Interview submitted successfully!");
+                    document.exitFullscreen();
+                    setIsFullscreen(false);
+                    navigate(`/dashboard`);
+                } catch (error) {
+                    console.error("Error submitting interview:", error);
+                    toast.error("Failed to submit interview");
+                }
+            },
+            confirmText: "Submit Interview",
+            cancelText: "Continue Interview",
+        });
+    };
+
     if (isLoading || !currentQuestion) {
         return <Loader />;
     }
 
     return (
-        <div className="flex h-screen bg-light-surface dark:bg-dark-surface">
+        <div className="flex h-screen select-none bg-light-surface dark:bg-dark-surface">
             {/* Main Content */}
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Question area */}
@@ -748,21 +629,30 @@ Example of the exact output format you must use:
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    {
-                                        <Info
-                                            onClick={toggleDrawerHandler}
-                                            className="h-6 w-6"
-                                        />
-                                    }
+                                    {/* Add this button */}
+                                    <button
+                                        onClick={toggleFullscreen}
+                                        className="text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary">
+                                        {isFullscreen ? (
+                                            <Minimize2 className="h-6 w-6" />
+                                        ) : (
+                                            <Maximize2 className="h-6 w-6" />
+                                        )}
+                                    </button>
+
+                                    <Info
+                                        onClick={toggleDrawerHandler}
+                                        className="h-6 w-6  hover:text-light-primary dark:hover:text-dark-primary"
+                                    />
                                     {theme ? (
                                         <Sun
                                             onClick={() => setTheme(!theme)}
-                                            className="h-6 w-6 text-light-primary-text dark:text-dark-primary-text"
+                                            className="h-6 w-6 text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary"
                                         />
                                     ) : (
                                         <Moon
                                             onClick={() => setTheme(!theme)}
-                                            className="h-6 w-6 text-light-primary-text dark:text-dark-primary-text"
+                                            className="h-6 w-6 text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary"
                                         />
                                     )}
                                 </div>
@@ -770,9 +660,14 @@ Example of the exact output format you must use:
                         </div>
 
                         {/* Question text */}
-                        <h2 className="text-xl font-medium mb-6">
-                            {currentQuestion.text}
-                        </h2>
+                        <div className="flex flex-col gap-1 mb-6 text-sm">
+                            <h2 className="text-xl font-medium">
+                                {currentQuestion.text}
+                            </h2>
+                            <p className="text-light-secondary dark:text-dark-secondary">
+                                -{currentQuestion.rationale}
+                            </p>
+                        </div>
 
                         {/* Answer textarea */}
                         <div className="mb-6 relative">
@@ -803,17 +698,23 @@ Example of the exact output format you must use:
                         {/* Analyze button */}
                         <div className="flex justify-end mb-8">
                             <button
-                                onClick={handleAnalyze}
-                                disabled={!answer || isAnalysing}
+                                onClick={onHandlePermission}
+                                disabled={
+                                    !answer ||
+                                    isAnalysing ||
+                                    analyzedAnswers[currentQuestionIndex]
+                                }
                                 className={`px-4 py-2 rounded-md flex items-center gap-2 ${
-                                    !answer || isAnalysing
+                                    !answer ||
+                                    isAnalysing ||
+                                    analyzedAnswers[currentQuestionIndex]
                                         ? "bg-light-bg dark:bg-dark-bg/50 cursor-not-allowed"
                                         : "bg-light-primary hover:bg-light-primary-hover dark:bg-dark-primary dark:hover:bg-dark-primary-hover text-white"
                                 }`}>
                                 {isAnalysing ? (
                                     <>
                                         <svg
-                                            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                                            className="animate-spin -ml-1 mr-1 h-4 w-4 text-light-primary dark:text-dark-primary"
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="none"
                                             viewBox="0 0 24 24">
@@ -830,6 +731,11 @@ Example of the exact output format you must use:
                                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
                                         Analyzing...
+                                    </>
+                                ) : analyzedAnswers[currentQuestionIndex] ? (
+                                    <>
+                                        <Sparkles className="w-4 h-4" />
+                                        Already Analyzed
                                     </>
                                 ) : (
                                     <>
@@ -857,6 +763,22 @@ Example of the exact output format you must use:
                                     </div>
                                     <div>
                                         <span className="text-sm text-light-primary dark:text-dark-primary">
+                                            Important Keywords:{" "}
+                                        </span>
+                                        <div className="flex flex-wrap gap-2 mt-1">
+                                            {analysis.generated_ideal_keywords.map(
+                                                (keyword) => (
+                                                    <span
+                                                        key={keyword}
+                                                        className="px-3 py-2 bg-light-surface dark:bg-dark-surface text-dark-primary text-xs rounded-md">
+                                                        {keyword}
+                                                    </span>
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span className="text-sm text-light-primary dark:text-dark-primary">
                                             Improvements:{" "}
                                         </span>
                                         <p className="text-light-primary-text dark:text-dark-primary-text/60">
@@ -868,7 +790,7 @@ Example of the exact output format you must use:
                                     </div>
                                     <div>
                                         <span className="text-sm text-light-primary dark:text-dark-primary">
-                                            Strength:{" "}
+                                            Strengths:{" "}
                                         </span>
                                         <p className="text-light-primary-text dark:text-dark-primary-text/60">
                                             {
@@ -888,22 +810,6 @@ Example of the exact output format you must use:
                                             }
                                         </p>
                                     </div>
-                                    <div>
-                                        <span className="text-sm text-light-primary dark:text-dark-primary">
-                                            Important Keywords:{" "}
-                                        </span>
-                                        <div className="flex flex-wrap gap-2 mt-1">
-                                            {analysis.generated_ideal_keywords.map(
-                                                (keyword) => (
-                                                    <span
-                                                        key={keyword}
-                                                        className="px-3 py-2 bg-surface-surface dark:bg-dark-surface text-dark-primary text-xs rounded-md">
-                                                        {keyword}
-                                                    </span>
-                                                )
-                                            )}
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         )}
@@ -921,21 +827,33 @@ Example of the exact output format you must use:
                                 <ChevronRight className="w-4 h-4 transform rotate-180" />
                                 Previous
                             </button>
-                            <button
-                                onClick={nextQuestion}
-                                disabled={
-                                    currentQuestionIndex ===
-                                    questions.length - 1
-                                }
-                                className={`px-4 py-2 rounded-md flex items-center gap-2 ${
-                                    currentQuestionIndex ===
-                                    questions.length - 1
-                                        ? "text-light-secondary-text dark:text-dark-secondary-text cursor-not-allowed"
-                                        : "text-light-secondary-text dark:text-dark-secondary-text hover:bg-light-primary dark:hover:bg-dark-primary  hover:text-dark-primary-text"
-                                }`}>
-                                Next
-                                <ChevronRight className="w-4 h-4" />
-                            </button>
+
+                            {currentQuestionIndex === questions.length - 1 ? (
+                                <button
+                                    onClick={interviewSubmitHandler}
+                                    className={
+                                        "px-4 py-2 rounded-md flex items-center gap-2 text-light-secondary-text dark:text-dark-secondary-text hover:bg-light-primary dark:hover:bg-dark-primary  hover:text-dark-primary-text"
+                                    }>
+                                    Submit
+                                    <ChevronRight className="w-4 h-4" />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={nextQuestion}
+                                    disabled={
+                                        currentQuestionIndex ===
+                                        questions.length - 1
+                                    }
+                                    className={`px-4 py-2 rounded-md flex items-center gap-2 ${
+                                        currentQuestionIndex ===
+                                        questions.length - 1
+                                            ? "text-light-secondary-text dark:text-dark-secondary-text cursor-not-allowed"
+                                            : "text-light-secondary-text dark:text-dark-secondary-text hover:bg-light-primary dark:hover:bg-dark-primary  hover:text-dark-primary-text"
+                                    }`}>
+                                    Next
+                                    <ChevronRight className="w-4 h-4" />
+                                </button>
+                            )}
                         </div>
                     </div>
                 </main>
@@ -968,6 +886,7 @@ Example of the exact output format you must use:
                 isInfoOpen={isInfoOpen}
                 setIsInfoOpen={setIsInfoOpen}
             />
+            <AlertComponent />
         </div>
     );
 };

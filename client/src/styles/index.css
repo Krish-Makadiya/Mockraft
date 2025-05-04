@@ -27,5 +27,13 @@
     --color-dark-secondary-hover: #b794ff;
     --color-dark-fail-hover: #ff5555;
     --color-dark-success-hover: #4ade80;
+}
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
 }
