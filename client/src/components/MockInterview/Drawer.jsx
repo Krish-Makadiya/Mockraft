@@ -83,7 +83,7 @@ const Drawer = ({ interviewDetails, isInfoOpen, setIsInfoOpen }) => {
                     <div className="flex h-full flex-col overflow-y-auto bg-light-bg dark:bg-dark-bg shadow-xl">
                         <div className="p-6">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-2xl font-bold text-light-primary-text dark:text-dark-primary-text">
+                                <h2 className="text-2xl font-bold text-light-primary-text dark:text-dark-primary-text pr-8">
                                     {interviewDetails.interviewName}
                                 </h2>
 

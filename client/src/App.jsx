@@ -29,29 +29,29 @@ const App = () => {
                         </div>
                     }
                 />
-                <Route 
-                    path="/dashboard" 
+                <Route
+                    path="/dashboard"
                     element={
                         <ProtectedRoute>
                             <Dashboard />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path="/:user_id/mock-interview/:id" 
+                <Route
+                    path="/:user_id/mock-interview/:id"
                     element={
                         <ProtectedRoute>
                             <ChatMockInterview />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path="/:user_id/mock-interview/:id/analysis" 
+                <Route
+                    path="/:user_id/mock-interview/:id/analysis"
                     element={
                         <ProtectedRoute>
                             <GetAllQuestionInfo />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
                 <Route path="*" element={<ErrorPage />} />
             </Routes>

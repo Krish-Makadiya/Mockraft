@@ -37,3 +37,31 @@
 .animate-fadeIn {
     animation: fadeIn 0.3s ease-out;
 }
+
+@layer components {
+    .filter-group {
+        @apply flex flex-col w-full lg:w-auto;
+    }
+
+    .filter-select {
+        @apply px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface 
+        border border-gray-200 dark:border-gray-700
+        text-light-primary-text dark:text-dark-primary-text
+        hover:border-light-primary dark:hover:border-dark-primary
+        focus:outline-none focus:ring-1 focus:ring-light-primary dark:focus:ring-dark-primary
+        transition-colors duration-200 cursor-pointer
+        appearance-none bg-no-repeat
+        bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%3E%3Cpath%20d%3D%22m3%205%203%203%203-3%22%2F%3E%3C%2Fsvg%3E')]
+        pr-8;
+    }
+}
+
+@keyframes pulse {
+    50% {
+        opacity: .8;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
