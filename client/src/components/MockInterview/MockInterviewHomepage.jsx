@@ -12,6 +12,7 @@ import {
     Briefcase,
     Clock,
     Code,
+    FilePlus2,
     FileUser,
     Filter,
     Layers,
@@ -510,17 +511,16 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary px-6 py-3 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 sm:px-8"
+                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary px-4 py-3 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                     aria-label="Create new mock interview">
-                    
                     <span className="absolute inset-0 bg-gradient-to-r from-light-secondary to-light-primary dark:from-dark-secondary dark:to-dark-primary  opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"></span>
 
-                    <SquarePlus
-                        className="relative h-5 w-5 text-white transition-transform duration-200 
-                                                ease-out group-hover:scale-110"
+                    <FilePlus2
+                        className="relative h-6 w-6 text-white transition-transform duration-200 
+                                                ease-out group-hover:scale-[1.02]"
                     />
 
-                    <span className="relative hidden text-sm font-medium text-white sm:inline-block">
+                    <span className="relative hidden font-medium text-white sm:inline-block">
                         New Interview
                     </span>
                 </button>
