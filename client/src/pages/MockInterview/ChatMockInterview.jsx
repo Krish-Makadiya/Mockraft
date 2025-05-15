@@ -1,38 +1,27 @@
-import { useUser } from "@clerk/clerk-react";
 import { doc, getDoc, updateDoc } from "@firebase/firestore";
 import axios from "axios";
 import {
-    Briefcase,
-    Calendar,
     ChevronRight,
-    Code,
     Code2,
-    Gauge,
     HardHat,
     Info,
-    Layers,
     Maximize2,
     Minimize2,
     Moon,
     Sparkles,
     Star,
     Sun,
-    User,
     Users,
-    WandSparkles,
-    X,
-    ChevronDown,
-    ChevronUp,
+    WandSparkles
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/main/Loader";
+import Drawer from "../../components/MockInterview/Drawer";
 import { db } from "../../config/firebase";
 import { useTheme } from "../../context/ThemeProvider";
-import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../hooks/useAlert"; // adjust path as needed
-import Drawer from "../../components/MockInterview/Drawer";
 
 const ChatMockInterview = () => {
     const { user_id, id } = useParams();
@@ -270,41 +259,32 @@ const MockInterviewTest = ({ user_id, id }) => {
             if (!document.fullscreenElement) {
                 toggleFullscreen();
             }
-            const prompt = `Act as a senior technical interviewer. Generate exactly 10 interview    questions based on these parameters:
+            const prompt = `Act as a senior technical interviewer. Conduct a professional interview using the following parameters:
+-Primary Language: ${interview.programmingLanguage}
+-Tech Stack: ${interview.technologyStack}
+-Job Description: ${interview.jobDescription}
+-Experience Level: ${interview.experienceLevel}
 
-- Primary Language: ${interview.programmingLanguage}
-- Tech Stack: ${interview.technologyStack}
-- Job Description: ${interview.jobDescription}
-- Experience Level: ${interview.experienceLevel}
+Output Requirements:
+-Return ONLY a valid JSON object — no additional commentary, explanation, or text.
+-Structure the interview as a realistic sequence of 8 questions in the following proportions:
+-40% technical questions (specific to language/framework/tools)
+-30% system design or applied scenario-based questions (avoid any "draw a diagram" or visual design questions; ask only those that can be answered in text)
+-20% behavioral questions (STAR format: Situation, Task, Action, Result)
+-10% curveball or creative thinking questions
 
-Structure the output as valid JSON with:
-- 40% technical questions (language/framework specific)
-- 30% system design/scenario questions
-- 20% behavioral questions (STAR format)
-- 10% curveball/creative thinking questions
+Each question must include:
+-"type" (one of: "technical", "system design", "behavioral", "curveball")
+-"text" (the interview question)
+-"difficulty" (integer from 1 to 5, increasing in order through the interview)
+-"ideal_answer_keywords" (array of keywords expected in a good answer)
+-"rationale" (why the question is being asked)
 
-Format requirements:
-1. Return ONLY the JSON output with no additional text or explanation
-2. Questions should progress from easy to hard
-3. Each question must include:
-   - "type" (technical/system design/behavioral/curveball)
-   - "text" (the question itself)
-   - "difficulty" (1-5)
-   - "ideal_answer_keywords" (array of strings)
-   - "rationale" (why this question was chosen)
-
-Example of the exact output format you must use:
-{
-  "questions": [
-    {
-      "type": "technical",
-      "text": "Explain React's component lifecycle methods",
-      "difficulty": 3,
-      "ideal_answer_keywords": ["mounting", "updating", "unmounting", "useEffect equivalents"],
-      "rationale": "This question tests core React knowledge essential for a mid-level frontend developer."
-    }
-  ]
-            }`;
+Additional Guidelines:
+-Begin the sequence with a professional and conversational opener like “Tell me about yourself, your background, and what led you to apply for this role.”
+-Avoid any questions that require drawing, whiteboarding, or designing interfaces/architectures visually. Only include questions that can be answered in text form.
+-Ensure question difficulty increases from easy (1) to hard (5) across the 8 questions.
+-Make the overall tone and content suitable for a real senior technical interview.`;
 
             const res = await axios.get(
                 "http://localhost:4000/ai/generate-questions",

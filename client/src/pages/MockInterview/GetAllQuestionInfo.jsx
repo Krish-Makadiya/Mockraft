@@ -1,29 +1,26 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../config/firebase";
-import { toast } from "react-hot-toast";
-import axios from "axios";
+import { doc, getDoc } from "firebase/firestore";
 import {
-    Star,
-    ChevronUp,
     ChevronDown,
-    WandSparkles,
-    Info,
-    Sun,
-    Moon,
+    ChevronUp,
     CircleArrowLeft,
+    Info,
+    Moon,
+    Star,
+    Sun
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/main/Loader";
-import { useTheme } from "../../context/ThemeProvider";
 import Drawer from "../../components/MockInterview/Drawer";
+import { db } from "../../config/firebase";
+import { useTheme } from "../../context/ThemeProvider";
 import { useAlert } from "../../hooks/useAlert";
 
 const GetAllQuestionInfo = () => {
     const [interviewDetails, setInterviewDetails] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [expandedQuestions, setExpandedQuestions] = useState({});
-    const [analyzingQuestions, setAnalyzingQuestions] = useState({});
     const [isInfoOpen, setIsInfoOpen] = useState(true);
     const { theme, setTheme } = useTheme();
     const { showAlert, AlertComponent } = useAlert();
@@ -99,115 +96,6 @@ const GetAllQuestionInfo = () => {
     const calculateQuestionPoints = (difficulty, score) => {
         const basePoints = difficulty * 20; // Max points possible based on difficulty
         return Math.round((score / 100) * basePoints);
-    };
-
-    const handleAnalyzeQuestion = async (question, index) => {
-        try {
-            setAnalyzingQuestions((prev) => ({
-                ...prev,
-                [index]: true,
-            }));
-
-            const prompt = `"Analyze this interview Q&A pair and generate both ideal keywords and evaluation in one response. Return strictly in this JSON format:",
-    "response_schema": {
-            "analysis": {
-                "generated_ideal_keywords": {
-                "description": "Extract 3-5 most important technical concepts this question should cover",
-                "type": "string[]"
-            },
-            "evaluation": {
-                "score": {
-                    "description": "0-100 scale (50=minimum, 70=good, 100=expert)",
-                    "type": "integer"
-                },
-                "feedback": {
-                    "strengths": "string",
-                    "improvements": "string",
-                    "suggestions": "string"
-                },
-                "keyword_analysis": {
-                    "matched_count": "integer",
-                    "missing_keywords": "string[]"
-                }
-            }
-        }
-    },
-  "processing_steps": [
-    "1. First extract core concepts to create ideal_keywords",
-    "2. Then evaluate answer against these generated keywords",
-    "3. Finally provide comprehensive feedback"
-  ],
-  "input": {
-    "question": ${question.text},
-    "candidate_answer": ${question.answer}
-  }
-            }`;
-
-            const res = await axios.get(
-                "http://localhost:4000/ai/generate-questions",
-                {
-                    params: { prompt },
-                }
-            );
-
-            const response = res.data;
-            const jsonString = response.replace(/```json\n|```/g, "").trim();
-            const data = JSON.parse(jsonString);
-
-            if (data?.analysis) {
-                // Update Firebase
-                const interviewRef = doc(
-                    db,
-                    "users",
-                    user_id,
-                    "mock-interviews",
-                    id
-                );
-                const currentQuestions = [...interviewDetails.questions];
-
-                currentQuestions[index] = {
-                    ...currentQuestions[index],
-                    isAnalyzed: true,
-                    analysis: {
-                        score: data.analysis.evaluation.score,
-                        improvements:
-                            data.analysis.evaluation.feedback.improvements,
-                        strengths: data.analysis.evaluation.feedback.strengths,
-                        suggestions:
-                            data.analysis.evaluation.feedback.suggestions,
-                        keywords: data.analysis.generated_ideal_keywords,
-                    },
-                };
-
-                await updateDoc(interviewRef, {
-                    questions: currentQuestions,
-                    updatedAt: new Date(),
-                });
-
-                // Update local state
-                setInterviewDetails((prev) => ({
-                    ...prev,
-                    questions: currentQuestions,
-                }));
-
-                toast.success("Analysis completed successfully");
-            }
-        } catch (error) {
-            console.error("Analysis error:", error);
-            toast.error("Failed to analyze answer");
-        } finally {
-            setAnalyzingQuestions((prev) => ({
-                ...prev,
-                [index]: false,
-            }));
-        }
-    };
-
-    const areAllQuestionsAnalyzed = () => {
-        if (!interviewDetails?.questions) return false;
-        return interviewDetails.questions.every(
-            (question) => question.isAnalyzed
-        );
     };
 
     if (isLoading) return <Loader />;
@@ -301,14 +189,12 @@ const GetAllQuestionInfo = () => {
                         <div className="flex items-center gap-2">
                             <div
                                 className={`h-2 w-2 rounded-full ${
-                                    interviewDetails.isCompleted &&
-                                    areAllQuestionsAnalyzed()
+                                    interviewDetails.isCompleted
                                         ? "bg-green-500"
                                         : "bg-yellow-500"
                                 }`}></div>
                             <div className="text-light-primary-text dark:text-dark-primary-text">
-                                {interviewDetails.isCompleted &&
-                                areAllQuestionsAnalyzed()
+                                {interviewDetails.isCompleted
                                     ? "Completed"
                                     : "In Progress"}
                             </div>

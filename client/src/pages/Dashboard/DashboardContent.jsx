@@ -1,4 +1,4 @@
-import { Info, ChevronDown } from "lucide-react";
+import { ChevronDown, Info } from "lucide-react";
 import React from "react";
 
 const DashboardContent = () => {

@@ -1,5 +1,5 @@
 import { UserButton, useUser } from "@clerk/clerk-react";
-import { LayoutDashboard, UserRoundSearch, Moon, Sun } from "lucide-react";
+import { LayoutDashboard, Moon, Sun, UserRoundSearch } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeProvider";

@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import ChatMockInterview from "./pages/MockInterview/ChatMockInterview";
 import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import MockInterviewContent from "./pages/MockInterview/MockInterviewContent";
 
 const App = () => {
     const { isLoaded } = useAuth();
@@ -34,6 +35,14 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/mock-interview"
+                    element={
+                        <ProtectedRoute>
+                            <MockInterviewContent />
                         </ProtectedRoute>
                     }
                 />
