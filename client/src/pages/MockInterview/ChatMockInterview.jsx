@@ -294,17 +294,19 @@ Additional Guidelines:
             );
 
             const response = res.data;
+            console.log(response);
             const jsonString = response
                 .replace(/```json/g, "")
                 .replace(/```/g, "")
                 .trim();
             const data = JSON.parse(jsonString);
+            console.log(data);
 
-            if (data && data.questions) {
-                setQuestions(data.questions);
-                addQuestionsToUser(data.questions);
-                setCurrentQuestion(data.questions[0]);
-                console.log("Questions loaded:", data.questions);
+            if (data) {
+                setQuestions(data);
+                addQuestionsToUser(data);
+                setCurrentQuestion(data[0]);
+                console.log("Questions loaded:", data);
             }
         } catch (error) {
             console.error("Error generating questions:", error);

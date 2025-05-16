@@ -1,13 +1,6 @@
-import { useState } from "react";
-import {
-    Dialog,
-    DialogBackdrop,
-    DialogPanel,
-    DialogTitle,
-    TransitionChild,
-} from "@headlessui/react";
-import { Briefcase, Calendar, Code, Gauge, Layers, Star, User, X } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
+import { Briefcase, Calendar, Code, Gauge, Layers, Star, User, X } from "lucide-react";
+import { useState } from "react";
 
 const Drawer = ({ interviewDetails, isInfoOpen, setIsInfoOpen }) => {
     const [isBookmarked, setIsBookmarked] = useState(
@@ -80,7 +73,16 @@ const Drawer = ({ interviewDetails, isInfoOpen, setIsInfoOpen }) => {
                     </div>
 
                     {/* Content */}
-                    <div className="flex h-full flex-col overflow-y-auto bg-light-bg dark:bg-dark-bg shadow-xl">
+                    <div 
+                        className="flex h-full flex-col overflow-y-auto bg-light-bg dark:bg-dark-bg shadow-xl custom-scrollbar"
+                        style={{
+                            '--scrollbar-thumb': 'var(--light-surface)',
+                            '--scrollbar-thumb-hover': 'var(--light-primary)',
+                            '@media (prefers-color-scheme: dark)': {
+                                '--scrollbar-thumb': 'var(--dark-surface)',
+                                '--scrollbar-thumb-hover': 'var(--dark-primary)',
+                            },
+                        }}>
                         <div className="p-6">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-2xl font-bold text-light-primary-text dark:text-dark-primary-text pr-8">

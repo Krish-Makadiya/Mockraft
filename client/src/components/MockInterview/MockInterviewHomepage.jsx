@@ -89,7 +89,7 @@ const MockInterviewCard = ({ interview }) => {
             onClick={() => interviewCardHandler()}
             className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface p-4 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer">
             <div className="flex items-start gap-4">
-                <div className="bg-light-primary/10 dark:bg-dark-primary/10 p-3 rounded-lg">
+                <div className="bg-gradient-to-br from-light-primary/20 to-light-primary/10 dark:from-dark-primary/20 dark:to-dark-primary/10 p-3 rounded-lg">
                     <Briefcase className="w-5 h-5 text-light-primary dark:text-dark-primary" />
                 </div>
 
@@ -100,7 +100,9 @@ const MockInterviewCard = ({ interview }) => {
                         </h3>
                         <span
                             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
-  ${getLevelClass(interview.experienceLevel)}`}>
+                            ${getLevelClass(
+                                interview.experienceLevel
+                            )} bg-opacity-10 backdrop-blur-sm`}>
                             {interview.experienceLevel || "Mid"} Level
                         </span>
                     </div>
@@ -112,22 +114,22 @@ const MockInterviewCard = ({ interview }) => {
                     <div className="flex justify-between items-center">
                         <div className="flex flex-col">
                             <div className="mt-3 flex flex-wrap gap-2">
-                                <div className="inline-flex items-center text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded-md">
-                                    <Code className="w-3 h-3 mr-1 text-gray-500 dark:text-gray-400" />
+                                <div className="inline-flex items-center text-xs bg-gradient-to-r from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 px-2 py-1 rounded-md">
+                                    <Code className="w-3 h-3 mr-1 text-light-primary dark:text-dark-primary" />
                                     {interview.programmingLanguage ||
                                         "Not specified"}
                                 </div>
 
-                                <span className="inline-flex items-center text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded-md">
-                                    <Layers className="w-3 h-3 mr-1 text-gray-500 dark:text-gray-400" />
+                                <span className="inline-flex items-center text-xs bg-gradient-to-r from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 px-2 py-1 rounded-md">
+                                    <Layers className="w-3 h-3 mr-1 text-light-primary dark:text-dark-primary" />
                                     {interview.technologyStack ||
                                         "Not specified"}
                                 </span>
                             </div>
 
                             <div className="flex items-center mt-3 gap-3">
-                                <div className="flex items-center text-xs text-light-secondary-text/50 dark:text-dark-secondary-text/50">
-                                    <Clock className="w-3 h-3 mr-1" />
+                            <div className="flex items-center text-xs text-light-secondary-text/70 dark:text-dark-secondary-text/70">
+                            <Clock className="w-3 h-3 mr-1" />
                                     Created{" "}
                                     {interview.createdAt?.seconds
                                         ? new Date(
@@ -143,8 +145,8 @@ const MockInterviewCard = ({ interview }) => {
                                     <div
                                         className={`h-2 w-2 rounded-full ${
                                             interview.isCompleted
-                                                ? "bg-green-500"
-                                                : "bg-yellow-500"
+                                                 ? "bg-gradient-to-r from-green-400 to-green-500"
+                                                : "bg-gradient-to-r from-yellow-400 to-yellow-500"
                                         }`}
                                     />
                                     <span className="text-xs text-light-secondary-text dark:text-dark-secondary-text">
@@ -262,7 +264,7 @@ const FilterMenu = ({ filters, setFilters }) => {
                                             }));
                                             close();
                                         }}
-                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
                                         <option value="all">All Status</option>
                                         <option value="completed">
                                             Completed
@@ -287,7 +289,7 @@ const FilterMenu = ({ filters, setFilters }) => {
                                             }));
                                             close();
                                         }}
-                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
                                         <option value="all">All Levels</option>
                                         <option value="Entry">
                                             Entry Level
@@ -313,7 +315,7 @@ const FilterMenu = ({ filters, setFilters }) => {
                                             }));
                                             close();
                                         }}
-                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
                                         <option value="all">
                                             All Technologies
                                         </option>
@@ -343,7 +345,7 @@ const FilterMenu = ({ filters, setFilters }) => {
                                             }));
                                             close();
                                         }}
-                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
                                         <option value="all">
                                             All Languages
                                         </option>
@@ -371,7 +373,7 @@ const FilterMenu = ({ filters, setFilters }) => {
                                             }));
                                             close();
                                         }}
-                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
                                         <option value="newest">
                                             Newest First
                                         </option>
@@ -551,7 +553,7 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                     ) : (
                         <div className="w-full flex flex-col items-center justify-center py-20 text-center">
                             <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-8">
-                                <ListFilter className="h-12 w-12 mx-auto text-gray-400 mb-3" />
+                                <ListFilter className="h-12 w-12 mx-auto text-neutral-400 mb-3" />
                                 <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text mb-2">
                                     No matches found
                                 </h3>
