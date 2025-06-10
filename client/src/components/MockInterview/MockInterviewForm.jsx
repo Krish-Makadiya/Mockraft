@@ -1,14 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
-import {
-    addDoc,
-    collection,
-    serverTimestamp
-} from "firebase/firestore";
-import {
-    ChevronDown,
-    CircleArrowLeft,
-    Info
-} from "lucide-react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { ChevronDown, CircleArrowLeft, Info } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { db } from "../../config/firebase";
@@ -119,13 +111,13 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
         <form
             className="w-3/5 select-none mx-auto text-light-primary-text dark:text-dark-primary-text"
             onSubmit={submitHandler}>
-            <div className="flex flex-col gap-6">
-                <CircleArrowLeft
-                    onClick={cancleHandler}
-                    className="size-8 text-light-fail dark:text-dark-fail hover:text-light-fail-hover dark:hover:text-dark-fail-hover"
-                />
-                <div className="space-y-12">
-                    <div className="border-b border-neutral-300 dark:border-neutral-600 pb-12">
+            <div className="flex flex-col">
+                <div className="flex items-center gap-5">
+                    <CircleArrowLeft
+                        onClick={cancleHandler}
+                        className="size-8 text-light-fail dark:text-dark-fail hover:text-light-fail-hover dark:hover:text-dark-fail-hover"
+                    />
+                    <div>
                         <h2 className="text-2xl font-semibold">
                             Create Mock Interview
                         </h2>
@@ -133,64 +125,64 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                             This information will be displayed publicly so be
                             careful
                         </p>
+                    </div>
+                </div>
+                <div className="space-y-12">
+                    <div className="border-b border-neutral-300 dark:border-neutral-600 pb-12 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div className="sm:col-span-4">
+                            <label
+                                htmlFor="username"
+                                className="block text-sm font-medium">
+                                Mock-Interview Name
+                            </label>
 
-                        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-4">
-                                <label
-                                    htmlFor="username"
-                                    className="block text-sm font-medium">
-                                    Mock-Interview Name
-                                </label>
+                            <input
+                                id="username"
+                                name="interviewName"
+                                type="text"
+                                placeholder="Enter the name of the interview"
+                                value={formData.interviewName}
+                                onChange={handleInputChange}
+                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary sm:text-sm text-light-primary-text"
+                                required
+                            />
+                            <div className="flex gap-1 mt-1.5 items-center">
+                                <Info className="size-5 text-light-secondary dark:text-dark-secondary" />
+                                <p className="text-xs text-light-secondary dark:text-dark-secondary">
+                                    It will be displayed on your dashboard
+                                    profile.
+                                </p>
+                            </div>
+                        </div>
 
-                                <input
-                                    id="username"
-                                    name="interviewName"
-                                    type="text"
-                                    placeholder="Enter the name of the interview"
-                                    value={formData.interviewName}
-                                    onChange={handleInputChange}
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary sm:text-sm text-light-primary-text"
+                        <div className="col-span-full">
+                            <label
+                                htmlFor="about"
+                                className="block text-sm font-medium">
+                                Job Description
+                            </label>
+                            <div className="mt-2">
+                                <textarea
+                                    id="about"
+                                    name="jobDescription"
+                                    rows={3}
+                                    placeholder="Write a few lines about the job description."
+                                    value={formData.jobDescription}
+                                    onChange={(e) => {
+                                        e.target.style.height = "auto";
+                                        e.target.style.height =
+                                            e.target.scrollHeight + "px";
+                                        handleInputChange(e);
+                                    }}
+                                    className="w-full min-h-[80px] max-h-[300px] appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-light-primary-text outline-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary sm:text-sm/6 resize-none "
                                     required
                                 />
-                                <div className="flex gap-1 mt-1.5 items-center">
-                                    <Info className="size-5 text-light-secondary dark:text-dark-secondary" />
-                                    <p className="text-xs text-light-secondary dark:text-dark-secondary">
-                                        It will be displayed on your dashboard
-                                        profile.
-                                    </p>
-                                </div>
                             </div>
-
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="about"
-                                    className="block text-sm font-medium">
-                                    Job Description
-                                </label>
-                                <div className="mt-2">
-                                    <textarea
-                                        id="about"
-                                        name="jobDescription"
-                                        rows={3}
-                                        placeholder="Write a few lines about the job description."
-                                        value={formData.jobDescription}
-                                        onChange={(e) => {
-                                            e.target.style.height = "auto";
-                                            e.target.style.height =
-                                                e.target.scrollHeight + "px";
-                                            handleInputChange(e);
-                                        }}
-                                        className="w-full min-h-[80px] max-h-[300px] appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-light-primary-text outline-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary sm:text-sm/6 resize-none "
-                                        required
-                                    />
-                                </div>
-                                <div className="flex gap-1 mt-1.5 items-center">
-                                    <Info className="size-5 text-light-secondary dark:text-dark-secondary" />
-                                    <p className="text-xs text-light-secondary dark:text-dark-secondary">
-                                        Write few lines about the job
-                                        description.
-                                    </p>
-                                </div>
+                            <div className="flex gap-1 mt-1.5 items-center">
+                                <Info className="size-5 text-light-secondary dark:text-dark-secondary" />
+                                <p className="text-xs text-light-secondary dark:text-dark-secondary">
+                                    Write few lines about the job description.
+                                </p>
                             </div>
                         </div>
                     </div>
