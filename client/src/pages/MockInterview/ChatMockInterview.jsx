@@ -105,12 +105,14 @@ const MockInterviewTest = ({ user_id, id }) => {
     }, [questions, currentQuestionIndex]);
 
     useEffect(() => {
-        if (interviewDetails?.questions) {
+        if (interviewDetails?.questions?.interview_questions) {
             const analyzed = {};
 
-            interviewDetails.questions.forEach((question, index) => {
+            console.log(interviewDetails)
+            interviewDetails.questions.interview_questions.forEach((question, index) => {
                 if (question.isAnalyzed) {
                     // Reconstruct analysis object from stored data
+                    console.log(question);
                     const analysisData = {
                         evaluation: {
                             score: question.analysis.score,
@@ -199,7 +201,7 @@ const MockInterviewTest = ({ user_id, id }) => {
                 id: interviewDoc.id,
                 ...interviewDoc.data(),
             };
-
+        console.log(interviewData);
             setInterviewDetails(interviewData);
         } catch (error) {
             console.error("Error fetching interview:", error);

@@ -77,6 +77,7 @@ const MockInterviewCard = ({ interview }) => {
     };
 
     const interviewCardHandler = () => {
+        console.log(interview)
         if (interview.isCompleted) {
             navigate(`/${user.id}/mock-interview/${interview.id}/analysis`);
         } else {
@@ -433,7 +434,7 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                 ...doc.data(),
                 createdAtMs: doc.data().createdAt?.seconds * 1000 || Date.now(),
             }));
-
+            console.log(interviews);
             setAllInterviews(interviews);
         } catch (error) {
             setError("Failed to fetch interviews. Please try again later.");

@@ -78,7 +78,7 @@ const Drawer = ({ interviewDetails, isInfoOpen, setIsInfoOpen }) => {
                         style={{
                             '--scrollbar-thumb': 'var(--light-surface)',
                             '--scrollbar-thumb-hover': 'var(--light-primary)',
-                            '@media (prefers-color-scheme: dark)': {
+                            '@media (prefersColorScheme: dark)': {
                                 '--scrollbar-thumb': 'var(--dark-surface)',
                                 '--scrollbar-thumb-hover': 'var(--dark-primary)',
                             },
