@@ -77,7 +77,7 @@ const MockInterviewCard = ({ interview }) => {
     };
 
     const interviewCardHandler = () => {
-        console.log(interview)
+        console.log(interview);
         if (interview.isCompleted) {
             navigate(`/${user.id}/mock-interview/${interview.id}/analysis`);
         } else {
@@ -88,7 +88,7 @@ const MockInterviewCard = ({ interview }) => {
     return (
         <div
             onClick={() => interviewCardHandler()}
-            className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface p-4 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer">
+            className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface md:p-4 p-3 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer">
             <div className="flex items-start gap-4">
                 <div className="bg-gradient-to-br from-light-primary/20 to-light-primary/10 dark:from-dark-primary/20 dark:to-dark-primary/10 p-3 rounded-lg">
                     <Briefcase className="w-5 h-5 text-light-primary dark:text-dark-primary" />
@@ -108,7 +108,7 @@ const MockInterviewCard = ({ interview }) => {
                         </span>
                     </div>
 
-                    <p className="mt-1 text-sm text-light-secondary-text max-w-[90%] dark:text-dark-secondary-text line-clamp-2">
+                    <p className="mt-1 md:text-sm text-xs text-light-secondary-text md:max-w-[90%] max-w-[90%] dark:text-dark-secondary-text line-clamp-2">
                         {interview.jobDescription || "No description provided"}
                     </p>
 
@@ -129,8 +129,8 @@ const MockInterviewCard = ({ interview }) => {
                             </div>
 
                             <div className="flex items-center mt-3 gap-3">
-                            <div className="flex items-center text-xs text-light-secondary-text/70 dark:text-dark-secondary-text/70">
-                            <Clock className="w-3 h-3 mr-1" />
+                                <div className="flex items-center text-xs text-light-secondary-text/70 dark:text-dark-secondary-text/70">
+                                    <Clock className="w-3 h-3 mr-1" />
                                     Created{" "}
                                     {interview.createdAt?.seconds
                                         ? new Date(
@@ -146,7 +146,7 @@ const MockInterviewCard = ({ interview }) => {
                                     <div
                                         className={`h-2 w-2 rounded-full ${
                                             interview.isCompleted
-                                                 ? "bg-gradient-to-r from-green-400 to-green-500"
+                                                ? "bg-gradient-to-r from-green-400 to-green-500"
                                                 : "bg-gradient-to-r from-yellow-400 to-yellow-500"
                                         }`}
                                     />
@@ -158,12 +158,11 @@ const MockInterviewCard = ({ interview }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="px-5">
+                        <div className="md:px-5 px-3">
                             <Star
                                 onClick={bookmarkHandler}
                                 size={25}
                                 className={`text-yellow-500 dark:text-yellow-400 cursor-pointer
-                
                 transition-all duration-200   group-hover:opacity-100 group-hover:scale-105 ${
                     isUpdating ? "opacity-50" : "hover:scale-110"
                 } 
@@ -503,23 +502,23 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
     };
 
     return (
-        <div className="flex flex-col  min-h-screen bg-light-bg dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text gap-10 px-4">
-            <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="text-2xl font-bold">Mock Interviews</h1>
-                    <p className="text-sm text-light-secondary-text dark:text-dark-secondary-text">
+        <div className="flex flex-col min-h-screen bg-light-bg dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text gap-10 px-4">
+            <div className="flex justify-between items-center gap-10">
+                <div className="md:ml-0 ml-12">
+                    <h1 className="md:text-2xl text-xl font-bold">Mock Interviews</h1>
+                    <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
                         Prepare for your next interview with our mock interview
                         sessions.
                     </p>
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary px-4 py-3 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary md:px-4 px-2 md:py-3 py-2 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                     aria-label="Create new mock interview">
                     <span className="absolute inset-0 bg-gradient-to-r from-light-secondary to-light-primary dark:from-dark-secondary dark:to-dark-primary  opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"></span>
 
                     <FilePlus2
-                        className="relative h-6 w-6 text-white transition-transform duration-200 
+                        className="relative md:h-6 h-10 md:w-6 w-10 text-white transition-transform duration-200 
                                                 ease-out group-hover:scale-[1.02]"
                     />
 

@@ -109,21 +109,20 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
 
     return (
         <form
-            className="w-3/5 select-none mx-auto text-light-primary-text dark:text-dark-primary-text"
+            className="md:w-3/5 w-[90vw] select-none mx-auto text-light-primary-text dark:text-dark-primary-text"
             onSubmit={submitHandler}>
             <div className="flex flex-col">
-                <div className="flex items-center gap-5">
+                <div className="flex items-center md:gap-5 gap-2 md:ml-0 ml-12">
                     <CircleArrowLeft
                         onClick={cancleHandler}
-                        className="size-8 text-light-fail dark:text-dark-fail hover:text-light-fail-hover dark:hover:text-dark-fail-hover"
+                        className="size-8 text-light-fail md:block hidden dark:text-dark-fail hover:text-light-fail-hover dark:hover:text-dark-fail-hover"
                     />
                     <div>
-                        <h2 className="text-2xl font-semibold">
+                        <h2 className="md:text-2xl text-xl font-semibold">
                             Create Mock Interview
                         </h2>
-                        <p className="text-sm text-light-secondary dark:text-dark-secondary">
-                            This information will be displayed publicly so be
-                            careful
+                        <p className="md:text-sm text-xs text-light-secondary dark:text-dark-secondary">
+                            This information will be only displayed to you.
                         </p>
                     </div>
                 </div>
@@ -143,11 +142,11 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                 placeholder="Enter the name of the interview"
                                 value={formData.interviewName}
                                 onChange={handleInputChange}
-                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary sm:text-sm text-light-primary-text"
+                                className="block w-full rounded-md bg-light-surface dark:bg-dark-bg px-3 md:py-2 py-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-500 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary md:text-base text-sm dark:text-dark-primary-text text-light-primary-text"
                                 required
                             />
                             <div className="flex gap-1 mt-1.5 items-center">
-                                <Info className="size-5 text-light-secondary dark:text-dark-secondary" />
+                                <Info className="md:size-5 size-4 text-light-secondary dark:text-dark-secondary" />
                                 <p className="text-xs text-light-secondary dark:text-dark-secondary">
                                     It will be displayed on your dashboard
                                     profile.
@@ -174,12 +173,12 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                             e.target.scrollHeight + "px";
                                         handleInputChange(e);
                                     }}
-                                    className="w-full min-h-[80px] max-h-[300px] appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-light-primary-text outline-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary sm:text-sm/6 resize-none "
+                                    className="w-full min-h-[80px] max-h-[300px] appearance-none rounded-md bg-light-surface dark:bg-dark-bg py-2 pr-8 pl-3 md:text-base text-sm text-light-primary-text dark:text-dark-primary-text outline-1 outline-gray-300 dark:outline-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary placeholder:text-gray-400 dark:focus:outline-dark-secondary  resize-none"
                                     required
                                 />
                             </div>
                             <div className="flex gap-1 mt-1.5 items-center">
-                                <Info className="size-5 text-light-secondary dark:text-dark-secondary" />
+                                <Info className="md:size-5 size-4 text-light-secondary dark:text-dark-secondary" />
                                 <p className="text-xs text-light-secondary dark:text-dark-secondary">
                                     Write few lines about the job description.
                                 </p>
@@ -188,11 +187,11 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                     </div>
 
                     <div className="border-b border-neutral-300 dark:border-neutral-600 pb-12">
-                        <h2 className="text-xl font-semibold">
+                        <h2 className="md:text-xl text-[18px] font-semibold">
                             User Background & Skills
                         </h2>
 
-                        <p className="text-sm text-light-secondary dark:text-dark-secondary">
+                        <p className="md:text-sm text-xs text-light-secondary dark:text-dark-secondary">
                             Use a permanent address where you can receive mail.
                         </p>
 
@@ -210,8 +209,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         required
                                         value={formData.programmingLanguage}
                                         onChange={handleInputChange}
-                                        className="w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-light-primary-text outline-1  outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary sm:text-sm/6">
-                                        <option value="">
+                                        className="w-full appearance-none rounded-md bg-light-surface dark:bg-dark-bg py-2 pr-8 pl-3 text-light-primary-text dark:text-dark-primary-text outline-1 outline-gray-300 dark:outline-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary md:text-base text-sm">
+                                        <option value="" disabled>
                                             Select a language
                                         </option>
                                         <optgroup label="Popular Languages">
@@ -234,11 +233,11 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                     </select>
                                     <ChevronDown
                                         aria-hidden="true"
-                                        className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 size-5 text-gray-500"
+                                        className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 size-5 text-gray-400"
                                     />
                                 </div>
                                 <div className="flex gap-1 mt-1.5 items-center">
-                                    <Info className="size-5 text-light-secondary dark:text-dark-secondary" />
+                                    <Info className="md:size-5 size-4 text-light-secondary dark:text-dark-secondary" />
                                     <p className="text-xs text-light-secondary dark:text-dark-secondary">
                                         Choose language for technical interview
                                     </p>
@@ -256,7 +255,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         name="technologyStack"
                                         value={formData.technologyStack}
                                         onChange={handleInputChange}
-                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-light-primary-text outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary sm:text-sm/6"
+                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-light-surface dark:bg-dark-bg py-2 pr-8 pl-3 text-light-primary-text dark:text-dark-primary-text outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary md:text-base text-sm"
                                         required>
                                         <option value="">
                                             Select your expertise
@@ -280,7 +279,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                     <ChevronDown className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" />
                                 </div>
                                 <div className="flex gap-1 mt-1.5 items-center">
-                                    <Info className="size-5 text-light-secondary dark:text-dark-secondary" />
+                                    <Info className="md:size-5 size-4 text-light-secondary dark:text-dark-secondary" />
                                     <p className="text-xs text-light-secondary dark:text-dark-secondary">
                                         Choose your primary area of technical
                                         expertise
@@ -303,7 +302,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 "Entry"
                                             }
                                             onChange={handleInputChange}
-                                            className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-light-secondary dark:checked:border-dark-secondary checked:bg-light-secondary dark:checked:bg-dark-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary dark:focus-visible:outline-dark-secondary disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
+                                            className="relative size-4 appearance-none rounded-full border border-gray-300 bg-light-surface dark:bg-dark-bg before:absolute before:inset-1 before:rounded-full before:bg-light-surface dark:before:bg-dark-bg not-checked:before:hidden checked:border-light-secondary dark:checked:border-dark-secondary checked:bg-light-secondary dark:checked:bg-dark-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary dark:focus-visible:outline-dark-secondary disabled:border-gray-300 disabled:bg-light-surface disabled:before:bg-light-surface forced-colors:appearance-auto forced-colors:before:hidden"
                                             required
                                         />
                                         <label
@@ -323,7 +322,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 "Mid"
                                             }
                                             onChange={handleInputChange}
-                                            className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-light-secondary dark:checked:border-dark-secondary checked:bg-light-secondary dark:checked:bg-dark-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary dark:focus-visible:outline-dark-secondary disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
+                                            className="relative size-4 appearance-none rounded-full border border-gray-300 bg-light-surface dark:bg-dark-bg before:absolute before:inset-1 before:rounded-full before:bg-light-surface dark:before:bg-dark-bg not-checked:before:hidden checked:border-light-secondary dark:checked:border-dark-secondary checked:bg-light-secondary dark:checked:bg-dark-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary dark:focus-visible:outline-dark-secondary disabled:border-gray-300 disabled:bg-light-surface disabled:before:bg-light-surface forced-colors:appearance-auto forced-colors:before:hidden"
                                         />
                                         <label
                                             htmlFor="mid-level"
@@ -342,7 +341,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 "Senior"
                                             }
                                             onChange={handleInputChange}
-                                            className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-light-secondary dark:checked:border-dark-secondary checked:bg-light-secondary dark:checked:bg-dark-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary dark:focus-visible:outline-dark-secondary disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
+                                            className="relative size-4 appearance-none rounded-full border border-gray-300 bg-light-surface dark:bg-dark-bg before:absolute before:inset-1 before:rounded-full before:bg-light-surface dark:before:bg-dark-bg not-checked:before:hidden checked:border-light-secondary dark:checked:border-dark-secondary checked:bg-light-secondary dark:checked:bg-dark-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary dark:focus-visible:outline-dark-secondary disabled:border-gray-300 disabled:bg-light-surface disabled:before:bg-light-surface forced-colors:appearance-auto forced-colors:before:hidden"
                                             required
                                         />
                                         <label
@@ -356,11 +355,11 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                         </div>
                     </div>
 
-                    <div className="border-b border-neutral-300 dark:border-neutral-600  pb-12">
-                        <h2 className="text-xl font-semibold">
+                    <div className="border-b border-neutral-300 dark:border-neutral-600 pb-12">
+                        <h2 className="md:text-xl text-[18px] font-semibold">
                             Session Feedback
                         </h2>
-                        <p className="text-sm text-light-secondary dark:text-dark-secondary">
+                        <p className="md:text-sm text-xs text-light-secondary dark:text-dark-secondary">
                             Receive detailed performance analysis
                         </p>
 
@@ -369,7 +368,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                 <legend className="font-semibold">
                                     By email
                                 </legend>
-                                <div className="mt-4 space-y-3">
+                                <div className="mt-4 md:space-y-3 space-y-5">
                                     <div className="flex gap-3">
                                         <div className="flex h-6 shrink-0 items-center">
                                             <div className="group grid size-4 grid-cols-1">
@@ -383,12 +382,12 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                             .feedbackNotify
                                                     }
                                                     onChange={handleInputChange}
-                                                    className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-light-secondary 
-                                                checked:bg-light-secondary 
-                                                indeterminate:border-light-secondary 
-                                                indeterminate:bg-light-secondary
-                                                focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary
-                                                 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                                                    className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-light-surface dark:bg-dark-bg checked:border-light-secondary 
+                                    checked:bg-light-secondary 
+                                    indeterminate:border-light-secondary 
+                                    indeterminate:bg-light-secondary
+                                    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary
+                                     disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                                                 />
                                                 <svg
                                                     fill="none"
@@ -411,7 +410,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 </svg>
                                             </div>
                                         </div>
-                                        <div className="space-y-1">
+                                        <div className="md:space-y-1 space-y-0">
                                             <label
                                                 htmlFor="feedback-notify"
                                                 className="block text-sm font-medium">
@@ -436,7 +435,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                             .reminderNotify
                                                     }
                                                     onChange={handleInputChange}
-                                                    className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-light-secondary checked:bg-light-secondary indeterminate:border-light-secondary indeterminate:bg-light-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                                                    className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-light-surface dark:bg-dark-bg checked:border-light-secondary checked:bg-light-secondary indeterminate:border-light-secondary indeterminate:bg-light-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                                                 />
                                                 <svg
                                                     fill="none"
@@ -459,7 +458,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 </svg>
                                             </div>
                                         </div>
-                                        <div className="space-y-1">
+                                        <div className="md:space-y-1 space-y-0">
                                             <label
                                                 htmlFor="reminder-notify"
                                                 className="block text-sm font-medium">
@@ -484,7 +483,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                             .progressNotify
                                                     }
                                                     onChange={handleInputChange}
-                                                    className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-light-secondary checked:bg-light-secondary indeterminate:border-light-secondary indeterminate:bg-light-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                                                    className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-light-surface dark:bg-dark-bg checked:border-light-secondary checked:bg-light-secondary indeterminate:border-light-secondary indeterminate:bg-light-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                                                 />
                                                 <svg
                                                     fill="none"
@@ -507,7 +506,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 </svg>
                                             </div>
                                         </div>
-                                        <div className="space-y-1">
+                                        <div className="md:space-y-1 space-y-0">
                                             <label
                                                 htmlFor="progress-notify"
                                                 className="block text-sm font-medium">

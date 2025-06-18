@@ -6,7 +6,10 @@ import {
     Info,
     Moon,
     Star,
-    Sun
+    Sun,
+    Award,
+    Trophy,
+    CheckCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -98,6 +101,29 @@ const GetAllQuestionInfo = () => {
         return Math.round((score / 100) * basePoints);
     };
 
+    const calculatePointsEarned = () => {
+        if (!interviewDetails?.questions) return 0;
+
+        // Calculate total score earned
+        const totalScoreEarned = interviewDetails.questions.reduce(
+            (total, question) => {
+                if (question.answer && question.answer.trim() !== "") {
+                    return total + question.analysis.score;
+                }
+                return total;
+            },
+            0
+        );
+
+        // Calculate maximum possible score
+        const maxPossibleScore = interviewDetails.questions.length * 100; // Each question can score up to 100
+
+        // Calculate percentage
+        const percentage = (totalScoreEarned / maxPossibleScore) * 100;
+
+        return Number(percentage.toFixed(1)); // Return with one decimal place
+    };
+
     if (isLoading) return <Loader />;
 
     const toggleDrawerHandler = () => {
@@ -106,20 +132,20 @@ const GetAllQuestionInfo = () => {
 
     const cancleHandler = (e) => {
         e.preventDefault();
-        navigate("/dashboard")
+        navigate("/dashboard");
     };
 
     return (
-        <div className="min-h-screen  select-none bg-light-surface dark:bg-dark-surface p-4 md:p-6">
-            <div className="max-w-6xl mx-auto space-y-6">
+        <div className="min-h-screen  select-none bg-light-surface dark:bg-dark-surface md:p-6 py-4 px-3 ">
+            <div className="max-w-6xl mx-auto md:space-y-6 space-y-10">
                 {/* Header */}
                 <div className="flex justify-between items-center">
-                    <div className="flex gap-5">
+                    <div className="flex md:gap-5 gap-2 items-center">
                         <CircleArrowLeft
                             onClick={cancleHandler}
                             className="size-8 text-light-fail dark:text-dark-fail hover:text-light-fail-hover dark:hover:text-dark-fail-hover"
                         />
-                        <h1 className="text-2xl font-bold text-light-primary-text dark:text-dark-primary-text">
+                        <h1 className="md:text-2xl text-xl font-bold text-light-primary-text dark:text-dark-primary-text">
                             Mock Interview Analysis
                         </h1>
                     </div>
@@ -143,24 +169,24 @@ const GetAllQuestionInfo = () => {
                 </div>
 
                 {/* Overview Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
                     <div className="bg-light-bg dark:bg-dark-bg rounded-lg p-4">
                         <h3 className="text-sm text-light-secondary-text dark:text-dark-secondary-text mb-2">
                             Average Score
                         </h3>
                         <div className="flex items-center gap-2">
                             <div className="text-3xl font-bold text-light-primary dark:text-dark-primary">
-                                {calculateAverageScore()}%
+                                {interviewDetails.analysis.overallScore}%
                             </div>
                             <div
                                 className={`text-sm ${
                                     getPerformanceStatus(
-                                        calculateAverageScore()
+                                        interviewDetails.analysis.overallScore
                                     ).color
                                 }`}>
                                 {
                                     getPerformanceStatus(
-                                        calculateAverageScore()
+                                        interviewDetails.analysis.overallScore
                                     ).text
                                 }
                             </div>
@@ -169,68 +195,77 @@ const GetAllQuestionInfo = () => {
 
                     <div className="bg-light-bg dark:bg-dark-bg rounded-lg p-4">
                         <h3 className="text-sm text-light-secondary-text dark:text-dark-secondary-text mb-2">
-                            Questions Analyzed
+                            Questions Answered
                         </h3>
                         <div className="text-3xl font-bold text-light-primary dark:text-dark-primary">
                             {
                                 interviewDetails.questions.filter(
-                                    (q) => q.isAnalyzed
+                                    (q) => q.answer && q.answer.trim() !== ""
                                 ).length
                             }{" "}
                             / {interviewDetails.questions.length}
                         </div>
                     </div>
 
-                    {/* Update the status display section */}
-                    <div className="bg-light-bg dark:bg-dark-bg rounded-lg p-4">
-                        <h3 className="text-sm text-light-secondary-text dark:text-dark-secondary-text mb-2">
-                            Interview Status
-                        </h3>
-                        <div className="flex items-center gap-2">
-                            <div
-                                className={`h-2 w-2 rounded-full ${
-                                    interviewDetails.isCompleted
-                                        ? "bg-green-500"
-                                        : "bg-yellow-500"
-                                }`}></div>
-                            <div className="text-light-primary-text dark:text-dark-primary-text">
-                                {interviewDetails.isCompleted
-                                    ? "Completed"
-                                    : "In Progress"}
+                    <div className="relative bg-gradient-to-br from-emerald-50 to-emerald-200 dark:from-emerald-900 dark:to-emerald-700 rounded-lg p-4 border-2 border-emerald-200 dark:border-emerald-700 shadow-md transform hover:scale-101 transition-transform duration-200">
+                        {/* Award Icon */}
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+                                <Award className="w-5 h-5 text-white" />
                             </div>
+                            <h3 className="text-sm text-emerald-700 dark:text-emerald-300 font-semibold">
+                                Points Earned
+                            </h3>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <div className="text-4xl font-bold text-emerald-600 dark:text-emerald-400">
+                                {calculatePointsEarned()}
+                                <span className="text-lg text-emerald-500 dark:text-emerald-500">
+                                    / 100%
+                                </span>
+                            </div>
+
+                            {/* Achievement Badge */}
+                            <div className="bg-emerald-500 text-white px-3 py-2 rounded-full text-xs font-medium shadow-sm flex items-center gap-1">
+                                <Trophy className="w-4 h-4" />
+                                Earned!
+                            </div>
+                        </div>
+
+                        {/* Reward message */}
+                        <div className="mt-3 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400">
+                            <CheckCircle className="w-4 h-4" />
+                            Added to your profile
                         </div>
                     </div>
                 </div>
 
                 {/* Questions List */}
-                <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-light-primary-text dark:text-dark-primary-text">
+                <div className="md:space-y-4 space-y-3 md:mt-0 mt-5">
+                    <h2 className="md:text-xl text-lg font-semibold text-light-primary-text dark:text-dark-primary-text">
                         Question Analysis
                     </h2>
 
                     {interviewDetails.questions.map((question, index) => (
                         <div
                             key={index}
-                            className="bg-light-bg dark:bg-dark-bg rounded-lg p-4 transition-all duration-300 hover:shadow-lg">
+                            className="bg-light-bg dark:bg-dark-bg rounded-lg md:p-4 p-3 transition-all duration-300 hover:shadow-lg">
                             <div
                                 onClick={() => toggleQuestionExpand(index)}
                                 className="cursor-pointer">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-center gap-4">
                                         <div className="flex flex-col">
-                                            {question.isAnalyzed && (
-                                                <div className="text-2xl font-bold text-emerald-500">
-                                                    {calculateQuestionPoints(
-                                                        question.difficulty,
-                                                        question.analysis.score
-                                                    )}
-                                                    <span className="text-xs text-light-secondary-text dark:text-dark-secondary-text">
-                                                        /
-                                                        {question.difficulty *
-                                                            20}
-                                                    </span>
-                                                </div>
-                                            )}
+                                            <div className="md:text-2xl text-xl font-bold text-emerald-500">
+                                                {calculateQuestionPoints(
+                                                    question.difficulty,
+                                                    question.analysis.score
+                                                )}
+                                                <span className="text-xs text-light-secondary-text dark:text-dark-secondary-text">
+                                                    /{question.difficulty * 20}
+                                                </span>
+                                            </div>
                                             <div className="flex items-center gap-1">
                                                 {[
                                                     ...Array(
@@ -240,18 +275,16 @@ const GetAllQuestionInfo = () => {
                                                     <Star
                                                         key={i}
                                                         size={14}
-                                                        className={`${
-                                                            question.isAnalyzed
-                                                                ? "text-amber-400 fill-amber-400"
-                                                                : "text-gray-400"
-                                                        }`}
+                                                        className={
+                                                            "text-amber-400 fill-amber-400"
+                                                        }
                                                     />
                                                 ))}
                                             </div>
                                         </div>
                                         <div>
                                             <span
-                                                className={`text-sm font-medium px-2 py-1 rounded-full ${
+                                                className={`md:text-sm text-xs font-medium px-2 py-1 rounded-full ${
                                                     question.type ===
                                                     "technical"
                                                         ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
@@ -268,24 +301,20 @@ const GetAllQuestionInfo = () => {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        {question.isAnalyzed && (
-                                            <div
-                                                className={`text-sm font-medium px-3 py-1 rounded-full ${
-                                                    question.analysis.score >=
-                                                    90
-                                                        ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
-                                                        : question.analysis
-                                                              .score >= 75
-                                                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
-                                                        : question.analysis
-                                                              .score >= 60
-                                                        ? "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
-                                                        : "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300"
-                                                }`}>
-                                                Score: {question.analysis.score}
-                                                %
-                                            </div>
-                                        )}
+                                        <div
+                                            className={`md:text-sm text-xs font-medium px-3 py-1 rounded-full ${
+                                                question.analysis.score >= 90
+                                                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
+                                                    : question.analysis.score >=
+                                                      75
+                                                    ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                                                    : question.analysis.score >=
+                                                      60
+                                                    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
+                                                    : "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300"
+                                            }`}>
+                                            Score: {question.analysis.score}%
+                                        </div>
                                         {expandedQuestions[index] ? (
                                             <ChevronUp className="w-5 h-5 text-light-secondary-text dark:text-dark-secondary-text" />
                                         ) : (
@@ -294,107 +323,134 @@ const GetAllQuestionInfo = () => {
                                     </div>
                                 </div>
 
-                                <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text mb-2">
+                                <h3 className="md:text-lg text-sm font-medium text-light-primary-text dark:text-dark-primary-text mb-2">
                                     {question.text}
                                 </h3>
                             </div>
 
                             {expandedQuestions[index] && (
                                 <div className="mt-4 space-y-4 animate-fadeIn">
-                                    {question.answer ? (
-                                        question.isAnalyzed ? (
-                                            <>
-                                                <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-4">
-                                                    <h4 className="text-sm font-medium text-light-secondary-text dark:text-dark-secondary-text mb-2">
-                                                        Your Answer
-                                                    </h4>
-                                                    <p className="text-light-primary-text dark:text-dark-primary-text/80 text-sm">
-                                                        {question.answer}
+                                    <>
+                                        <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-3 md:p-4">
+                                            <h4 className="md:text-sm text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text mb-2">
+                                                Your Answer
+                                            </h4>
+                                            <p className="text-light-primary-text dark:text-dark-primary-text/80 text-sm">
+                                                {question.answer ? (
+                                                    question.answer
+                                                ) : (
+                                                    <p className="text-red-500 dark:text-red-400">
+                                                        No answer provided
                                                     </p>
-                                                </div>
+                                                )}
+                                            </p>
+                                        </div>
 
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                    <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-4">
-                                                        <h4 className="text-sm font-medium text-emerald-700 dark:text-emerald-300 mb-2 flex items-center gap-2">
-                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
-                                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                            </svg>
-                                                            Strengths
-                                                        </h4>
-                                                        <p className="text-emerald-600 dark:text-emerald-200/80 text-sm">
-                                                            {question.analysis.strengths}
-                                                        </p>
-                                                    </div>
-
-                                                    <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4">
-                                                        <h4 className="text-sm font-medium text-amber-700 dark:text-amber-300 mb-2 flex items-center gap-2">
-                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
-                                                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                                            </svg>
-                                                            Areas for Improvement
-                                                        </h4>
-                                                        <p className="text-amber-600 dark:text-amber-200/80 text-sm">
-                                                            {question.analysis.improvements}
-                                                        </p>
-                                                    </div>
-
-                                                    <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                                                        <h4 className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-2">
-                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
-                                                                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                                            </svg>
-                                                            Key Concepts
-                                                        </h4>
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {question.analysis.keywords.map((keyword, i) => (
-                                                                <span
-                                                                    key={i}
-                                                                    className="px-2 py-1 bg-blue-100 dark:bg-blue-800 rounded text-xs text-blue-700 dark:text-blue-200"
-                                                                >
-                                                                    {keyword}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="md:col-span-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 mt-2">
-                                                        <h4 className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-2 flex items-center gap-2">
-                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
-                                                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                            </svg>
-                                                            Suggestions for Improvement
-                                                        </h4>
-                                                        <p className="text-purple-600 dark:text-purple-200/80 text-sm">
-                                                            {question.analysis.suggestions}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-4">
-                                                <h4 className="text-sm font-medium text-light-secondary-text dark:text-dark-secondary-text mb-2">
-                                                    Answer
+                                        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4 gap-2">
+                                            <div className="bg-emerald-100 dark:bg-emerald-900/20 rounded-lg p-3 md:p-4">
+                                                <h4 className="text-sm font-medium text-emerald-700 dark:text-emerald-300 mb-2 flex items-center gap-2">
+                                                    <svg
+                                                        className="w-4 h-4"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        />
+                                                    </svg>
+                                                    Strengths
                                                 </h4>
-                                                <p className="text-light-primary-text dark:text-dark-primary-text/80 text-sm">
-                                                    {question.answer}
+                                                <p className="text-emerald-600 dark:text-emerald-200/80 text-sm">
+                                                    {
+                                                        question.analysis
+                                                            .feedback.strengths
+                                                    }
                                                 </p>
                                             </div>
-                                        )
-                                    ) : (
-                                        <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4">
-                                            <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300">
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
-                                                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                                </svg>
-                                                <span className="text-sm font-medium">No answer provided for this question</span>
+
+                                            <div className="bg-amber-100 dark:bg-amber-900/20 rounded-lg p-3 md:p-4">
+                                                <h4 className="text-sm font-medium text-amber-700 dark:text-amber-300 mb-2 flex items-center gap-2">
+                                                    <svg
+                                                        className="w-4 h-4"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                                                        />
+                                                    </svg>
+                                                    Areas for Improvement
+                                                </h4>
+                                                <p className="text-amber-600 dark:text-amber-200/80 text-sm">
+                                                    {
+                                                        question.analysis
+                                                            .feedback
+                                                            .improvements
+                                                    }
+                                                </p>
+                                            </div>
+
+                                            <div className="bg-blue-100 dark:bg-blue-900/20 rounded-lg p-3 md:p-4">
+                                                <h4 className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-2">
+                                                    <svg
+                                                        className="w-4 h-4"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                                                        />
+                                                    </svg>
+                                                    Key Concepts
+                                                </h4>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {question.analysis.keyword_analysis.missing_keywords.map(
+                                                        (keyword, i) => (
+                                                            <span
+                                                                key={i}
+                                                                className="px-2 py-1 bg-blue-200 dark:bg-blue-800 rounded text-xs text-blue-700 dark:text-blue-200">
+                                                                {keyword}
+                                                            </span>
+                                                        )
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="md:col-span-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg p-3 md:p-4">
+                                                <h4 className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-2 flex items-center gap-2">
+                                                    <svg
+                                                        className="w-4 h-4"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        />
+                                                    </svg>
+                                                    Suggestions for Improvement
+                                                </h4>
+                                                <p className="text-purple-600 dark:text-purple-200/80 text-sm">
+                                                    {
+                                                        question.analysis
+                                                            .feedback
+                                                            .suggestions
+                                                    }
+                                                </p>
                                             </div>
                                         </div>
-                                    )}
+                                    </>
                                 </div>
                             )}
                         </div>
@@ -406,7 +462,7 @@ const GetAllQuestionInfo = () => {
                 isInfoOpen={isInfoOpen}
                 setIsInfoOpen={setIsInfoOpen}
             />
-            <AlertComponent/>
+            <AlertComponent />
         </div>
     );
 };

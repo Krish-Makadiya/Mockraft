@@ -45,7 +45,7 @@ const Drawer = ({ interviewDetails, isInfoOpen, setIsInfoOpen }) => {
             }`}>
             {/* Backdrop */}
             <div
-                className={`fixed inset-0 bg-light-secondary-text/50 dark:bg-gray-500/50 transition-opacity duration-300 ${
+                className={`fixed inset-0 bg-light-secondary-text/90 dark:bg-gray-500/90 transition-opacity duration-300 ${
                     isInfoOpen ? "opacity-100" : "opacity-0"
                 }`}
                 onClick={() => setIsInfoOpen(false)}
