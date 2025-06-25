@@ -6,42 +6,46 @@ import toast from "react-hot-toast";
 import { db } from "../../config/firebase";
 import { useAlert } from "../../hooks/useAlert";
 
-const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
-    const [formData, setFormData] = useState({
+const MockInterviewForm = ({ setIsCreateModalOpen }) => {
+    // Consolidated form state
+    const [formState, setFormState] = useState({
         interviewName: "",
         jobDescription: "",
         programmingLanguage: "",
         technologyStack: "",
         experienceLevel: "entry-level",
         notifications: {
-            comments: false,
-            candidates: false,
-            offers: false,
+            feedback: false,
+            progress: false,
+            reminders: false,
         },
     });
 
     const { showAlert, AlertComponent } = useAlert();
     const { user } = useUser();
 
+    // Handle input changes
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
 
-        if (type === "checkbox") {
-            setFormData((prev) => ({
-                ...prev,
-                notifications: {
-                    ...prev.notifications,
-                    [name]: checked,
-                },
-            }));
-        } else {
-            setFormData((prev) => ({
+        setFormState((prev) => {
+            if (type === "checkbox") {
+                return {
+                    ...prev,
+                    notifications: {
+                        ...prev.notifications,
+                        [name]: checked,
+                    },
+                };
+            }
+            return {
                 ...prev,
                 [name]: value,
-            }));
-        }
+            };
+        });
     };
 
+    // Handle form submission
     const setMockInterviewInfo = async () => {
         try {
             toast.promise(
@@ -49,12 +53,12 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                     const docRef = await addDoc(
                         collection(db, `users/${user.id}/mock-interviews`),
                         {
-                            interviewName: formData.interviewName,
-                            jobDescription: formData.jobDescription,
-                            programmingLanguage: formData.programmingLanguage,
-                            technologyStack: formData.technologyStack,
-                            experienceLevel: formData.experienceLevel,
-                            notifications: formData.notifications,
+                            interviewName: formState.interviewName,
+                            jobDescription: formState.jobDescription,
+                            programmingLanguage: formState.programmingLanguage,
+                            technologyStack: formState.technologyStack,
+                            experienceLevel: formState.experienceLevel,
+                            notifications: formState.notifications,
                             createdAt: serverTimestamp(),
                             userId: user.id,
                             isBookmarked: false,
@@ -77,7 +81,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        console.log("Form submitted", formData);
+        console.log("Form submitted", formState);
 
         showAlert({
             title: "Ready to Practice?",
@@ -110,7 +114,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
     return (
         <form
             className="md:w-3/5 w-[90vw] select-none mx-auto text-light-primary-text dark:text-dark-primary-text"
-            onSubmit={submitHandler}>
+            onSubmit={submitHandler}
+        >
             <div className="flex flex-col">
                 <div className="flex items-center md:gap-5 gap-2 md:ml-0 ml-12">
                     <CircleArrowLeft
@@ -131,7 +136,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                         <div className="sm:col-span-4">
                             <label
                                 htmlFor="username"
-                                className="block text-sm font-medium">
+                                className="block text-sm font-medium"
+                            >
                                 Mock-Interview Name
                             </label>
 
@@ -140,7 +146,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                 name="interviewName"
                                 type="text"
                                 placeholder="Enter the name of the interview"
-                                value={formData.interviewName}
+                                value={formState.interviewName}
                                 onChange={handleInputChange}
                                 className="block w-full rounded-md bg-light-surface dark:bg-dark-bg px-3 md:py-2 py-3 outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-500 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary md:text-base text-sm dark:text-dark-primary-text text-light-primary-text"
                                 required
@@ -157,7 +163,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                         <div className="col-span-full">
                             <label
                                 htmlFor="about"
-                                className="block text-sm font-medium">
+                                className="block text-sm font-medium"
+                            >
                                 Job Description
                             </label>
                             <div className="mt-2">
@@ -166,7 +173,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                     name="jobDescription"
                                     rows={3}
                                     placeholder="Write a few lines about the job description."
-                                    value={formData.jobDescription}
+                                    value={formState.jobDescription}
                                     onChange={(e) => {
                                         e.target.style.height = "auto";
                                         e.target.style.height =
@@ -199,7 +206,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="programming-language"
-                                    className="block text-sm font-medium">
+                                    className="block text-sm font-medium"
+                                >
                                     Programming Language
                                 </label>
                                 <div className="mt-2 relative">
@@ -207,9 +215,10 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         id="programming-language"
                                         name="programmingLanguage"
                                         required
-                                        value={formData.programmingLanguage}
+                                        value={formState.programmingLanguage}
                                         onChange={handleInputChange}
-                                        className="w-full appearance-none rounded-md bg-light-surface dark:bg-dark-bg py-2 pr-8 pl-3 text-light-primary-text dark:text-dark-primary-text outline-1 outline-gray-300 dark:outline-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary md:text-base text-sm">
+                                        className="w-full appearance-none rounded-md bg-light-surface dark:bg-dark-bg py-2 pr-8 pl-3 text-light-primary-text dark:text-dark-primary-text outline-1 outline-gray-300 dark:outline-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary md:text-base text-sm"
+                                    >
                                         <option value="" disabled>
                                             Select a language
                                         </option>
@@ -246,17 +255,19 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                             <div className="sm:col-span-3">
                                 <label
                                     htmlFor="technology"
-                                    className="block text-sm font-medium">
+                                    className="block text-sm font-medium"
+                                >
                                     Technology Stack
                                 </label>
                                 <div className="mt-2 grid grid-cols-1">
                                     <select
                                         id="technology"
                                         name="technologyStack"
-                                        value={formData.technologyStack}
+                                        value={formState.technologyStack}
                                         onChange={handleInputChange}
                                         className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-light-surface dark:bg-dark-bg py-2 pr-8 pl-3 text-light-primary-text dark:text-dark-primary-text outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-light-secondary dark:focus:outline-dark-secondary md:text-base text-sm"
-                                        required>
+                                        required
+                                    >
                                         <option value="">
                                             Select your expertise
                                         </option>
@@ -298,7 +309,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                             type="radio"
                                             value="Entry"
                                             checked={
-                                                formData.experienceLevel ===
+                                                formState.experienceLevel ===
                                                 "Entry"
                                             }
                                             onChange={handleInputChange}
@@ -307,7 +318,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         />
                                         <label
                                             htmlFor="entry-level"
-                                            className="text-sm">
+                                            className="text-sm"
+                                        >
                                             Entry Level
                                         </label>
                                     </div>
@@ -318,7 +330,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                             type="radio"
                                             value="Mid"
                                             checked={
-                                                formData.experienceLevel ===
+                                                formState.experienceLevel ===
                                                 "Mid"
                                             }
                                             onChange={handleInputChange}
@@ -326,7 +338,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         />
                                         <label
                                             htmlFor="mid-level"
-                                            className="text-sm">
+                                            className="text-sm"
+                                        >
                                             Mid Level
                                         </label>
                                     </div>
@@ -337,7 +350,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                             type="radio"
                                             value="Senior"
                                             checked={
-                                                formData.experienceLevel ===
+                                                formState.experienceLevel ===
                                                 "Senior"
                                             }
                                             onChange={handleInputChange}
@@ -346,7 +359,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         />
                                         <label
                                             htmlFor="senior-level"
-                                            className="text-sm">
+                                            className="text-sm"
+                                        >
                                             Senior Level
                                         </label>
                                     </div>
@@ -365,9 +379,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
 
                         <div className="mt-10">
                             <fieldset>
-                                <legend className="font-semibold">
-                                    By email
-                                </legend>
+                                <legend className="font-semibold">By email</legend>
                                 <div className="mt-4 md:space-y-3 space-y-5">
                                     <div className="flex gap-3">
                                         <div className="flex h-6 shrink-0 items-center">
@@ -378,7 +390,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                     type="checkbox"
                                                     aria-describedby="comments-description"
                                                     checked={
-                                                        formData.notifications
+                                                        formState.notifications
                                                             .feedbackNotify
                                                     }
                                                     onChange={handleInputChange}
@@ -392,7 +404,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 <svg
                                                     fill="none"
                                                     viewBox="0 0 14 14"
-                                                    className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25">
+                                                    className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
+                                                >
                                                     <path
                                                         d="M3 8L6 11L11 3.5"
                                                         strokeWidth={2}
@@ -413,7 +426,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         <div className="md:space-y-1 space-y-0">
                                             <label
                                                 htmlFor="feedback-notify"
-                                                className="block text-sm font-medium">
+                                                className="block text-sm font-medium"
+                                            >
                                                 Interview Feedback
                                             </label>
                                             <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -431,7 +445,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                     type="checkbox"
                                                     aria-describedby="candidates-description"
                                                     checked={
-                                                        formData.notifications
+                                                        formState.notifications
                                                             .reminderNotify
                                                     }
                                                     onChange={handleInputChange}
@@ -440,7 +454,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 <svg
                                                     fill="none"
                                                     viewBox="0 0 14 14"
-                                                    className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25">
+                                                    className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
+                                                >
                                                     <path
                                                         d="M3 8L6 11L11 3.5"
                                                         strokeWidth={2}
@@ -461,7 +476,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         <div className="md:space-y-1 space-y-0">
                                             <label
                                                 htmlFor="reminder-notify"
-                                                className="block text-sm font-medium">
+                                                className="block text-sm font-medium"
+                                            >
                                                 Practice Reminders
                                             </label>
                                             <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -479,7 +495,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                     type="checkbox"
                                                     aria-describedby="offers-description"
                                                     checked={
-                                                        formData.notifications
+                                                        formState.notifications
                                                             .progressNotify
                                                     }
                                                     onChange={handleInputChange}
@@ -488,7 +504,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                                 <svg
                                                     fill="none"
                                                     viewBox="0 0 14 14"
-                                                    className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25">
+                                                    className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
+                                                >
                                                     <path
                                                         d="M3 8L6 11L11 3.5"
                                                         strokeWidth={2}
@@ -509,7 +526,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                                         <div className="md:space-y-1 space-y-0">
                                             <label
                                                 htmlFor="progress-notify"
-                                                className="block text-sm font-medium">
+                                                className="block text-sm font-medium"
+                                            >
                                                 Progress Updates
                                             </label>
                                             <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -529,12 +547,14 @@ const MockInterviewForm = ({ setIsCreateModalOpen, isCreateModalOpen }) => {
                 <button
                     type="button"
                     onClick={cancleHandler}
-                    className="rounded-md bg-light-fail dark:bg-dark-fail px-3 py-2 text-white text-sm font-semibold shadow-xs hover:bg-light-fail-hover dark:hover:bg-dark-fail-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-fail dark:focus-visible:outline-dark-fail">
+                    className="rounded-md bg-light-fail dark:bg-dark-fail px-3 py-2 text-white text-sm font-semibold shadow-xs hover:bg-light-fail-hover dark:hover:bg-dark-fail-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-fail dark:focus-visible:outline-dark-fail"
+                >
                     Cancel
                 </button>
                 <button
                     type="submit"
-                    className="rounded-md bg-light-secondary dark:bg-dark-secondary px-3 py-2 text-sm font-semibold text-white shadow-xs dark:hover:bg-dark-secondary-hover hover:bg-light-secondary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary dark:focus-visible:outline-dark-secondary">
+                    className="rounded-md bg-light-secondary dark:bg-dark-secondary px-3 py-2 text-sm font-semibold text-white shadow-xs dark:hover:bg-dark-secondary-hover hover:bg-light-secondary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-secondary dark:focus-visible:outline-dark-secondary"
+                >
                     Save
                 </button>
             </div>

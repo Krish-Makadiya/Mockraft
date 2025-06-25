@@ -1,42 +1,67 @@
-import { useAuth, UserButton, useUser } from "@clerk/clerk-react";
-import React, { useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { LayoutDashboard, UserRoundSearch } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Loader from "./components/main/Loader";
 import Navbar from "./components/main/Navbar";
-import Homepage from "./pages/Homepage";
-import ErrorPage from "./pages/ErrorPage";
+import { db } from "./config/firebase"; // adjust the import
 import Dashboard from "./pages/Dashboard/Dashboard";
+import ErrorPage from "./pages/ErrorPage";
+import Homepage from "./pages/Homepage";
 import ChatMockInterview from "./pages/MockInterview/ChatMockInterview";
 import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-import MockInterviewContent from "./pages/MockInterview/MockInterviewContent";
-import { LayoutDashboard, Moon, Sun, UserRoundSearch } from "lucide-react";
-import { useTheme } from "./context/ThemeProvider";
-import DashboardContent from "./pages/Dashboard/DashboardContent";
 import MockInterview from "./pages/MockInterview/MockInterview";
 
 const tabs = [
-    { 
-        id: 1, 
-        name: "Dashboard", 
+    {
+        id: 1,
+        name: "Dashboard",
         icon: LayoutDashboard,
-        path: "/dashboard"
+        path: "/dashboard",
     },
-    { 
-        id: 2, 
-        name: "Mock Interview", 
+    {
+        id: 2,
+        name: "Mock Interview",
         icon: UserRoundSearch,
-        path: "/mock-interview"
+        path: "/mock-interview",
     },
 ];
+
+const useInitializeUser = () => {
+    const { user } = useUser();
+
+    useEffect(() => {
+        const initializeUser = async () => {
+            if (!user) return;
+            const userRef = doc(db, "users", user.id);
+            const userSnap = await getDoc(userRef);
+
+            if (!userSnap.exists()) {
+                await setDoc(userRef, {
+                    plan: "free",
+                    points: 0,
+                    email: user.emailAddresses[0]?.emailAddress || "",
+                    firstname: user.firstName,
+                    fullname: user.fullName,
+                    lastname: user.lastName,
+                    id: user.id,
+                    avtaar: user.imageUrl,
+                    createdAt: user.createdAt
+                });
+            }
+        };
+
+        initializeUser();
+    }, [user]);
+};
 
 const App = () => {
     const { isLoaded } = useAuth();
     const [activeTab, setActiveTab] = useState(tabs[0].name);
-    const { theme, setTheme } = useTheme();
 
-    const navigate = useNavigate();
-    const { user } = useUser();
+    useInitializeUser();
 
     if (!isLoaded) {
         return <Loader />;

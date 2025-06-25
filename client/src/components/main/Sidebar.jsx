@@ -54,7 +54,7 @@ const Sidebar = ({ tabs }) => {
                         <p
                             className="text-2xl font-semibold cursor-pointer whitespace-nowrap"
                             onClick={() => navigate("/")}>
-                            C
+                            Mockie
                         </p>
                     </div>
                     <button

@@ -11,7 +11,7 @@ import {
     Trophy,
     CheckCircle,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/main/Loader";
@@ -19,18 +19,30 @@ import Drawer from "../../components/MockInterview/Drawer";
 import { db } from "../../config/firebase";
 import { useTheme } from "../../context/ThemeProvider";
 import { useAlert } from "../../hooks/useAlert";
+import { useUser } from "@clerk/clerk-react";
 
 const GetAllQuestionInfo = () => {
-    const [interviewDetails, setInterviewDetails] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [expandedQuestions, setExpandedQuestions] = useState({});
+    const [analysisState, setAnalysisState] = useState({
+        questions: [],
+        expandedQuestions: {},
+        isLoading: true,
+        error: null,
+        details: null,
+        filters: {
+            type: "all",
+            difficulty: "all",
+        },
+    });
     const [isInfoOpen, setIsInfoOpen] = useState(true);
+    const { questions, expandedQuestions, isLoading } = analysisState;
+
     const { theme, setTheme } = useTheme();
     const { showAlert, AlertComponent } = useAlert();
 
     const navigate = useNavigate();
 
     const { user_id, id } = useParams();
+    const {user} = useUser();
 
     useEffect(() => {
         fetchMockInterviewDetails();
@@ -41,7 +53,7 @@ const GetAllQuestionInfo = () => {
             const interviewRef = doc(
                 db,
                 "users",
-                user_id,
+                user.id,
                 "mock-interviews",
                 id
             );
@@ -58,19 +70,23 @@ const GetAllQuestionInfo = () => {
                 ...interviewDoc.data(),
             };
 
-            setInterviewDetails(interviewData);
+            setAnalysisState((prev) => ({
+                ...prev,
+                details: interviewData,
+                questions: interviewData.questions,
+                isLoading: false,
+            }));
         } catch (error) {
             console.error("Error fetching interview:", error);
             toast.error("Failed to fetch interview details");
-        } finally {
-            setIsLoading(false);
+            setAnalysisState((prev) => ({ ...prev, isLoading: false, error }));
         }
     };
 
     const calculateAverageScore = () => {
-        if (!interviewDetails?.questions) return 0;
+        if (!analysisState.details?.questions) return 0;
 
-        const analyzedQuestions = interviewDetails.questions.filter(
+        const analyzedQuestions = analysisState.details.questions.filter(
             (q) => q.isAnalyzed
         );
         if (analyzedQuestions.length === 0) return 0;
@@ -90,9 +106,12 @@ const GetAllQuestionInfo = () => {
     };
 
     const toggleQuestionExpand = (index) => {
-        setExpandedQuestions((prev) => ({
+        setAnalysisState((prev) => ({
             ...prev,
-            [index]: !prev[index],
+            expandedQuestions: {
+                ...prev.expandedQuestions,
+                [index]: !prev.expandedQuestions[index],
+            },
         }));
     };
 
@@ -102,10 +121,10 @@ const GetAllQuestionInfo = () => {
     };
 
     const calculatePointsEarned = () => {
-        if (!interviewDetails?.questions) return 0;
+        if (!analysisState.details?.questions) return 0;
 
         // Calculate total score earned
-        const totalScoreEarned = interviewDetails.questions.reduce(
+        const totalScoreEarned = analysisState.details.questions.reduce(
             (total, question) => {
                 if (question.answer && question.answer.trim() !== "") {
                     return total + question.analysis.score;
@@ -116,7 +135,7 @@ const GetAllQuestionInfo = () => {
         );
 
         // Calculate maximum possible score
-        const maxPossibleScore = interviewDetails.questions.length * 100; // Each question can score up to 100
+        const maxPossibleScore = analysisState.details.questions.length * 100; // Each question can score up to 100
 
         // Calculate percentage
         const percentage = (totalScoreEarned / maxPossibleScore) * 100;
@@ -176,17 +195,19 @@ const GetAllQuestionInfo = () => {
                         </h3>
                         <div className="flex items-center gap-2">
                             <div className="text-3xl font-bold text-light-primary dark:text-dark-primary">
-                                {interviewDetails.analysis.overallScore}%
+                                {analysisState.details.analysis.overallScore}%
                             </div>
                             <div
                                 className={`text-sm ${
                                     getPerformanceStatus(
-                                        interviewDetails.analysis.overallScore
+                                        analysisState.details.analysis
+                                            .overallScore
                                     ).color
                                 }`}>
                                 {
                                     getPerformanceStatus(
-                                        interviewDetails.analysis.overallScore
+                                        analysisState.details.analysis
+                                            .overallScore
                                     ).text
                                 }
                             </div>
@@ -199,11 +220,11 @@ const GetAllQuestionInfo = () => {
                         </h3>
                         <div className="text-3xl font-bold text-light-primary dark:text-dark-primary">
                             {
-                                interviewDetails.questions.filter(
+                                analysisState.details.questions.filter(
                                     (q) => q.answer && q.answer.trim() !== ""
                                 ).length
                             }{" "}
-                            / {interviewDetails.questions.length}
+                            / {analysisState.details.questions.length}
                         </div>
                     </div>
 
@@ -220,10 +241,7 @@ const GetAllQuestionInfo = () => {
 
                         <div className="flex items-center justify-between">
                             <div className="text-4xl font-bold text-emerald-600 dark:text-emerald-400">
-                                {calculatePointsEarned()}
-                                <span className="text-lg text-emerald-500 dark:text-emerald-500">
-                                    / 100%
-                                </span>
+                                {analysisState.details.analysis.overallScore}
                             </div>
 
                             {/* Achievement Badge */}
@@ -247,7 +265,7 @@ const GetAllQuestionInfo = () => {
                         Question Analysis
                     </h2>
 
-                    {interviewDetails.questions.map((question, index) => (
+                    {questions.map((question, index) => (
                         <div
                             key={index}
                             className="bg-light-bg dark:bg-dark-bg rounded-lg md:p-4 p-3 transition-all duration-300 hover:shadow-lg">
@@ -458,7 +476,7 @@ const GetAllQuestionInfo = () => {
                 </div>
             </div>
             <Drawer
-                interviewDetails={interviewDetails}
+                interviewDetails={analysisState.details}
                 isInfoOpen={isInfoOpen}
                 setIsInfoOpen={setIsInfoOpen}
             />

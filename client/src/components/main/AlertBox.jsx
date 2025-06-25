@@ -47,7 +47,7 @@ export default function AlertBox({
         <Dialog open={isOpen} onClose={onClose} className="relative z-50 select-none">
             <DialogBackdrop
                 transition
-                className="fixed inset-0 bg-light-surface/70 dark:bg-dark-bg/70 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
+                className="fixed inset-0 bg-light-surface/90 dark:bg-dark-bg/90 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-300 data-leave:ease-in"
             />
 
             <div className="fixed inset-0 z-10 w-screen overflow-y-auto">

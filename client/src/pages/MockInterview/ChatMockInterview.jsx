@@ -14,7 +14,7 @@ import {
     Users,
     WandSparkles,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/main/Loader";
@@ -22,10 +22,12 @@ import Drawer from "../../components/MockInterview/Drawer";
 import { db } from "../../config/firebase";
 import { useTheme } from "../../context/ThemeProvider";
 import { useAlert } from "../../hooks/useAlert";
+import { useUser } from "@clerk/clerk-react";
 
 const ChatMockInterview = () => {
     const { user_id, id } = useParams();
     const navigate = useNavigate();
+    const { user } = useUser();
 
     useEffect(() => {
         const checkInterviewStatus = async () => {
@@ -33,7 +35,7 @@ const ChatMockInterview = () => {
                 const interviewRef = doc(
                     db,
                     "users",
-                    user_id,
+                    user.id,
                     "mock-interviews",
                     id
                 );
@@ -68,18 +70,25 @@ const ChatMockInterview = () => {
 };
 
 const MockInterviewTest = ({ user_id, id }) => {
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answer, setAnswer] = useState("");
-    const [interviewDetails, setInterviewDetails] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isInfoOpen, setIsInfoOpen] = useState(true);
-    const [questions, setQuestions] = useState([]);
-    const [currentQuestion, setCurrentQuestion] = useState(null);
-    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [interviewState, setInterviewState] = useState({
+        currentIndex: 0,
+        answers: [],
+        questions: [],
+        currentQuestion: null,
+        isLoading: true,
+        details: null,
+        isInfoOpen: true,
+        isFullscreen: false,
+        isAnalysing: false,
+        analysis: null,
+        // answer: "",
+    });
+    // const [answer, setAnswer] = useState("");
 
     const { showAlert, AlertComponent } = useAlert();
     const { theme, setTheme } = useTheme();
     const navigate = useNavigate();
+    const { user } = useUser();
 
     useEffect(() => {
         if (!user_id || !id) {
@@ -90,21 +99,30 @@ const MockInterviewTest = ({ user_id, id }) => {
     }, [user_id, id]);
 
     useEffect(() => {
-        if (interviewDetails) {
-            generateQuestions(interviewDetails);
+        if (interviewState.details) {
+            generateQuestions(interviewState.details);
         }
-    }, [interviewDetails]);
+    }, [interviewState.details]);
 
     useEffect(() => {
-        if (questions.length > 0) {
-            setCurrentQuestion(questions[currentQuestionIndex]);
-            setAnswer(questions[currentQuestionIndex]?.answer || "");
+        if (interviewState.questions.length > 0) {
+            setInterviewState((prev) => ({
+                ...prev,
+                currentQuestion:
+                    interviewState.questions[interviewState.currentIndex],
+                answer:
+                    interviewState.questions[interviewState.currentIndex]
+                        ?.answer || "",
+            }));
         }
-    }, [questions, currentQuestionIndex]);
+    }, [interviewState.questions, interviewState.currentIndex]);
 
     useEffect(() => {
         const handleFullscreenChange = () => {
-            setIsFullscreen(!!document.fullscreenElement);
+            setInterviewState((prev) => ({
+                ...prev,
+                isFullscreen: !!document.fullscreenElement,
+            }));
         };
 
         document.addEventListener("fullscreenchange", handleFullscreenChange);
@@ -116,16 +134,11 @@ const MockInterviewTest = ({ user_id, id }) => {
     }, []);
 
     const fetchMockInterviewDetails = async () => {
-        if (!user_id || !id) {
-            console.error("Missing userId or interviewId");
-            return;
-        }
-
         try {
             const interviewRef = doc(
                 db,
                 "users",
-                user_id,
+                user.id,
                 "mock-interviews",
                 id
             );
@@ -140,13 +153,39 @@ const MockInterviewTest = ({ user_id, id }) => {
                 id: interviewDoc.id,
                 ...interviewDoc.data(),
             };
-            setInterviewDetails(interviewData);
+            setInterviewState((prev) => ({
+                ...prev,
+                details: interviewData,
+            }));
         } catch (error) {
             console.error("Error fetching interview:", error);
             toast.error(error.message || "Failed to fetch interview details");
         } finally {
-            setIsLoading(false);
+            setInterviewState((prev) => ({
+                ...prev,
+                isLoading: false,
+            }));
         }
+    };
+
+    const handleAnswerChange = (e) => {
+        const value = e.target.value;
+        setInterviewState(prev => {
+            // Update answers array
+            const updatedAnswers = [...prev.answers];
+            updatedAnswers[prev.currentIndex] = value;
+
+            // Update questions array
+            const updatedQuestions = [...prev.questions];
+            if (updatedQuestions[prev.currentIndex]) {
+                updatedQuestions[prev.currentIndex] = {
+                    ...updatedQuestions[prev.currentIndex],
+                    answer: value,
+                };
+            }
+
+            return { ...prev, answers: updatedAnswers, questions: updatedQuestions };
+        });
     };
 
     const addQuestionsToUser = async (questions) => {
@@ -154,7 +193,7 @@ const MockInterviewTest = ({ user_id, id }) => {
             const interviewRef = doc(
                 db,
                 "users",
-                user_id,
+                user.id,
                 "mock-interviews",
                 id
             );
@@ -171,7 +210,7 @@ const MockInterviewTest = ({ user_id, id }) => {
                 updatedAt: new Date(),
             });
 
-            if (!interviewDetails.questions) {
+            if (!interviewState.details.questions) {
                 toast.success("Questions generated successfully");
             }
         } catch (error) {
@@ -183,9 +222,12 @@ const MockInterviewTest = ({ user_id, id }) => {
 
     const generateQuestions = async (interview) => {
         if (interview.questions) {
-            setQuestions(interview.questions);
+            setInterviewState((prev) => ({
+                ...prev,
+                questions: interview.questions,
+                currentQuestion: interview.questions[0],
+            }));
             addQuestionsToUser(interview.questions);
-            setCurrentQuestion(interview.questions[0]);
             if (!document.fullscreenElement) {
                 toggleFullscreen();
             }
@@ -237,9 +279,12 @@ Additional Guidelines:
             const data = JSON.parse(jsonString);
 
             if (data) {
-                setQuestions(data.interview);
+                setInterviewState((prev) => ({
+                    ...prev,
+                    questions: data.interview,
+                    currentQuestion: data.interview[0],
+                }));
                 addQuestionsToUser(data.interview);
-                setCurrentQuestion(data.interview[0]);
             }
         } catch (error) {
             console.error("Error generating questions:", error);
@@ -248,34 +293,38 @@ Additional Guidelines:
     };
 
     const nextQuestion = () => {
-        if (currentQuestionIndex < questions.length - 1) {
+        if (interviewState.currentIndex < interviewState.questions.length - 1) {
             // Update the current question's answer
-            const updatedQuestions = [...questions];
-            updatedQuestions[currentQuestionIndex] = {
-                ...updatedQuestions[currentQuestionIndex],
-                answer: answer
+            const updatedQuestions = [...interviewState.questions];
+            updatedQuestions[interviewState.currentIndex] = {
+                ...updatedQuestions[interviewState.currentIndex],
+                answer: interviewState.answer,
             };
-            setQuestions(updatedQuestions);
-            
-            const nextIndex = currentQuestionIndex + 1;
-            setCurrentQuestionIndex(nextIndex);
-            setAnswer(updatedQuestions[nextIndex]?.answer || "");
+            setInterviewState((prev) => ({
+                ...prev,
+                questions: updatedQuestions,
+                currentIndex: prev.currentIndex + 1,
+                currentQuestion: updatedQuestions[prev.currentIndex + 1],
+                answer: updatedQuestions[prev.currentIndex + 1]?.answer || "",
+            }));
         }
     };
 
     const prevQuestion = () => {
-        if (currentQuestionIndex > 0) {
+        if (interviewState.currentIndex > 0) {
             // Update the current question's answer
-            const updatedQuestions = [...questions];
-            updatedQuestions[currentQuestionIndex] = {
-                ...updatedQuestions[currentQuestionIndex],
-                answer: answer
+            const updatedQuestions = [...interviewState.questions];
+            updatedQuestions[interviewState.currentIndex] = {
+                ...updatedQuestions[interviewState.currentIndex],
+                answer: interviewState.answer,
             };
-            setQuestions(updatedQuestions);
-            
-            const prevIndex = currentQuestionIndex - 1;
-            setCurrentQuestionIndex(prevIndex);
-            setAnswer(updatedQuestions[prevIndex]?.answer || "");
+            setInterviewState((prev) => ({
+                ...prev,
+                questions: updatedQuestions,
+                currentIndex: prev.currentIndex - 1,
+                currentQuestion: updatedQuestions[prev.currentIndex - 1],
+                answer: updatedQuestions[prev.currentIndex - 1]?.answer || "",
+            }));
         }
     };
 
@@ -297,43 +346,58 @@ Additional Guidelines:
         );
     };
 
-    const getTypeIcon = (type) => {
-        switch (type) {
-            case "technical":
-                return <Code2 className="w-6 h-6 text-blue-500" />;
-            case "system":
-                return <HardHat className="w-6 h-6 text-green-500" />;
-            case "behavioral":
-                return <Users className="w-6 h-6 text-purple-500" />;
-            default:
-                return <Sparkles className="w-6 h-6" />;
-        }
-    };
+    const questionTypeIcons = useMemo(
+        () => ({
+            technical: <Code2 className="w-6 h-6 text-blue-500" />,
+            system_design: <HardHat className="w-6 h-6 text-green-500" />,
+            behavioral: <Users className="w-6 h-6 text-purple-500" />,
+            default: <Sparkles className="w-6 h-6 text-gray-500" />,
+        }),
+        []
+    ); // Empty dependency array as icons don't change
 
     const toggleDrawerHandler = () => {
-        setIsInfoOpen(!isInfoOpen);
+        setInterviewState((prev) => ({
+            ...prev,
+            isInfoOpen: !prev.isInfoOpen,
+        }));
     };
 
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
-            setIsFullscreen(true);
+            setInterviewState((prev) => ({
+                ...prev,
+                isFullscreen: true,
+            }));
         } else {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
-                setIsFullscreen(false);
+                setInterviewState((prev) => ({
+                    ...prev,
+                    isFullscreen: false,
+                }));
             }
         }
     };
 
     const interviewSubmitHandler = () => {
         // Update the current question's answer before submitting
-        const updatedQuestions = [...questions];
-        updatedQuestions[currentQuestionIndex] = {
-            ...updatedQuestions[currentQuestionIndex],
-            answer: answer
+        const updatedQuestions = [...interviewState.questions];
+        updatedQuestions[interviewState.currentIndex] = {
+            ...updatedQuestions[interviewState.currentIndex],
+            answer: interviewState.answers[interviewState.currentIndex] || "",
         };
-        setQuestions(updatedQuestions);
+        setInterviewState((prev) => ({
+            ...prev,
+            questions: updatedQuestions,
+        }));
+
+        // Build the answers array for submission
+        const questionsWithAnswers = updatedQuestions.map((q, i) => ({
+            ...q,
+            answer: interviewState.answers[i] || "",
+        }));
 
         showAlert({
             title: "Submit Interview?",
@@ -345,7 +409,7 @@ Additional Guidelines:
                     const interviewRef = doc(
                         db,
                         "users",
-                        user_id,
+                        user.id,
                         "mock-interviews",
                         id
                     );
@@ -354,33 +418,34 @@ Additional Guidelines:
                     const analysisPrompt = {
                         prompt: "Analyze a full technical interview by evaluating each question-answer pair in parallel. The input consists of two arrays: 'questions' and 'answers', where the index alignment represents the corresponding Q&A pair. For each pair, return a structured evaluation object in the specified format. Return a JSON array, one object per question-answer pair.",
                         input_format: {
-                            questions: updatedQuestions.map(q => q.text),
-                            answers: updatedQuestions.map(q => q.answer || "")
+                            questions: updatedQuestions.map((q) => q.text),
+                            answers: questionsWithAnswers.map((q) => q.answer),
                         },
                         response_schema_per_pair: {
                             evaluation: {
                                 score: {
-                                    description: "0-100 scale (50=minimal pass, 70=good, 90=expert)",
-                                    type: "integer"
+                                    description:
+                                        "0-100 scale (50=minimal pass, 70=good, 90=expert)",
+                                    type: "integer",
                                 },
                                 feedback: {
                                     strengths: "string",
                                     improvements: "string",
-                                    suggestions: "string"
+                                    suggestions: "string",
                                 },
                                 keyword_analysis: {
                                     matched_count: "integer",
-                                    missing_keywords: "string[]"
-                                }
-                            }
-                        }
+                                    missing_keywords: "string[]",
+                                },
+                            },
+                        },
                     };
 
                     // Get analysis from AI
                     const analysisRes = await axios.get(
                         "http://localhost:4000/ai/generate-questions",
                         {
-                            params: { prompt: JSON.stringify(analysisPrompt) }
+                            params: { prompt: JSON.stringify(analysisPrompt) },
                         }
                     );
 
@@ -391,31 +456,40 @@ Additional Guidelines:
                         .trim();
                     const analysisData = JSON.parse(analysisJsonString);
                     console.log("ANALYSIS DATA: ", analysisData);
-                    
+
                     // Calculate overall score
-                    const overallScore = analysisData.reduce((acc, curr) => acc + curr.evaluation.score, 0) / analysisData.length;
+                    const overallScore =
+                        analysisData.reduce(
+                            (acc, curr) => acc + curr.evaluation.score,
+                            0
+                        ) / analysisData.length;
                     console.log("OVERALL SCORE: ", overallScore);
 
                     // Add analysis to each question
-                    const questionsWithAnalysis = updatedQuestions.map((question, index) => ({
-                        ...question,
-                        analysis: analysisData[index].evaluation
-                    }));
+                    const questionsWithAnalysis = updatedQuestions.map(
+                        (question, index) => ({
+                            ...question,
+                            analysis: analysisData[index].evaluation,
+                        })
+                    );
 
                     await updateDoc(interviewRef, {
                         isCompleted: true,
                         completedAt: new Date(),
-                        totalQuestions: questions.length,
+                        totalQuestions: questionsWithAnswers.length,
                         questions: questionsWithAnalysis,
                         analysis: {
                             overallScore: Math.round(overallScore),
-                            completedAt: new Date()
-                        }
+                            completedAt: new Date(),
+                        },
                     });
 
                     toast.success("Interview submitted successfully!");
                     document.exitFullscreen();
-                    setIsFullscreen(false);
+                    setInterviewState((prev) => ({
+                        ...prev,
+                        isFullscreen: false,
+                    }));
                     navigate(`/dashboard`);
                 } catch (error) {
                     console.error("Error submitting interview:", error);
@@ -427,7 +501,7 @@ Additional Guidelines:
         });
     };
 
-    if (isLoading || !currentQuestion) {
+    if (interviewState.isLoading || !interviewState.currentQuestion) {
         return <Loader />;
     }
 
@@ -442,14 +516,20 @@ Additional Guidelines:
                         <div className="flex items-center gap-3 mb-6">
                             <div className="flex items-center justify-between w-full">
                                 <div className="flex md:gap-3 gap-2 items-center">
-                                    {getTypeIcon(currentQuestion.type)}
+                                    {questionTypeIcons[
+                                        interviewState.currentQuestion?.type.replace(
+                                            " ",
+                                            "_"
+                                        )
+                                    ] || questionTypeIcons.default}
                                     <span className="text-sm font-medium px-2 py-1 bg-light-bg dark:bg-dark-bg rounded-md">
-                                        {currentQuestion.type}
+                                        {interviewState.currentQuestion?.type}
                                     </span>
                                     <span className="text-xs text-yellow-500 dark:text-yellow-400">
                                         <span className="flex items-center">
                                             {getDifficultyStars(
-                                                currentQuestion.difficulty
+                                                interviewState.currentQuestion
+                                                    .difficulty
                                             )}
                                         </span>
                                     </span>
@@ -458,7 +538,7 @@ Additional Guidelines:
                                     <button
                                         onClick={toggleFullscreen}
                                         className="text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary">
-                                        {isFullscreen ? (
+                                        {interviewState.isFullscreen ? (
                                             <Minimize2 className="h-6 w-6" />
                                         ) : (
                                             <Maximize2 className="h-6 w-6" />
@@ -487,10 +567,10 @@ Additional Guidelines:
                         {/* Question text */}
                         <div className="flex flex-col gap-1 mb-6 text-sm">
                             <h2 className="text-xl font-medium">
-                                {currentQuestion.text}
+                                {interviewState.currentQuestion.text}
                             </h2>
                             <p className="text-light-secondary dark:text-dark-secondary text-sm">
-                                -{currentQuestion.rationale}
+                                -{interviewState.currentQuestion.rationale}
                             </p>
                         </div>
 
@@ -504,20 +584,35 @@ Additional Guidelines:
                             <textarea
                                 id="answer"
                                 rows={8}
-                                className="w-full min-h-[80px] max-h-[300px] appearance-none rounded-md bg-light-bg dark:bg-dark-bg py-2 px-3 outline-1 outline-light-surface dark:outline-dark-surface focus:outline-1 focus:-outline-offset-2 focus:outline-light-primary dark:focus:outline-dark-primary/50  resize-none md:text-base text-sm"
-                                value={answer}
-                                onChange={(e) => setAnswer(e.target.value)}
-                                placeholder="Type your answer here..."
+                                maxLength={500}
+                                className="w-full min-h-[80px] max-h-[300px] rounded-md bg-light-bg dark:bg-dark-bg py-2 px-3 text-base resize-none"
+                                value={
+                                    interviewState.answers[
+                                        interviewState.currentIndex
+                                    ] || ""
+                                }
+                                onChange={handleAnswerChange}
+                                placeholder="Type your answer here (max 500 characters)..."
                             />
+                            <div className="text-xs text-right mt-1 text-gray-500">
+                                {
+                                    (
+                                        interviewState.answers[
+                                            interviewState.currentIndex
+                                        ] || ""
+                                    ).length
+                                }{" "}
+                                / 500 characters
+                        </div>
                         </div>
 
                         {/* Question navigation */}
                         <div className="flex justify-between mt-8 pt-4 border-t border-neitral-500 dark:border-neutral-600">
                             <button
                                 onClick={prevQuestion}
-                                disabled={currentQuestionIndex === 0}
+                                disabled={interviewState.currentIndex === 0}
                                 className={`px-4 py-2 rounded-md flex items-center gap-2 ${
-                                    currentQuestionIndex === 0
+                                    interviewState.currentIndex === 0
                                         ? "text-light-secondary-text dark:text-dark-secondary-text cursor-not-allowed"
                                         : "text-light-secondary-text dark:text-dark-secondary-text hover:bg-light-primary dark:hover:bg-dark-primary  hover:text-dark-primary-text"
                                 }`}>
@@ -525,7 +620,8 @@ Additional Guidelines:
                                 Previous
                             </button>
 
-                            {currentQuestionIndex === questions.length - 1 ? (
+                            {interviewState.currentIndex ===
+                            interviewState.questions.length - 1 ? (
                                 <button
                                     onClick={interviewSubmitHandler}
                                     className="px-4 py-2 rounded-md flex items-center gap-2 text-light-secondary-text dark:text-dark-secondary-text hover:bg-light-primary dark:hover:bg-dark-primary  hover:text-dark-primary-text">
@@ -536,12 +632,12 @@ Additional Guidelines:
                                 <button
                                     onClick={nextQuestion}
                                     disabled={
-                                        currentQuestionIndex ===
-                                        questions.length - 1
+                                        interviewState.currentIndex ===
+                                        interviewState.questions.length - 1
                                     }
                                     className={`px-4 py-2 rounded-md flex items-center gap-2 ${
-                                        currentQuestionIndex ===
-                                        questions.length - 1
+                                        interviewState.currentIndex ===
+                                        interviewState.questions.length - 1
                                             ? "text-light-secondary-text dark:text-dark-secondary-text cursor-not-allowed"
                                             : "text-light-secondary-text dark:text-dark-secondary-text hover:bg-light-primary dark:hover:bg-dark-primary  hover:text-dark-primary-text"
                                     }`}>
@@ -558,16 +654,17 @@ Additional Guidelines:
                     <div className="max-w-3xl mx-auto">
                         <div className="flex justify-between items-center text-sm">
                             <span className="text-light-secondary-text dark:text-dark-secondary-text">
-                                Question {currentQuestionIndex + 1} of{" "}
-                                {questions.length}
+                                Question {interviewState.currentIndex + 1} of{" "}
+                                {interviewState.questions.length}
                             </span>
                             <div className="w-1/2 bg-light-surface dark:bg-dark-surface rounded-full h-2">
                                 <div
                                     className="bg-light-primary dark:bg-dark-primary h-2 rounded-full"
                                     style={{
                                         width: `${
-                                            ((currentQuestionIndex + 1) /
-                                                questions.length) *
+                                            ((interviewState.currentIndex + 1) /
+                                                interviewState.questions
+                                                    .length) *
                                             100
                                         }%`,
                                     }}></div>
@@ -577,9 +674,14 @@ Additional Guidelines:
                 </footer>
             </div>
             <Drawer
-                interviewDetails={interviewDetails}
-                isInfoOpen={isInfoOpen}
-                setIsInfoOpen={setIsInfoOpen}
+                interviewDetails={interviewState.details}
+                isInfoOpen={interviewState.isInfoOpen}
+                setIsInfoOpen={(val) =>
+                    setInterviewState((prev) => ({
+                        ...prev,
+                        isInfoOpen: val,
+                    }))
+                }
             />
             <AlertComponent />
         </div>
