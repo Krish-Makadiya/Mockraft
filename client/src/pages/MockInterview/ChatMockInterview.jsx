@@ -81,9 +81,7 @@ const MockInterviewTest = ({ user_id, id }) => {
         isFullscreen: false,
         isAnalysing: false,
         analysis: null,
-        // answer: "",
     });
-    // const [answer, setAnswer] = useState("");
 
     const { showAlert, AlertComponent } = useAlert();
     const { theme, setTheme } = useTheme();
@@ -414,77 +412,96 @@ Additional Guidelines:
                         id
                     );
 
-                    // Generate analysis prompt
-                    const analysisPrompt = {
-                        prompt: "Analyze a full technical interview by evaluating each question-answer pair in parallel. The input consists of two arrays: 'questions' and 'answers', where the index alignment represents the corresponding Q&A pair. For each pair, return a structured evaluation object in the specified format. Return a JSON array, one object per question-answer pair.",
-                        input_format: {
-                            questions: updatedQuestions.map((q) => q.text),
-                            answers: questionsWithAnswers.map((q) => q.answer),
-                        },
-                        response_schema_per_pair: {
-                            evaluation: {
-                                score: {
-                                    description:
-                                        "0-100 scale (50=minimal pass, 70=good, 90=expert)",
-                                    type: "integer",
+                    // Show promise toast while analyzing
+                    await toast.promise(
+                        (async () => {
+                            // Generate analysis prompt
+                            const analysisPrompt = {
+                                prompt: "Analyze a full technical interview by evaluating each question-answer pair in parallel. The input consists of two arrays: 'questions' and 'answers', where the index alignment represents the corresponding Q&A pair. For each pair, return a structured evaluation object in the specified format. Return a JSON array, one object per question-answer pair.",
+                                input_format: {
+                                    questions: updatedQuestions.map((q) => q.text),
+                                    answers: questionsWithAnswers.map((q) => q.answer),
                                 },
-                                feedback: {
-                                    strengths: "string",
-                                    improvements: "string",
-                                    suggestions: "string",
+                                response_schema_per_pair: {
+                                    evaluation: {
+                                        score: {
+                                            description:
+                                                "0-100 scale (10=no answer provided, 50=minimal pass, 70=good, 90=expert)",
+                                            type: "integer",
+                                        },
+                                        feedback: {
+                                            strengths: "string",
+                                            improvements: "string",
+                                            suggestions: "string",
+                                        },
+                                        keyword_analysis: {
+                                            matched_count: "integer",
+                                            missing_keywords: "string[]",
+                                        },
+                                    },
                                 },
-                                keyword_analysis: {
-                                    matched_count: "integer",
-                                    missing_keywords: "string[]",
-                                },
-                            },
-                        },
-                    };
+                            };
 
-                    // Get analysis from AI
-                    const analysisRes = await axios.get(
-                        "http://localhost:4000/ai/generate-questions",
+                            // Get analysis from AI
+                            const analysisRes = await axios.get(
+                                "http://localhost:4000/ai/generate-questions",
+                                {
+                                    params: { prompt: JSON.stringify(analysisPrompt) },
+                                }
+                            );
+
+                            const analysisResponse = analysisRes.data;
+                            const analysisJsonString = analysisResponse
+                                .replace(/```json/g, "")
+                                .replace(/```/g, "")
+                                .trim();
+                            const analysisData = JSON.parse(analysisJsonString);
+
+                            // Calculate overall score
+                            const overallScore =
+                                analysisData.reduce(
+                                    (acc, curr) => acc + curr.evaluation.score,
+                                    0
+                                ) / analysisData.length;
+
+                            // Add analysis to each question
+                            const questionsWithAnalysis = updatedQuestions.map(
+                                (question, index) => ({
+                                    ...question,
+                                    analysis: analysisData[index].evaluation,
+                                })
+                            );
+
+                            await updateDoc(interviewRef, {
+                                isCompleted: true,
+                                completedAt: new Date(),
+                                totalQuestions: questionsWithAnswers.length,
+                                questions: questionsWithAnalysis,
+                                analysis: {
+                                    overallScore: Math.round(overallScore),
+                                    completedAt: new Date(),
+                                },
+                            });
+
+                            // --- Add this block to update the user's overall score ---
+                            const userRef = doc(db, "users", user.id);
+                            const userSnap = await getDoc(userRef);
+                            if (userSnap.exists()) {
+                                const userData = userSnap.data();
+                                const prevScore = userData.points || 0;
+                                const newScore = prevScore + Math.round(overallScore);
+                                await updateDoc(userRef, {
+                                    points: newScore,
+                                });
+                            }
+                        })(),
                         {
-                            params: { prompt: JSON.stringify(analysisPrompt) },
+                            loading: "Analyzing your answers...",
+                            success: "Interview submitted and analyzed successfully!",
+                            error: "Failed to analyze and submit interview.",
                         }
                     );
 
-                    const analysisResponse = analysisRes.data;
-                    const analysisJsonString = analysisResponse
-                        .replace(/```json/g, "")
-                        .replace(/```/g, "")
-                        .trim();
-                    const analysisData = JSON.parse(analysisJsonString);
-                    console.log("ANALYSIS DATA: ", analysisData);
-
-                    // Calculate overall score
-                    const overallScore =
-                        analysisData.reduce(
-                            (acc, curr) => acc + curr.evaluation.score,
-                            0
-                        ) / analysisData.length;
-                    console.log("OVERALL SCORE: ", overallScore);
-
-                    // Add analysis to each question
-                    const questionsWithAnalysis = updatedQuestions.map(
-                        (question, index) => ({
-                            ...question,
-                            analysis: analysisData[index].evaluation,
-                        })
-                    );
-
-                    await updateDoc(interviewRef, {
-                        isCompleted: true,
-                        completedAt: new Date(),
-                        totalQuestions: questionsWithAnswers.length,
-                        questions: questionsWithAnalysis,
-                        analysis: {
-                            overallScore: Math.round(overallScore),
-                            completedAt: new Date(),
-                        },
-                    });
-
-                    toast.success("Interview submitted successfully!");
                     document.exitFullscreen();
                     setInterviewState((prev) => ({
                         ...prev,
@@ -493,7 +510,7 @@ Additional Guidelines:
                     navigate(`/dashboard`);
                 } catch (error) {
                     console.error("Error submitting interview:", error);
-                    toast.error("Failed to submit interview");
+                    // toast.error is not needed here, handled by toast.promise
                 }
             },
             confirmText: "Submit Interview",

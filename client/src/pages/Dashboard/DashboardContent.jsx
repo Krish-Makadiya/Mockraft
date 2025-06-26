@@ -26,12 +26,26 @@ import {
     Clock1,
     Clock4,
     FileText,
+    ChartBar,
+    Gauge,
+    Sprout,
+    NotebookPen,
+    Pickaxe,
+    LayoutTemplate,
+    Atom,
+    Medal,
+    ShieldCheck,
 } from "lucide-react";
 import { doc, getDoc } from "@firebase/firestore";
 import { useUser } from "@clerk/clerk-react";
 import { collection, getDocs } from "@firebase/firestore";
 import { db } from "../../config/firebase";
 import Loader from "../../components/main/Loader";
+import {
+    RankProgressBar,
+    RANKS,
+} from "../../components/Dashboard/RankProgressBar";
+import { useNavigate } from "react-router-dom";
 
 const QUESTION_TYPES = [
     "technical",
@@ -155,11 +169,23 @@ const useMockInterviewStats = () => {
     return { mockInterviews, stats };
 };
 
+const ICONS = {
+    Sprout,
+    NotebookPen,
+    Pickaxe,
+    LayoutTemplate,
+    Atom,
+    Medal,
+    ShieldCheck,
+    Trophy,
+};
+
 const DashboardContent = () => {
     const { mockInterviews, stats } = useMockInterviewStats();
     const { user } = useUser();
     const [userData, setUserData] = useState(null);
     const [isUserDataLoading, setIsUserDataLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -178,7 +204,12 @@ const DashboardContent = () => {
         return <Loader />;
     }
 
-    console.log(stats);
+    console.log(userData);
+
+    const userPoints = userData?.points || 0;
+    const currentRankIndex = RANKS.findIndex(
+        (rank) => userPoints >= rank.minPoints && userPoints <= rank.maxPoints
+    );
 
     return (
         <div className="flex flex-col gap-10">
@@ -221,7 +252,7 @@ const DashboardContent = () => {
                                         <WalletMinimal className="w-6 h-6 text-blue-500" />
                                         <p className="text-sm text-gray-700 dark:text-gray-300">
                                             {" "}
-                                            {userData?.points ?? 0} Coins
+                                            {userData?.coins ?? 0} Coins
                                         </p>
                                     </span>
                                 </div>
@@ -256,6 +287,78 @@ const DashboardContent = () => {
                                     : "Unknown"}
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div className="w-full flex flex-col items-center gap-6 bg-light-surface dark:bg-dark-bg p-6 rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
+                    <div className="flex items-center w-[80%] mx-auto">
+                        {RANKS.map((rank, idx) => {
+                            const isCurrent = idx === currentRankIndex;
+                            const isCompleted = idx < currentRankIndex;
+                            const Icon = ICONS[rank.icon];
+                            return (
+                                <React.Fragment key={rank.level}>
+                                    <div className="flex flex-col items-center">
+                                        <div
+                                            className={`rounded-full border-2 p-4 mb-1
+                                ${
+                                    isCurrent
+                                        ? "border-yellow-500 bg-yellow-100 dark:bg-yellow-900/40"
+                                        : isCompleted
+                                        ? "border-green-400 bg-green-100 dark:bg-green-900/40"
+                                        : "border-gray-300 bg-gray-100 dark:bg-gray-800"
+                                }
+                            `}>
+                                            <Icon
+                                                className={`w-10 h-10
+                                    ${
+                                        isCurrent
+                                            ? "text-yellow-600"
+                                            : isCompleted
+                                            ? "text-green-500"
+                                            : "text-gray-400 dark:text-gray-500"
+                                    }
+                                `}
+                                            />
+                                        </div>
+                                        <span
+                                            className={`text-xs font-semibold
+                                ${
+                                    isCurrent
+                                        ? "text-yellow-700 dark:text-yellow-200"
+                                        : isCompleted
+                                        ? "text-green-600 dark:text-green-300"
+                                        : "text-gray-400 dark:text-gray-500"
+                                }
+                            `}>
+                                            {rank.name}
+                                        </span>
+                                    </div>
+                                    {idx < RANKS.length - 1 && (
+                                        <div
+                                            className={`flex-1 h-1 mx-1 rounded-full
+                                ${
+                                    idx < currentRankIndex
+                                        ? "bg-green-400"
+                                        : idx === currentRankIndex
+                                        ? "bg-yellow-400"
+                                        : "bg-gray-300 dark:bg-gray-700"
+                                }
+                            `}
+                                            style={{ minWidth: 24 }}
+                                        />
+                                    )}
+                                </React.Fragment>
+                            );
+                        })}
+                    </div>
+                    <div className=" text-gray-500 dark:text-gray-400">
+                        You are currently at{" "}
+                        <span className="font-bold text-yellow-600 dark:text-yellow-300">
+                            {RANKS[currentRankIndex].name}
+                        </span>{" "}
+                        rank with{" "}
+                        <span className="font-bold">{userPoints}</span> points.
                     </div>
                 </div>
 
@@ -329,7 +432,7 @@ const DashboardContent = () => {
                                 Points Earned
                             </p>
                             <p className="text-4xl font-bold text-purple-900 dark:text-purple-100">
-                                {stats.totalPoints}
+                                {userData?.points || 0}
                             </p>
                         </div>
                         <div className="flex items-center justify-center">
@@ -344,13 +447,15 @@ const DashboardContent = () => {
                 </div>
 
                 <div className="flex gap-[2%]">
-                    <div className="w-[49%] bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col">
+                    <div className="w-[49%] bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
                         <div className="flex items-center gap-4">
                             <div className="bg-light-bg dark:bg-dark-surface p-3 rounded-full shadow-sm">
                                 <Clock4 size={30} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="text-xl font-semibold">Recent Interviews</p>
+                                <p className="text-xl font-semibold">
+                                    Recent Interviews
+                                </p>
                                 <p className="text-light-secondary-text">
                                     Your latest mock interview sessions
                                 </p>
@@ -362,12 +467,21 @@ const DashboardContent = () => {
                                     {stats.recent.map((interview) => (
                                         <li
                                             key={interview.id}
-                                            className="flex items-center justify-between p-4 bg-light-bg dark:bg-dark-surface rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                                            className="flex items-center justify-between p-4 bg-light-bg dark:bg-dark-surface rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
+                                            onClick={() =>
+                                                interview.isCompleted
+                                                    ? navigate(
+                                                          `/${userData.id}/mock-interview/${interview.id}/analysis`
+                                                      )
+                                                    : navigate(
+                                                          `/${userData.id}/mock-interview/${interview.id}`
+                                                      )
+                                            }>
                                             <div className="flex items-center gap-3">
                                                 <FileText size={24} />
                                                 <div>
                                                     <p className="font-semibold">
-                                                        {interview.title ||
+                                                        {interview.interviewName ||
                                                             "Mock Interview"}
                                                     </p>
                                                     <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -387,7 +501,20 @@ const DashboardContent = () => {
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-3">
+                                                {/* Status indicator */}
+                                                {interview.isCompleted ? (
+                                                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 text-xs font-semibold">
+                                                        <CheckCircle className="w-4 h-4" />
+                                                        Completed
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 text-xs font-semibold">
+                                                        <Clock className="w-4 h-4" />
+                                                        Ongoing
+                                                    </span>
+                                                )}
+
                                                 <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
                                                     Score:{" "}
                                                     {interview.analysis
@@ -405,6 +532,158 @@ const DashboardContent = () => {
                                     No recent interviews found.
                                 </p>
                             )}
+                        </div>
+                    </div>
+                    <div className="w-[49%] bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
+                        <div className="flex items-center gap-4">
+                            <div className="bg-light-bg dark:bg-dark-surface p-3 rounded-full shadow-sm">
+                                <ChartBar size={30} />
+                            </div>
+                            <div className="flex flex-col">
+                                <p className="text-xl font-semibold">
+                                    Performance Analysis{" "}
+                                </p>
+                                <p className="text-light-secondary-text">
+                                    Breakdown by question categories
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            {Object.keys(stats.typeStats).length > 0 ? (
+                                <ul className="mt-4 space-y-4">
+                                    {QUESTION_TYPES.map((type) => {
+                                        const typeStat =
+                                            stats.typeStats[type] || {};
+                                        const avg = typeStat.avgScore || 0;
+                                        return (
+                                            <li
+                                                key={type}
+                                                className="flex items-center justify-between p-4 bg-light-bg dark:bg-dark-surface rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                                                <div className="flex items-center gap-3">
+                                                    <Gauge size={24} />
+                                                    <div>
+                                                        <p className="font-semibold capitalize">
+                                                            {type.replace(
+                                                                "_",
+                                                                " "
+                                                            )}
+                                                        </p>
+                                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                            Total:{" "}
+                                                            {typeStat.total} |
+                                                            Attempted:{" "}
+                                                            {typeStat.attempted}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col items-end min-w-[180px] w-1/3">
+                                                    <span className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-1">
+                                                        Avg Score: {avg}%
+                                                    </span>
+                                                    <div className="w-full h-3 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                                                        <div
+                                                            className={`
+                            h-full rounded-full transition-all duration-300
+                            ${
+                                avg >= 80
+                                    ? "bg-green-500"
+                                    : avg >= 60
+                                    ? "bg-yellow-400"
+                                    : "bg-red-400"
+                            }
+                        `}
+                                                            style={{
+                                                                width: `${avg}%`,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            ) : (
+                                <p className="text-gray-500 dark:text-gray-400 mt-4">
+                                    No performance data available.
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <RankProgressBar points={userData?.points || 0} />
+
+                <div className="flex gap-[2%]">
+                    {/* Highlight: Why Buy Paid Plan */}
+                    <div className="w-[49%] bg-gradient-to-br from-yellow-100 via-yellow-50 to-white dark:from-yellow-900/40 dark:via-yellow-900/10 dark:to-gray-900 border-2 border-yellow-300 dark:border-yellow-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <Crown className="w-8 h-8 text-yellow-500" />
+                                <span className="text-xl font-bold text-yellow-800 dark:text-yellow-200">
+                                    Unlock Premium Features!
+                                </span>
+                            </div>
+                            <ul className="list-disc pl-6 text-gray-700 dark:text-gray-200 text-sm mb-4">
+                                <li>Unlimited mock interviews & AI feedback</li>
+                                <li>Priority support & early feature access</li>
+                                <li>Exclusive resources and community</li>
+                            </ul>
+                            <div className="text-base font-semibold text-yellow-700 dark:text-yellow-200 mb-4">
+                                Invest in your career. Stand out from the crowd.
+                            </div>
+                        </div>
+                        <button className="mt-2 px-6 py-2 rounded-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold shadow transition">
+                            Upgrade Now
+                        </button>
+                    </div>
+                    {/* Contact Card */}
+                    <div className="w-[49%] bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-900/40 dark:via-blue-900/10 dark:to-gray-900 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <MailCheck className="w-8 h-8 text-blue-500" />
+                                <span className="text-xl font-bold text-blue-800 dark:text-blue-200">
+                                    Need Help? Contact Us!
+                                </span>
+                            </div>
+                            <div className="text-gray-700 dark:text-gray-200 text-sm mb-4">
+                                Our support team is here for you. Reach out for
+                                any queries, feedback, or issues.
+                            </div>
+                            <div className="flex flex-col gap-1 text-sm">
+                                <span>
+                                    <span className="font-semibold">
+                                        Email:
+                                    </span>{" "}
+                                    <a
+                                        href="mailto:support@careerly.com"
+                                        className="text-blue-600 hover:underline">
+                                        support@careerly.com
+                                    </a>
+                                </span>
+                                <span>
+                                    <span className="font-semibold">
+                                        Phone:
+                                    </span>{" "}
+                                    <a
+                                        href="tel:+1234567890"
+                                        className="text-blue-600 hover:underline">
+                                        +1 234 567 890
+                                    </a>
+                                </span>
+                                <span>
+                                    <span className="font-semibold">
+                                        Live Chat:
+                                    </span>{" "}
+                                    <a
+                                        href="/support"
+                                        className="text-blue-600 hover:underline">
+                                        Start Chat
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
+                            We usually respond within 24 hours.
                         </div>
                     </div>
                 </div>
