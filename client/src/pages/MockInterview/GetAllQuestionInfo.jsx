@@ -155,7 +155,7 @@ const GetAllQuestionInfo = () => {
     };
 
     return (
-        <div className="min-h-screen  select-none bg-light-surface dark:bg-dark-surface md:p-6 py-4 px-3 ">
+        <div className="min-h-screen   bg-light-surface dark:bg-dark-surface md:p-6 py-4 px-3 ">
             <div className="max-w-6xl mx-auto md:space-y-6 space-y-10">
                 {/* Header */}
                 <div className="flex justify-between items-center">

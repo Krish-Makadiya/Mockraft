@@ -505,7 +505,7 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
         <div className="flex flex-col min-h-screen bg-light-bg dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text gap-10 px-4">
             <div className="flex justify-between items-center gap-10">
                 <div className="md:ml-0 ml-12">
-                    <h1 className="md:text-2xl text-xl font-bold">Mock Interviews</h1>
+                    <h1 className="md:text-3xl text-xl font-bold">Mock Interviews</h1>
                     <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
                         Prepare for your next interview with our mock interview
                         sessions.

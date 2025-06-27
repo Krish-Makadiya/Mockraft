@@ -1,8 +1,9 @@
+import React from "react";
 import { useLocation } from "react-router-dom";
 import Sidebar from "../../components/main/Sidebar";
-import DashboardContent from "./DashboardContent";
+import LeaderboardContent from "./LeaderboardContent";
 
-const Dashboard = ({ tabs }) => {
+const Leaderboard = ({tabs}) => {
     const location = useLocation();
 
     const getActiveTab = () => {
@@ -13,14 +14,14 @@ const Dashboard = ({ tabs }) => {
     };
 
     return (
-        <div className="flex relative ">
+        <div className="flex relative">
             <Sidebar tabs={tabs} getActiveTab={getActiveTab} />
 
             <div className="h-full w-full bg-light-bg dark:bg-dark-surface py-10 px-8">
-                <DashboardContent />
+                <LeaderboardContent />
             </div>
         </div>
     );
 };
 
-export default Dashboard;
+export default Leaderboard;

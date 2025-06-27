@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp, doc, updateDoc, increment } from "firebase/firestore";
 import { ChevronDown, CircleArrowLeft, Info } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -64,6 +64,13 @@ const MockInterviewForm = ({ setIsCreateModalOpen }) => {
                             isBookmarked: false,
                         }
                     );
+
+                    // Increment interviewsCreated for the user
+                    const userRef = doc(db, "users", user.id);
+                    await updateDoc(userRef, {
+                        interviewsCreated: increment(1),
+                    });
+
                     window.scrollTo({ top: 0, behavior: "smooth" });
                     return docRef;
                 },
@@ -113,7 +120,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen }) => {
 
     return (
         <form
-            className="md:w-3/5 w-[90vw] select-none mx-auto text-light-primary-text dark:text-dark-primary-text"
+            className="md:w-3/5 w-[90vw]  mx-auto text-light-primary-text dark:text-dark-primary-text"
             onSubmit={submitHandler}
         >
             <div className="flex flex-col">
@@ -123,7 +130,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen }) => {
                         className="size-8 text-light-fail md:block hidden dark:text-dark-fail hover:text-light-fail-hover dark:hover:text-dark-fail-hover"
                     />
                     <div>
-                        <h2 className="md:text-2xl text-xl font-semibold">
+                        <h2 className="md:text-3xl text-xl font-semibold">
                             Create Mock Interview
                         </h2>
                         <p className="md:text-sm text-xs text-light-secondary dark:text-dark-secondary">

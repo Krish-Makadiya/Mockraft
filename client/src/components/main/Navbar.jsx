@@ -73,7 +73,7 @@ export default function Example() {
     const { isSignedIn } = useAuth();
 
     return (
-        <header className="select-none">
+        <header className="">
             <nav className="mx-auto flex max-w-7xl items-center justify-between py-4 px-6 lg:px-8">
                 <div className="flex lg:flex-1">
                     <a href="#" className="">

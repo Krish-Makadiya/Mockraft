@@ -214,7 +214,7 @@ const DashboardContent = () => {
     return (
         <div className="flex flex-col gap-10">
             <div className="md:ml-0 ml-12">
-                <h1 className="md:text-2xl text-xl font-bold">Dashboard</h1>
+                <h1 className="md:text-3xl text-xl font-bold">Dashboard</h1>
                 <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
                     Track your interview progress and performance
                 </p>
@@ -291,7 +291,7 @@ const DashboardContent = () => {
                 </div>
 
                 <div className="w-full flex flex-col items-center gap-6 bg-light-surface dark:bg-dark-bg p-6 rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
-                    <div className="flex items-center w-[80%] mx-auto">
+                    <div className="flex items-center w-[85%] mx-auto">
                         {RANKS.map((rank, idx) => {
                             const isCurrent = idx === currentRankIndex;
                             const isCompleted = idx < currentRankIndex;
@@ -528,7 +528,7 @@ const DashboardContent = () => {
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-gray-500 dark:text-gray-400 mt-4">
+                                <p className="text-gray-500 dark:text-gray-400 my-36 text-center">
                                     No recent interviews found.
                                 </p>
                             )}

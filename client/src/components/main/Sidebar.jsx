@@ -1,5 +1,5 @@
 import { UserButton, useUser } from "@clerk/clerk-react";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen, ChartColumnIncreasing  } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeProvider";
@@ -40,7 +40,7 @@ const Sidebar = ({ tabs }) => {
                 )}
             </button>
             <aside
-                className={`sticky select-none top-0 h-screen ${
+                className={`sticky  top-0 h-screen ${
                     isCollapsed ? "md:w-20 md:block hidden" : "md:w-60 w-[300px]"
                 } bg-light-surface dark:bg-dark-bg text-light-primary-text dark:text-dark-primary-text flex flex-col px-3 py-5 transition-all duration-300 ease-in-out`}>
                 <div
@@ -70,11 +70,11 @@ const Sidebar = ({ tabs }) => {
 
                 <hr className="mt-3 mb-4 border-light-border dark:border-dark-border opacity-20" />
                 <nav className="flex-1">
-                    <ul className="space-y-1">
+                    <ul className="space-y-2">
                         {tabs.map((tab) => (
                             <li
                                 key={tab.id}
-                                className={`cursor-pointer px-4 py-2 text-sm rounded-lg transition-all duration-300 ease-in-out ${
+                                className={`cursor-pointer px-4 py-2 text-base rounded-lg transition-all duration-300 ease-in-out ${
                                     getActiveTab() === tab.name
                                         ? "bg-light-primary/10 dark:bg-dark-primary/10 text-light-primary dark:text-dark-primary"
                                         : "hover:bg-light-hover dark:hover:bg-dark-hover"

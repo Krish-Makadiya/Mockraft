@@ -523,7 +523,7 @@ Additional Guidelines:
     }
 
     return (
-        <div className="flex h-screen select-none bg-light-surface dark:bg-dark-surface">
+        <div className="flex h-screen  bg-light-surface dark:bg-dark-surface">
             {/* Main Content */}
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Question area */}

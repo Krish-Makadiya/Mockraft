@@ -1,6 +1,6 @@
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { LayoutDashboard, UserRoundSearch } from "lucide-react";
+import { LayoutDashboard, UserRoundSearch, ChartColumnIncreasing, FileText   } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -13,6 +13,7 @@ import Homepage from "./pages/Homepage";
 import ChatMockInterview from "./pages/MockInterview/ChatMockInterview";
 import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
 import MockInterview from "./pages/MockInterview/MockInterview";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
 
 const tabs = [
     {
@@ -24,8 +25,14 @@ const tabs = [
     {
         id: 2,
         name: "Mock Interview",
-        icon: UserRoundSearch,
+        icon: FileText ,
         path: "/mock-interview",
+    },
+    {
+        id: 3,
+        name: "Leaderboard",
+        icon: ChartColumnIncreasing,
+        path: "/leaderboard",
     },
 ];
 
@@ -68,7 +75,7 @@ const App = () => {
     }
 
     return (
-        <div className="h-screen font-[poppins] bg-light-bg dark:bg-dark-bg text-light-primary-text dark:text-dark-primary-text">
+        <div className="h-screen select-none font-[poppins] bg-light-bg dark:bg-dark-bg text-light-primary-text dark:text-dark-primary-text">
             <Routes>
                 <Route
                     path="/"
@@ -116,6 +123,18 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <GetAllQuestionInfo />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/leaderboard"
+                    element={
+                        <ProtectedRoute>
+                            <Leaderboard 
+                                tabs={tabs}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
                         </ProtectedRoute>
                     }
                 />
