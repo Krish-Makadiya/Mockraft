@@ -212,7 +212,7 @@ const DashboardContent = () => {
     );
 
     return (
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-10 md:px-4 px-2">
             <div className="md:ml-0 ml-12">
                 <h1 className="md:text-3xl text-xl font-bold">Dashboard</h1>
                 <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
@@ -220,25 +220,47 @@ const DashboardContent = () => {
                 </p>
             </div>
             <div className="flex flex-col gap-6">
-                <div className="flex flex-row items-center gap-8 bg-light-surface dark:bg-dark-bg p-6 rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg w-full mx-auto">
+                <div className="flex md:flex-row flex-col items-center md:gap-8 gap-3 bg-light-surface dark:bg-dark-bg p-6 rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg w-full mx-auto">
                     <img
                         src={userData?.avtaar || "/default-avatar.png"}
                         alt="User Avatar"
                         className="w-32 h-32 rounded-full object-cover border-3 border-blue-200 dark:border-blue-500 shadow"
                     />
-                    <div className="flex-1 flex gap-2 justify-between">
-                        <div className="flex flex-col gap-3">
-                            <div className="flex flex-col gap-1">
+                    <div className="flex-1 flex md:flex-row flex-col gap-4 justify-between">
+                        <div className="flex flex-col md:items-start items-center md:gap-3 gap-2">
+                            <div className="flex flex-col gap-1 md:items-start items-center">
                                 <div className="text-2xl font-bold text-light-primary-text dark:text-dark-primary-text">
                                     {userData?.fullname || "No Name"}
                                 </div>
-                                <div className="text-base flex gap-2 text-gray-500 dark:text-gray-500">
-                                    <MailCheck />
+                                <div className="text-base flex items-center md:gap-2 gap-1 text-gray-500 dark:text-gray-500">
+                                    <MailCheck className="md:w-6 md:h-6 w-4 h-4" />
                                     {userData?.email || "No Email"}
                                 </div>
                             </div>
-                            <div className="flex gap-3">
-                                <div className="flex items-center mt-4">
+                            <span
+                                className={`inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full font-semibold shadow-sm
+                                        ${
+                                            userData?.plan === "premium"
+                                                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200"
+                                                : "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200"
+                                        }
+                                    `}>
+                                {userData?.plan === "premium" ? (
+                                    <>
+                                        <Crown className="w-6 h-6 text-yellow-500" />
+                                        Premium
+                                    </>
+                                ) : (
+                                    <>
+                                        <Gift className="w-6 h-6 text-blue-400" />
+                                        Free
+                                    </>
+                                )}
+                            </span>
+                        </div>
+                        <div className="flex flex-col justify-between items-end">
+                            <div className="flex gap-3 w-full justify-center">
+                                <div className="flex items-center">
                                     <span className="inline-flex items-center p-3 rounded-full gap-2 bg-yellow-50 dark:bg-yellow-900/30 shadow-sm">
                                         <TrophyIcon className="w-6 h-6 text-yellow-500" />
                                         <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -247,7 +269,7 @@ const DashboardContent = () => {
                                         </p>
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-2 mt-4">
+                                <div className="flex items-center gap-2">
                                     <span className="inline-flex items-center p-3 rounded-full gap-2 bg-blue-50 dark:bg-blue-900/30 shadow-sm">
                                         <WalletMinimal className="w-6 h-6 text-blue-500" />
                                         <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -257,24 +279,7 @@ const DashboardContent = () => {
                                     </span>
                                 </div>
                             </div>
-                        </div>
-                        <div className="flex flex-col justify-between items-end">
-                            <div className="mt-2">
-                                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 font-semibold shadow-sm ">
-                                    {userData?.tier === "premium" ? (
-                                        <>
-                                            <Crown className="w-6 h-6 text-yellow-500" />
-                                            Premium
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Gift className="w-6 h-6 text-blue-400" />
-                                            Free
-                                        </>
-                                    )}
-                                </span>
-                            </div>
-                            <div className="text-sm text-gray-400 dark:text-gray-500">
+                            <div className="text-sm text-gray-400 dark:text-gray-500 md:text-end text-center w-full mt-4">
                                 Joined:{" "}
                                 {userData?.createdAt?.toDate
                                     ? userData.createdAt
@@ -290,8 +295,8 @@ const DashboardContent = () => {
                     </div>
                 </div>
 
-                <div className="w-full flex flex-col items-center gap-6 bg-light-surface dark:bg-dark-bg p-6 rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
-                    <div className="flex items-center w-[85%] mx-auto">
+                <div className="w-full flex flex-col items-center md:gap-6 gap-4 bg-light-surface dark:bg-dark-bg p-6 rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
+                    <div className="flex items-center md:w-[90%] w-full">
                         {RANKS.map((rank, idx) => {
                             const isCurrent = idx === currentRankIndex;
                             const isCompleted = idx < currentRankIndex;
@@ -300,7 +305,7 @@ const DashboardContent = () => {
                                 <React.Fragment key={rank.level}>
                                     <div className="flex flex-col items-center">
                                         <div
-                                            className={`rounded-full border-2 p-4 mb-1
+                                            className={`rounded-full border-2 md:p-4 p-2 mb-1
                                 ${
                                     isCurrent
                                         ? "border-yellow-500 bg-yellow-100 dark:bg-yellow-900/40"
@@ -310,7 +315,7 @@ const DashboardContent = () => {
                                 }
                             `}>
                                             <Icon
-                                                className={`w-10 h-10
+                                                className={`md:w-10 md:h-10 w-6 h-6
                                     ${
                                         isCurrent
                                             ? "text-yellow-600"
@@ -322,7 +327,7 @@ const DashboardContent = () => {
                                             />
                                         </div>
                                         <span
-                                            className={`text-xs font-semibold
+                                            className={`md:text-sm text-[8px] font-semibold
                                 ${
                                     isCurrent
                                         ? "text-yellow-700 dark:text-yellow-200"
@@ -336,7 +341,7 @@ const DashboardContent = () => {
                                     </div>
                                     {idx < RANKS.length - 1 && (
                                         <div
-                                            className={`flex-1 h-1 mx-1 rounded-full
+                                            className={`flex-1 h-1 md:mx-1 mx-0 rounded-full
                                 ${
                                     idx < currentRankIndex
                                         ? "bg-green-400"
@@ -345,7 +350,10 @@ const DashboardContent = () => {
                                         : "bg-gray-300 dark:bg-gray-700"
                                 }
                             `}
-                                            style={{ minWidth: 24 }}
+                                            style={{
+                                                minWidth: 8,
+                                                maxWidth: 100,
+                                            }}
                                         />
                                     )}
                                 </React.Fragment>
@@ -362,12 +370,12 @@ const DashboardContent = () => {
                     </div>
                 </div>
 
-                <div className="flex gap-[2%]">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                     <div
-                        className="flex w-[24%] justify-between p-6 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 border border-blue-100 dark:border-blue-900
-    bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500 dark:from-blue-900 dark:via-blue-800 dark:to-blue-700">
+                        className="flex justify-between md:p-6 p-3 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 border border-blue-100 dark:border-blue-900
+                        bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500 dark:from-blue-900 dark:via-blue-800 dark:to-blue-700">
                         <div className="flex flex-col gap-2">
-                            <p className="text-lg text-blue-900 dark:text-blue-100 font-semibold">
+                            <p className="md:text-lg text-sm text-blue-900 dark:text-blue-100 font-semibold">
                                 Total Interviews
                             </p>
                             <p className="text-4xl font-bold text-blue-900 dark:text-blue-100">
@@ -376,19 +384,15 @@ const DashboardContent = () => {
                         </div>
                         <div className="flex items-center justify-center">
                             <div className="p-4 rounded-full bg-blue-300 dark:bg-blue-900 transition-all duration-200 hover:bg-blue-200 dark:hover:bg-blue-800">
-                                <MessagesSquare
-                                    size={40}
-                                    className="text-blue-700 dark:text-blue-200 transition-all duration-200"
-                                />
+                                <MessagesSquare className="text-blue-700 dark:text-blue-200 transition-all duration-200 md:h-10 md:w-10 h-6 w-6" />
                             </div>
                         </div>
                     </div>
                     <div
-                        className="flex w-[24%] justify-between p-6 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 border border-green-100 dark:border-green-900
-    bg-gradient-to-r from-green-300 via-green-400 to-green-500 dark:from-green-800 dark:via-green-700 dark:to-green-600">
+                        className="flex justify-between  md:p-6 p-3 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 border border-green-100 dark:border-green-900
+                        bg-gradient-to-r from-green-300 via-green-400 to-green-500 dark:from-green-800 dark:via-green-700 dark:to-green-600">
                         <div className="flex flex-col gap-2">
-                            <p className="text-lg text-green-900 dark:text-green-100 font-semibold">
-                                {/* Example: This Week */}
+                            <p className="md:text-lg text-sm text-green-900 dark:text-green-100 font-semibold">
                                 This Week
                             </p>
                             <p className="text-4xl font-bold text-green-900 dark:text-green-100">
@@ -397,18 +401,15 @@ const DashboardContent = () => {
                         </div>
                         <div className="flex items-center justify-center">
                             <div className="p-4 rounded-full bg-white/40 dark:bg-green-900 transition-all duration-200 hover:bg-green-200 dark:hover:bg-green-800">
-                                <TrendingUpIcon
-                                    size={40}
-                                    className="text-green-700 dark:text-green-200 transition-all duration-200"
-                                />
+                                <TrendingUpIcon className="text-green-700 dark:text-green-200 transition-all duration-200  md:h-10 md:w-10 h-6 w-6" />
                             </div>
                         </div>
                     </div>
                     <div
-                        className="flex w-[24%] justify-between p-6 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 border border-yellow-100 dark:border-yellow-900
-    bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-400 dark:from-yellow-800 dark:via-yellow-700 dark:to-yellow-600">
+                        className="flex justify-between  md:p-6 p-3 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 border border-yellow-100 dark:border-yellow-900
+                        bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-400 dark:from-yellow-800 dark:via-yellow-700 dark:to-yellow-600">
                         <div className="flex flex-col gap-2">
-                            <p className="text-lg text-yellow-900 dark:text-yellow-100 font-semibold">
+                            <p className="md:text-lg text-sm text-yellow-900 dark:text-yellow-100 font-semibold">
                                 Average Score
                             </p>
                             <p className="text-4xl font-bold text-yellow-900 dark:text-yellow-100">
@@ -417,18 +418,15 @@ const DashboardContent = () => {
                         </div>
                         <div className="flex items-center justify-center">
                             <div className="p-4 rounded-full bg-white/40 dark:bg-yellow-900 transition-all duration-200 hover:bg-yellow-200 dark:hover:bg-yellow-800">
-                                <TargetIcon
-                                    size={40}
-                                    className="text-yellow-700 dark:text-yellow-200 transition-all duration-200"
-                                />
+                                <TargetIcon className="text-yellow-700 dark:text-yellow-200 transition-all duration-200 md:h-10 md:w-10 h-6 w-6" />
                             </div>
                         </div>
                     </div>
                     <div
-                        className="flex w-[24%] justify-between p-6 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 border border-purple-100 dark:border-purple-900
-    bg-gradient-to-r from-purple-200 via-purple-300 to-purple-400 dark:from-purple-900 dark:via-purple-800 dark:to-purple-700">
+                        className="flex justify-between  md:p-6 p-3 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 border border-purple-100 dark:border-purple-900
+                        bg-gradient-to-r from-purple-200 via-purple-300 to-purple-400 dark:from-purple-900 dark:via-purple-800 dark:to-purple-700">
                         <div className="flex flex-col gap-2">
-                            <p className="text-lg text-purple-900 dark:text-purple-100 font-semibold">
+                            <p className="md:text-lg text-sm text-purple-900 dark:text-purple-100 font-semibold">
                                 Points Earned
                             </p>
                             <p className="text-4xl font-bold text-purple-900 dark:text-purple-100">
@@ -437,23 +435,20 @@ const DashboardContent = () => {
                         </div>
                         <div className="flex items-center justify-center">
                             <div className="p-4 rounded-full bg-white/40 dark:bg-purple-900 transition-all duration-200 hover:bg-purple-200 dark:hover:bg-purple-800">
-                                <Trophy
-                                    size={40}
-                                    className="text-purple-700 dark:text-purple-200 transition-all duration-200"
-                                />
+                                <Trophy className="text-purple-700 dark:text-purple-200 transition-all duration-200 md:h-10 md:w-10 h-6 w-6" />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex gap-[2%]">
-                    <div className="w-[49%] bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
+                <div className="flex md:flex-row flex-col md:gap-[2%] gap-4">
+                    <div className="md:w-[49%] w-full bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
                         <div className="flex items-center gap-4">
                             <div className="bg-light-bg dark:bg-dark-surface p-3 rounded-full shadow-sm">
                                 <Clock4 size={30} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="text-xl font-semibold">
+                                <p className="text-2xl font-semibold">
                                     Recent Interviews
                                 </p>
                                 <p className="text-light-secondary-text">
@@ -534,13 +529,13 @@ const DashboardContent = () => {
                             )}
                         </div>
                     </div>
-                    <div className="w-[49%] bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
+                    <div className="md:w-[49%] w-full bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
                         <div className="flex items-center gap-4">
                             <div className="bg-light-bg dark:bg-dark-surface p-3 rounded-full shadow-sm">
                                 <ChartBar size={30} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="text-xl font-semibold">
+                                <p className="text-2xl font-semibold">
                                     Performance Analysis{" "}
                                 </p>
                                 <p className="text-light-secondary-text">
@@ -570,7 +565,7 @@ const DashboardContent = () => {
                                                         </p>
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                                             Total:{" "}
-                                                            {typeStat.total} |
+                                                            {typeStat.total} <br />
                                                             Attempted:{" "}
                                                             {typeStat.attempted}
                                                         </p>
@@ -583,15 +578,15 @@ const DashboardContent = () => {
                                                     <div className="w-full h-3 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
                                                         <div
                                                             className={`
-                            h-full rounded-full transition-all duration-300
-                            ${
-                                avg >= 80
-                                    ? "bg-green-500"
-                                    : avg >= 60
-                                    ? "bg-yellow-400"
-                                    : "bg-red-400"
-                            }
-                        `}
+                                                                    h-full rounded-full transition-all duration-300
+                                                                    ${
+                                                                        avg >= 70
+                                                                            ? "bg-green-500"
+                                                                            : avg >= 40
+                                                                            ? "bg-yellow-400"
+                                                                            : "bg-red-400"
+                                                                    }
+                                                                `}
                                                             style={{
                                                                 width: `${avg}%`,
                                                             }}
@@ -613,9 +608,9 @@ const DashboardContent = () => {
 
                 <RankProgressBar points={userData?.points || 0} />
 
-                <div className="flex gap-[2%]">
+                <div className="flex md:flex-row flex-col md:gap-[2%] gap-4">
                     {/* Highlight: Why Buy Paid Plan */}
-                    <div className="w-[49%] bg-gradient-to-br from-yellow-100 via-yellow-50 to-white dark:from-yellow-900/40 dark:via-yellow-900/10 dark:to-gray-900 border-2 border-yellow-300 dark:border-yellow-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+                    <div className="md:w-[49%] w-full bg-gradient-to-br from-yellow-100 via-yellow-50 to-white dark:from-yellow-900/40 dark:via-yellow-900/10 dark:to-gray-900 border-2 border-yellow-300 dark:border-yellow-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <Crown className="w-8 h-8 text-yellow-500" />
@@ -637,7 +632,7 @@ const DashboardContent = () => {
                         </button>
                     </div>
                     {/* Contact Card */}
-                    <div className="w-[49%] bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-900/40 dark:via-blue-900/10 dark:to-gray-900 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+                    <div className="md:w-[49%] w-full bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-900/40 dark:via-blue-900/10 dark:to-gray-900 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <MailCheck className="w-8 h-8 text-blue-500" />
