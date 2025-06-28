@@ -16,7 +16,7 @@ const Dashboard = ({ tabs }) => {
         <div className="flex relative ">
             <Sidebar tabs={tabs} getActiveTab={getActiveTab} />
 
-            <div className="h-full w-full bg-light-bg dark:bg-dark-surface md:py-10 md:px-8 py-5">
+            <div className="h-full w-full bg-light-bg dark:bg-dark-surface md:py-10 md:px-5 py-5">
                 <DashboardContent />
             </div>
         </div>

@@ -126,7 +126,7 @@ export function RankProgressBar({ points }) {
     );
 
     return (
-        <div className="w-full mx-auto p-6 bg-gradient-to-br from-yellow-50 via-white to-yellow-100 dark:from-gray-900 dark:via-yellow-900/30 dark:to-gray-800 rounded-2xl shadow-2xl border border-yellow-200 dark:border-yellow-900">
+        <div className="w-full mx-auto p-6 bg-gradient-to-br from-yellow-50 via-white to-yellow-100 dark:from-gray-900 dark:via-yellow-900/30 dark:to-gray-800 rounded-2xl shadow-xl border border-yellow-200 dark:border-yellow-900">
             <div className="flex items-center justify-between mb-4">
                 {/* Current Rank */}
                 <div className="flex items-center gap-2">
@@ -145,16 +145,16 @@ export function RankProgressBar({ points }) {
 
             {/* Next Rank */}
             {nextRank && (
-                <div className="flex items-center gap-2 mb-2 justify-end">
+                <div className="flex items-center justify-between gap-2 mb-2">
                     {ICONS[nextRank.icon] && (
                         <span className="flex items-center gap-2">
                             <span className="text-xs text-gray-500 dark:text-gray-400">
                                 Next:
                             </span>
                             {React.createElement(ICONS[nextRank.icon], {
-                                className: "w-6 h-6 text-purple-500",
+                                className: "w-8 h-8 text-purple-500",
                             })}
-                            <span className="font-semibold text-purple-700 dark:text-purple-200">
+                            <span className="font-semibold text-lg text-purple-700 dark:text-purple-200">
                                 {nextRank.name}
                             </span>
                             <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">

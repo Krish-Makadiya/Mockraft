@@ -259,7 +259,7 @@ export default function Example() {
                                 {isSignedIn ? (
                                     <div className="flex gap-3 items-center flex-column">
                                         <UserButton />
-                                        <button className="text-sm/6 font-semibold text-light-primary-text dark:text-dark-primary-text">
+                                        <button onClick={navigate("/dashboard")} className="text-sm/6 font-semibold text-light-primary-text dark:text-dark-primary-text">
                                             Dashboard
                                         </button>
                                     </div>

@@ -30,21 +30,28 @@ const Sidebar = ({ tabs }) => {
 
     return (
         <>
-            <button
+            {/* Mobile Sidebar Overlay */}
+            <div
+                className={`
+                    fixed inset-0 z-40 bg-black/30 transition-opacity duration-1000
+                    ${isCollapsed ? "pointer-events-none opacity-0" : "pointer-events-auto opacity-100"}
+                    md:hidden
+                `}
                 onClick={handleCollapse}
-                className="rounded-lg absolute hover:bg-light-hover dark:hover:bg-dark-hover px-4 py-6 md:opacity-0 opacity-100 md:hidden transition-all duration-300 ease-in-out">
-                {isCollapsed ? (
-                    <PanelLeftOpen size={25} />
-                ) : (
-                    <PanelLeftClose size={25} />
-                )}
-            </button>
+                aria-hidden="true"
+            />
+            {/* Sidebar */}
             <aside
-                className={`sticky  top-0 h-screen ${
-                    isCollapsed ? "md:w-20 md:block hidden" : "md:w-60 w-[300px]"
-                } bg-light-surface dark:bg-dark-bg text-light-primary-text dark:text-dark-primary-text flex flex-col px-3 py-5 transition-all duration-300 ease-in-out`}>
+                className={`
+                    top-0 left-0 h-screen bg-light-surface dark:bg-dark-bg text-light-primary-text dark:text-dark-primary-text flex flex-col px-3 py-5 transition-all duration-300 ease-in-out z-50
+                    ${isCollapsed
+                        ? "w-0 overflow-hidden md:w-20 md:block hidden md:relative fixed"
+                        : "w-full fixed md:w-60 md:sticky md:left-0"}
+                `}
+                style={{ maxWidth: isCollapsed ? "200px" : "100vw" }}
+            >
                 <div
-                    className={`flex px-4 ${
+                    className={`flex px-2 ${
                         isCollapsed ? "justify-center" : "justify-between"
                     } items-center w-full`}>
                     <div
@@ -61,27 +68,30 @@ const Sidebar = ({ tabs }) => {
                         onClick={handleCollapse}
                         className="rounded-lg hover:bg-light-hover dark:hover:bg-dark-hover p-2 md:opacity-100">
                         {isCollapsed ? (
-                            <PanelLeftOpen size={22} />
+                            <PanelLeftOpen size={30} />
                         ) : (
-                            <PanelLeftClose size={22} />
+                            <PanelLeftClose size={30} />
                         )}
                     </button>
                 </div>
 
                 <hr className="mt-3 mb-4 border-light-border dark:border-dark-border opacity-20" />
-                <nav className="flex-1">
+                <nav className="flex-0">
                     <ul className="space-y-2">
                         {tabs.map((tab) => (
                             <li
                                 key={tab.id}
-                                className={`cursor-pointer px-4 py-2 text-base rounded-lg transition-all duration-300 ease-in-out ${
+                                className={`cursor-pointer px-4 py-3 text-base rounded-lg transition-all duration-300 ease-in-out ${
                                     getActiveTab() === tab.name
-                                        ? "bg-light-primary/10 dark:bg-dark-primary/10 text-light-primary dark:text-dark-primary"
+                                        ? "bg-light-primary/15 dark:bg-dark-primary/10 text-light-primary dark:text-dark-primary"
                                         : "hover:bg-light-hover dark:hover:bg-dark-hover"
                                 }`}
-                                onClick={() => navigate(tab.path)}>
+                                onClick={() => {
+                                    navigate(tab.path);
+                                    if (window.innerWidth < 768) handleCollapse();
+                                }}>
                                 <div className="flex items-center">
-                                    <tab.icon className="shrink-0" size={20} />
+                                    <tab.icon className="shrink-0" size={25} />
                                     <span
                                         className={`ml-2 transition-all duration-300 ease-in-out ${
                                             isCollapsed
@@ -96,23 +106,47 @@ const Sidebar = ({ tabs }) => {
                     </ul>
                 </nav>
 
+                <hr className="mt-3 mb-5 border-light-border dark:border-dark-border opacity-20" />
+
                 <div
-                    className={`flex items-center justify-center mt-8 transition-all duration-300 ease-in-out`}>
+                    className={`flex items-center md:justify-center justify-start px-2 transition-all duration-300 ease-in-out`}>
                     {!isCollapsed ? (
-                        <div className="flex items-center justify-center gap-2 overflow-hidden">
-                            <UserButton />
-                            <p className="font-medium whitespace-nowrap transition-all duration-300 ease-in-out">
+                        <div className="flex items-center md:justify-center justify-start gap-2 overflow-hidden">
+                            <UserButton
+                                appearance={{
+                                    elements: {
+                                        userButtonAvatarBox: "w-12 h-12",
+                                },
+                            }}
+                            />
+                            <p className="font-medium md:text-base text-lg whitespace-nowrap transition-all duration-300 ease-in-out">
                                 {user.fullName ||
                                     user.firstName + user.lastName}
                             </p>
                         </div>
                     ) : (
                         <div className="flex flex-col gap-4">
-                            <UserButton />
+                            <UserButton
+                                appearance={{
+                                    elements: {
+                                        userButtonAvatarBox: "w-20 h-20",
+                                },
+                            }}
+                            />
                         </div>
                     )}
                 </div>
             </aside>
+            {/* Mobile Sidebar Toggle Button */}
+            <button
+                onClick={handleCollapse}
+                className="rounded-lg absolute hover:bg-light-hover dark:hover:bg-dark-hover px-4 py-6 md:opacity-0 opacity-100 md:hidden transition-all duration-300 ease-in-out z-50"
+                style={{ left: 0, top: 0 }}
+            >
+                {isCollapsed && (
+                    <PanelLeftOpen size={30} />
+                )}
+            </button>
         </>
     );
 };

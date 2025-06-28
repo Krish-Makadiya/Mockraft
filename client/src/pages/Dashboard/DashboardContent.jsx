@@ -214,7 +214,7 @@ const DashboardContent = () => {
     return (
         <div className="flex flex-col gap-10 md:px-4 px-2">
             <div className="md:ml-0 ml-12">
-                <h1 className="md:text-3xl text-xl font-bold">Dashboard</h1>
+                <h1 className="text-3xl font-bold">Dashboard</h1>
                 <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
                     Track your interview progress and performance
                 </p>
