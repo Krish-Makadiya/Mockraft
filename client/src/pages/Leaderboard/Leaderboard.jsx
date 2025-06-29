@@ -17,7 +17,7 @@ const Leaderboard = ({tabs}) => {
         <div className="flex relative">
             <Sidebar tabs={tabs} getActiveTab={getActiveTab} />
 
-            <div className="h-full w-full bg-light-bg dark:bg-dark-surface md:py-10 py-6 md:px-8 px-2">
+            <div className="h-screen w-full bg-light-bg dark:bg-dark-surface md:py-10 py-6 md:px-8 px-2">
                 <LeaderboardContent />
             </div>
         </div>
