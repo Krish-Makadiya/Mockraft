@@ -47,6 +47,9 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeProvider";
 import LightGradient from "../config/LightGradient";
 import Pricing from "./Pricing";
+import FAQSection from "../components/FAQSection";
+import CTASection from "../components/CTASection";
+import Footer from "../components/Footer";
 
 const features = [
     {
@@ -212,9 +215,9 @@ const Homepage = () => {
     return (
         <div className="relative min-h-screen bg-light-bg dark:bg-dark-bg w-full text-gray-900 dark:text-gray-100">
             <div className="sticky top-0 z-0">
-                <LightGradient
+                {/* <LightGradient
                     className="absolute inset-0 w-full h-full"
-                />
+                /> */}
                 <div className="relative z-10">
                     <header className="relative z-20">
                         <nav className="mx-auto flex max-w-7xl items-center justify-between py-4 px-6 lg:px-8 relative z-10">
@@ -795,22 +798,9 @@ const Homepage = () => {
             </section>
 
             <Pricing />
-
-            {/* Footer */}
-            <footer className="py-8 text-center text-gray-500 dark:text-gray-400">
-                <div className="flex flex-col md:flex-row gap-2 justify-center items-center">
-                    <span>
-                        &copy; {new Date().getFullYear()} Careerly. All rights
-                        reserved.
-                    </span>
-                    <a href="/privacy" className="hover:underline mx-2">
-                        Privacy Policy
-                    </a>
-                    <a href="/terms" className="hover:underline mx-2">
-                        Terms of Service
-                    </a>
-                </div>
-            </footer>
+            <FAQSection />
+            <CTASection />
+            <Footer />
         </div>
     );
 };
