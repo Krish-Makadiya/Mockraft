@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MockInterviewForm from "../../components/MockInterview/MockInterviewForm";
-import MockInterviewHomepage from "../../components/MockInterview/MockInterviewHomepage";
+import MockInterviewHomepage from "./MockInterviewHomepage";
 
 
 const MockInterviewContent = () => {

@@ -1,10 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
-import LightGradient from "../config/LightGradient";
 import { ArrowRight } from "lucide-react";
-import CTAGradientLight from "../config/CTAGradientLight";
-import CTAGradientDark from "../config/CTAGradientDark";
-import { useTheme } from "../context/ThemeProvider";
+import CTAGradientLight from "../../config/CTAGradient/CTAGradientLight";
+import CTAGradientDark from "../../config/CTAGradient/CTAGradientDark";
+import { useTheme } from "../../context/ThemeProvider";
 
 export default function CTASection() {
     const {theme} = useTheme();

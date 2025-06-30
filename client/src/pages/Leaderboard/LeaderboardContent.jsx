@@ -55,8 +55,6 @@ const LeaderboardContent = () => {
         return <Loader />;
     }
 
-    console.log("Current user rank object:", currentUserRank);
-
     return (
         <div className="flex flex-col gap-10">
             {/* Header Card */}
@@ -139,7 +137,7 @@ const LeaderboardContent = () => {
                 )}
             </div>
 
-            {/* Leaderboard Table */}
+            {/* Leaderboard Table */}   
             <div className="bg-light-surface dark:bg-dark-bg rounded-2xl shadow-lg overflow-hidden">
                 <div className="grid md:grid-cols-6 grid-cols-5 text-center text-gray-500 dark:text-gray-400 w-full py-3 text-sm font-semibold">
                     <span>Rank</span>

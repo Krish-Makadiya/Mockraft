@@ -81,7 +81,6 @@ const App = () => {
                     path="/"
                     element={
                         <div>
-                            {/* <Navbar /> */}
                             <Homepage />
                         </div>
                     }
