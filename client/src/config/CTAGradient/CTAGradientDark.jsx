@@ -15,7 +15,11 @@ const CTAGradientDark = ({ className = "", style = {} }) => {
             enabled: true,
         },
         {
-            color: '#262626',
+            color: '#6B8EFF',
+            enabled: true,
+        },
+        {
+            color: '#9D7AFF',
             enabled: true,
         },
         {
@@ -26,10 +30,7 @@ const CTAGradientDark = ({ className = "", style = {} }) => {
             color: '#9D7AFF',
             enabled: true,
         },
-        {
-            color: '#CBF6F6',
-            enabled: false,
-        },
+
     ],
     speed: 5,
     horizontalPressure: 4,

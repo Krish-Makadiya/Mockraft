@@ -15,10 +15,6 @@ const CTAGradientLight = ({ className = "", style = {} }) => {
             enabled: true,
         },
         {
-            color: '#FFFFFF',
-            enabled: true,
-        },
-        {
             color: '#2D5DED',
             enabled: true,
         },
@@ -27,7 +23,11 @@ const CTAGradientLight = ({ className = "", style = {} }) => {
             enabled: true,
         },
         {
-            color: '#CBF6F6',
+            color: '#2D5DED',
+            enabled: true,
+        },
+        {
+            color: '#7C4DFF',
             enabled: true,
         },
     ],

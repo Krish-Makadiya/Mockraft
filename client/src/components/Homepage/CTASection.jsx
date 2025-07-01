@@ -11,7 +11,7 @@ export default function CTASection() {
     return (
         <section className="relative w-full bg-light-bg dark:bg-dark-bg px-6 py-12 flex justify-center items-center overflow-hidden">
             <div className="absolute w-[95%]    mx-auto inset-0 z-0 rounded-xl">
-                {/* {theme ? (
+                {/* {!theme ? (
                     <CTAGradientLight className="rounded-xl" />
                 ) : (
                     <CTAGradientDark className="rounded-xl" />
@@ -25,7 +25,7 @@ export default function CTASection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true, amount: 0.7 }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="text-3xl md:text-4xl font-bold text-dark-primary-text dark:text-light-primary-text mb-3">
+                        className="text-3xl md:text-4xl font-bold dark:text-dark-primary-text text-light-primary-text mb-3">
                         Ready to ace your next interview?
                     </motion.h2>
                     <motion.p
@@ -37,7 +37,7 @@ export default function CTASection() {
                             delay: 0.1,
                             ease: "easeOut",
                         }}
-                        className="text-lg text-dark-primary-text/60 dark:text-light-primary-text/60 mb-6 max-w-md">
+                        className="text-lg dark:text-dark-primary-text text-light-primary-text mb-6 max-w-md">
                         Join Mockraft today and unlock your full potential with
                         AI-powered practice, instant feedback, and a supportive
                         community.
@@ -46,7 +46,7 @@ export default function CTASection() {
                         href="/signup"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.97 }}
-                        className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-dark-primary text-white dark:bg-light-primary font-semibold text-base shadow-lg transition">
+                        className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-[#181818] to-[#262626]  text-white font-semibold transition">
                         Get Started Free
                         <ArrowRight className="w-5 h-5" />
                     </motion.a>
