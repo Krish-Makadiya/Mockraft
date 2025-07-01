@@ -168,7 +168,7 @@ const MockInterviewTest = ({ user_id, id }) => {
 
     const handleAnswerChange = (e) => {
         const value = e.target.value;
-        setInterviewState(prev => {
+        setInterviewState((prev) => {
             // Update answers array
             const updatedAnswers = [...prev.answers];
             updatedAnswers[prev.currentIndex] = value;
@@ -182,7 +182,11 @@ const MockInterviewTest = ({ user_id, id }) => {
                 };
             }
 
-            return { ...prev, answers: updatedAnswers, questions: updatedQuestions };
+            return {
+                ...prev,
+                answers: updatedAnswers,
+                questions: updatedQuestions,
+            };
         });
     };
 
@@ -419,8 +423,12 @@ Additional Guidelines:
                             const analysisPrompt = {
                                 prompt: "Analyze a full technical interview by evaluating each question-answer pair in parallel. The input consists of two arrays: 'questions' and 'answers', where the index alignment represents the corresponding Q&A pair. For each pair, return a structured evaluation object in the specified format. Return a JSON array, one object per question-answer pair.",
                                 input_format: {
-                                    questions: updatedQuestions.map((q) => q.text),
-                                    answers: questionsWithAnswers.map((q) => q.answer),
+                                    questions: updatedQuestions.map(
+                                        (q) => q.text
+                                    ),
+                                    answers: questionsWithAnswers.map(
+                                        (q) => q.answer
+                                    ),
                                 },
                                 response_schema_per_pair: {
                                     evaluation: {
@@ -446,7 +454,9 @@ Additional Guidelines:
                             const analysisRes = await axios.get(
                                 "http://localhost:4000/ai/generate-questions",
                                 {
-                                    params: { prompt: JSON.stringify(analysisPrompt) },
+                                    params: {
+                                        prompt: JSON.stringify(analysisPrompt),
+                                    },
                                 }
                             );
 
@@ -489,7 +499,8 @@ Additional Guidelines:
                             if (userSnap.exists()) {
                                 const userData = userSnap.data();
                                 const prevScore = userData.points || 0;
-                                const newScore = prevScore + Math.round(overallScore);
+                                const newScore =
+                                    prevScore + Math.round(overallScore);
                                 await updateDoc(userRef, {
                                     points: newScore,
                                 });
@@ -497,7 +508,8 @@ Additional Guidelines:
                         })(),
                         {
                             loading: "Analyzing your answers...",
-                            success: "Interview submitted and analyzed successfully!",
+                            success:
+                                "Interview submitted and analyzed successfully!",
                             error: "Failed to analyze and submit interview.",
                         }
                     );
@@ -620,7 +632,7 @@ Additional Guidelines:
                                     ).length
                                 }{" "}
                                 / 500 characters
-                        </div>
+                            </div>
                         </div>
 
                         {/* Question navigation */}

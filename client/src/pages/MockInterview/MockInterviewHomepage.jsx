@@ -1,15 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
-import {
-    collection,
-    getDocs,
-    orderBy,
-    query
-} from "firebase/firestore";
-import {
-    FilePlus2,
-    FileUser,
-    ListFilter
-} from "lucide-react";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { FilePlus2, FileUser, ListFilter } from "lucide-react";
 import { useEffect, useState } from "react";
 import EmptyDialog from "../../components/main/EmptyDialog";
 import Loader from "../../components/main/Loader";
@@ -28,8 +19,13 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
         language: "all", // all, Javascript, Python, etc.
         sort: "newest", // newest, oldest
     });
+    const [isStarred, setIsStarred] = useState(false);
 
     const { user } = useUser();
+
+     useEffect(() => {
+        fetchInterviews();
+    }, []);
 
     const fetchInterviews = async () => {
         try {
@@ -54,12 +50,6 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
         }
     };
 
-    useEffect(() => {
-        fetchInterviews();
-    }, []);
-
-    const [isStarred, setIsStarred] = useState(false);
-
     if (isLoading) {
         return (
             <div>
@@ -67,14 +57,6 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
             </div>
         );
     }
-
-    const handleInterviewUpdate = (id, updates) => {
-        setAllInterviews((interviews) =>
-            interviews.map((interview) =>
-                interview.id === id ? { ...interview, ...updates } : interview
-            )
-        );
-    };
 
     const getFilteredInterviews = () => {
         return allInterviews
@@ -151,7 +133,7 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                         />
                     </div>
                     {getFilteredInterviews().length > 0 ? (
-                        <div className="w-full max-w-7xl space-y-3">
+                        <div className="w-full space-y-3">
                             {getFilteredInterviews().map((interview) => (
                                 <MockInterviewCard interview={interview} />
                             ))}

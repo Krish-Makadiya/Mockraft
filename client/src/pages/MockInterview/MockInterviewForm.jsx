@@ -14,7 +14,6 @@ import { db } from "../../config/firebase";
 import { useAlert } from "../../hooks/useAlert";
 
 const MockInterviewForm = ({ setIsCreateModalOpen }) => {
-    // Consolidated form state
     const [formState, setFormState] = useState({
         interviewName: "",
         jobDescription: "",

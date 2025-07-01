@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MockInterviewForm from "../../components/MockInterview/MockInterviewForm";
+import MockInterviewForm from "./MockInterviewForm";
 import MockInterviewHomepage from "./MockInterviewHomepage";
 
 
