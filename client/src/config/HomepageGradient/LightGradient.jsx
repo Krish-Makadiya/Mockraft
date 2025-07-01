@@ -22,6 +22,14 @@ const LightGradient = ({ className = "", style = {} }) => {
                     enabled: true,
                 },
                 {
+                    color: "#f4f4f9",
+                    enabled: true,
+                },
+                {
+                    color: "#f4f4f9",
+                    enabled: true,
+                },
+                {
                     color: "#6B8EFF",
                     enabled: true,
                 },

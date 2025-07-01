@@ -1,8 +1,11 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTheme } from "../../context/ThemeProvider";
 
 export default function Footer() {
+    const {theme} = useTheme();
+
     return (
         <footer className="relative w-full bg-light-bg dark:bg-dark-bg py-16 pt-30 px-4">
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
@@ -10,12 +13,12 @@ export default function Footer() {
                 <div className="flex flex-col items-center md:items-start gap-3">
                     <a href="/" className="flex items-center gap-2">
                         <img
-                            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                            alt="Careerly Logo"
+                            src={theme ? "/logo-dark.png" : "/logo-light.png"}
+                            alt="Mockraft Logo"
                             className="h-10 w-10"
                         />
                         <span className="text-xl font-bold text-light-primary-text dark:text-dark-primary-text">
-                            Careerly
+                            Mockraft
                         </span>
                     </a>
                     <p className="text-light-secondary-text dark:text-dark-secondary-text text-sm max-w-xs text-center md:text-left">
@@ -49,7 +52,7 @@ export default function Footer() {
                         <ArrowRight className="w-5 h-5" />
                     </motion.a>
                     <span className="text-xs text-light-secondary-text dark:text-dark-secondary-text">
-                        &copy; {new Date().getFullYear()} Careerly. All rights reserved.
+                        &copy; {new Date().getFullYear()} Mockraft. All rights reserved.
                     </span>
                 </div>
             </div>

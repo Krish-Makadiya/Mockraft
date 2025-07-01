@@ -27,6 +27,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeProvider";
+import { motion } from "framer-motion";
 
 const products = [
     {
@@ -76,13 +77,20 @@ export default function Example() {
         <header className="">
             <nav className="mx-auto flex max-w-7xl items-center justify-between py-4 px-6 lg:px-8">
                 <div className="flex lg:flex-1">
-                    <a href="#" className="">
+                    <motion.a
+                        href="#"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}>
                         <img
                             alt=""
-                            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                            className="h-8 w-auto"
+                            src={
+                                !theme
+                                    ? "/logo-dark-bnw.png"
+                                    : "/logo-light-bnw.png"
+                            }
+                            className="h-12 w-auto"
                         />
-                    </a>
+                    </motion.a>
                 </div>
                 <div className="flex lg:hidden">
                     <button
@@ -105,8 +113,8 @@ export default function Example() {
 
                         <PopoverPanel
                             transition
-                            className="absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-light-surface dark:bg-dark-surface shadow-lg ring-1 ring-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in">
-                            <div className="p-4">
+                            className="absolute top-full -left-8 z-50 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-light-surface dark:bg-dark-surface shadow-lg ring-1 ring-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in">
+                            <div className="p-4 ">
                                 {products.map((item) => (
                                     <div
                                         key={item.name}

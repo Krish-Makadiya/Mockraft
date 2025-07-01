@@ -45,8 +45,7 @@ export default function FeatureSection() {
                 relative py-20 px-4 md:px-0 flex justify-center items-center
                 bg-gradient-to-b from-[#ffffff] via-[#ffffff] to-[#f4f4f9] dark:from-[#262626] dark:via-[#181818] dark:to-[#181818]
                 overflow-hidden
-            "
-        >
+            ">
             <div className="max-w-5xl w-full flex flex-col md:flex-row gap-12 items-center">
                 {/* Feature List */}
                 <div className="flex-1">
@@ -55,8 +54,7 @@ export default function FeatureSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.4 }}
                         transition={{ duration: 0.3 }}
-                        className="text-2xl md:text-3xl font-bold text-light-primary dark:text-dark-primary mb-2"
-                    >
+                        className="text-2xl md:text-3xl font-bold text-light-primary dark:text-dark-primary mb-2">
                         Features
                     </motion.h2>
                     <motion.p
@@ -64,43 +62,49 @@ export default function FeatureSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.4 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-sm md:text-base text-light-secondary-text dark:text-dark-secondary-text mb-8 max-w-lg"
-                    >
-                        A powerful dashboard to help you manage and analyze your interview progress, feedback, and growth—all in one place.
+                        className="text-sm md:text-base text-light-secondary-text dark:text-dark-secondary-text mb-8 max-w-lg">
+                        A powerful dashboard to help you manage and analyze your
+                        interview progress, feedback, and growth—all in one
+                        place.
                     </motion.p>
                     <motion.ul
                         variants={featureListVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.3 }}
-                        className="space-y-4"
-                    >
+                        className="space-y-4">
                         {features.map((feature, idx) => (
                             <motion.li
                                 key={idx}
                                 variants={featureItemVariants}
                                 className=""
                                 whileHover={{
-                                    scale: 1.01,
+                                    scale: 1.02,
                                     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
                                     transition: {
                                         duration: 0.2,
                                         ease: "easeInOut",
                                     },
                                 }}
-                            >
+                                whileTap={{
+                                    scale: 0.98
+                                }}
+                                >
                                 <div className="flex items-start gap-4 group p-4 rounded-lg bg-white dark:bg-dark-surface shadow-sm hover:shadow-md transition-all">
                                     {feature.icon}
                                     <div>
                                         <span
                                             className={`font-semibold text-light-primary-text dark:text-dark-primary-text transition group-hover:${
-                                                feature.icon.props.className.includes("emerald")
+                                                feature.icon.props.className.includes(
+                                                    "emerald"
+                                                )
                                                     ? "text-emerald-400"
-                                                    : feature.icon.props.className.includes("purple")
+                                                    : feature.icon.props.className.includes(
+                                                          "purple"
+                                                      )
                                                     ? "text-purple-400"
                                                     : "text-blue-400"
-                                            }`}
-                                        >
+                                            }`}>
                                             {feature.title}
                                         </span>
                                         <p className="text-light-secondary-text dark:text-dark-secondary-text text-sm">
@@ -119,8 +123,7 @@ export default function FeatureSection() {
                             w-full max-w-lg rounded-2xl
                             bg-white/2 backdrop-blur-md border border-blue-200/10
                             shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 flex flex-col items-center
-                        "
-                    >
+                        ">
                         {/* Replace with your own SVG/Chart/Illustration */}
                         <div className="w-full h-80 bg-gradient-to-br from-blue-900/40 via-purple-900/30 to-emerald-900/20 rounded-xl flex items-center justify-center">
                             <span className="text-blue-200/60 text-lg"></span>

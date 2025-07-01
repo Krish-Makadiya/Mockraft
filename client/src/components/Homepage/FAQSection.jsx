@@ -142,34 +142,104 @@ const faqGroups = [
     },
 ];
 
-const faqStagger = {
-    hidden: {},
-    visible: {
-        transition: {
-            staggerChildren: 0.12,
-        },
-    },
-};
+// ...existing imports and code...
 
-const faqItemAnim = {
-    hidden: { opacity: 0, y: 24, boxShadow: "0 0 0 0 rgba(45,93,237,0)" },
-    visible: {
-        opacity: 1,
-        y: 0,
-        boxShadow: "0 2px 16px 0 rgba(45,93,237,0.07)",
-        transition: { duration: 0.4, ease: "easeOut" },
-    },
-};
+function FAQList({ group, openIdx, handleToggle, activeGroup, icon }) {
+    // Stagger and item animation configs (static)
+    const faqStagger = {
+        hidden: {},
+        visible: {
+            transition: {
+                staggerChildren: 0.12,
+            },
+        },
+    };
+    const faqItemAnim = {
+        hidden: { opacity: 0, y: 24, boxShadow: "0 0 0 0 rgba(45,93,237,0)" },
+        visible: {
+            opacity: 1,
+            y: 0,
+            boxShadow: "0 2px 16px 0 rgba(45,93,237,0.07)",
+            transition: { duration: 0.4, ease: "easeOut" },
+        },
+    };
+
+    // Control animation when FAQ list is in viewport
+    const [inView, setInView] = React.useState(false);
+    const ref = React.useRef();
+
+    React.useEffect(() => {
+        const observer = new window.IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setInView(true);
+                }
+            },
+            { threshold: 0.2 }
+        );
+        if (ref.current) observer.observe(ref.current);
+        return () => {
+            if (ref.current) observer.unobserve(ref.current);
+        };
+    }, []);
+
+    return (
+        <motion.ul
+            ref={ref}
+            variants={faqStagger}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            className="space-y-4">
+            {group.faqs.map((faq, idx) => (
+                <motion.li
+                    key={faq.q}
+                    variants={faqItemAnim}
+                    className="bg-white dark:bg-dark-surface rounded-xl shadow-sm transition-all border border-gray-100 dark:border-gray-800 py-4">
+                    <button
+                        className="w-full flex items-center justify-between gap-4 px-5 text-left focus:outline-none"
+                        onClick={() => handleToggle(idx)}>
+                        <div className="flex items-center gap-3">
+                            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-light-primary/10 dark:bg-dark-primary/10 text-light-primary dark:text-dark-primary font-bold">
+                                {icon}
+                            </span>
+                            <span className="font-medium text-light-primary-text dark:text-dark-primary-text text-base">
+                                {faq.q}
+                            </span>
+                        </div>
+                        <ChevronDown
+                            className={`w-5 h-5 text-light-secondary-text dark:text-dark-secondary-text transition-transform duration-200 ${
+                                openIdx[activeGroup] === idx ? "rotate-180" : ""
+                            }`}
+                        />
+                    </button>
+                    <AnimatePresence initial={false}>
+                        {openIdx[activeGroup] === idx && (
+                            <motion.div
+                                key="answer"
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{
+                                    duration: 0.3,
+                                    ease: "easeInOut",
+                                }}
+                                className="px-16 pt-4 text-light-secondary-text dark:text-dark-secondary-text text-sm overflow-hidden">
+                                {faq.a}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.li>
+            ))}
+        </motion.ul>
+    );
+}
 
 export default function FAQSection() {
     const [activeGroup, setActiveGroup] = useState(faqGroups[0].name);
-    // Always keep openIdx in sync with activeGroup
     const [openIdx, setOpenIdx] = useState({ [faqGroups[0].name]: 0 });
 
-    // Ensure openIdx always has a value for the current group
     React.useEffect(() => {
         setOpenIdx((prev) => {
-            // If the current group is not in openIdx, open the first FAQ by default
             if (prev[activeGroup] === undefined) {
                 return { ...prev, [activeGroup]: 0 };
             }
@@ -181,7 +251,6 @@ export default function FAQSection() {
 
     const handleTabChange = (name) => {
         setActiveGroup(name);
-        // openIdx will be handled by useEffect above
     };
 
     const handleToggle = (idx) => {
@@ -205,7 +274,7 @@ export default function FAQSection() {
                 <p className="text-center text-light-secondary-text dark:text-dark-secondary-text text-sm mb-8">
                     Can’t find what you’re looking for?{" "}
                     <a
-                        href="mailto:support@careerly.com"
+                        href="mailto:support@Mockraft.com"
                         className="text-light-primary dark:text-dark-primary hover:underline">
                         Contact our team
                     </a>
@@ -230,58 +299,14 @@ export default function FAQSection() {
                         </button>
                     ))}
                 </div>
-                {/* FAQ List */}
-                <motion.ul
-                    variants={faqStagger}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.2 }}
-                    className="space-y-4">
-                    
-                    
-                    {group.faqs.map((faq, idx) => (
-                        <motion.li
-                            key={faq.q}
-                            variants={faqItemAnim}
-                            initial="hidden"
-                            animate="visible"
-                            className="bg-white dark:bg-dark-surface rounded-xl shadow-sm transition-all border border-gray-100 dark:border-gray-800 py-4"
-                        >
-                            <button
-                                className="w-full flex items-center justify-between gap-4 px-5 text-left focus:outline-none"
-                                onClick={() => handleToggle(idx)}
-                            >
-                                <motion.div className="flex items-center gap-3">
-                                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-light-primary/10 dark:bg-dark-primary/10 text-light-primary dark:text-dark-primary font-bold">
-                                        {faqGroups.find((g) => g.name === activeGroup)?.icon}
-                                    </span>
-                                    <span className="font-medium text-light-primary-text dark:text-dark-primary-text text-base">
-                                        {faq.q}
-                                    </span>
-                                </motion.div>
-                                <ChevronDown
-                                    className={`w-5 h-5 text-light-secondary-text dark:text-dark-secondary-text transition-transform duration-200 ${
-                                        openIdx[activeGroup] === idx ? "rotate-180" : ""
-                                    }`}
-                                />
-                            </button>
-                                                        <AnimatePresence initial={false}>
-                                {openIdx[activeGroup] === idx && (
-                                    <motion.div
-                                        key="answer"
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: "auto" }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                                        className="px-16 pt-4 text-light-secondary-text dark:text-dark-secondary-text text-sm overflow-hidden"
-                                    >
-                                        {faq.a}
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </motion.li>
-                    ))}
-                </motion.ul>
+                {/* FAQ List with stagger effect */}
+                <FAQList
+                    group={group}
+                    openIdx={openIdx}
+                    handleToggle={handleToggle}
+                    activeGroup={activeGroup}
+                    icon={group.icon}
+                />
             </div>
         </section>
     );

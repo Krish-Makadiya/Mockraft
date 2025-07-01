@@ -12,7 +12,7 @@ export default function LandingPage() {
                 id="gradient"
             >
                 <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
-                    Practice. Improve. Get Hired. <br /> With Careerly.
+                    Practice. Improve. Get Hired. <br /> With Mockraft.
                 </h1>
                 <p className="max-w-xl mx-auto text-lg md:text-2xl text-light-primary-text dark:text-dark-primary-text mb-8">
                     Master interviews, track your growth, and join a winning community.

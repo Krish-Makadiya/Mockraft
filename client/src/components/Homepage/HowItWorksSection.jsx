@@ -66,7 +66,7 @@ export default function HowItWorksSection() {
                     How It Works
                 </motion.h2>
                 <p className="text-center text-light-secondary-text dark:text-dark-secondary-text text-sm mb-10 max-w-xl mx-auto">
-                    Careerly makes your interview prep journey simple and
+                    Mockraft makes your interview prep journey simple and
                     effective. Here’s how you can get started and grow with
                     us:
                 </p>

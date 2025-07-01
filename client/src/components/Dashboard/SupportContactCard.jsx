@@ -23,10 +23,10 @@ export default function SupportContactCard() {
                     <span>
                         <span className="font-semibold">Email:</span>{" "}
                         <a
-                            href="mailto:support@careerly.com"
+                            href="mailto:support@Mockraft.com"
                             className="text-blue-600 hover:underline"
                         >
-                            support@careerly.com
+                            support@Mockraft.com
                         </a>
                     </span>
                     <span>

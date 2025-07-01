@@ -6,14 +6,16 @@ import CTAGradientDark from "../../config/CTAGradient/CTAGradientDark";
 import { useTheme } from "../../context/ThemeProvider";
 
 export default function CTASection() {
-    const {theme} = useTheme();
+    const { theme } = useTheme();
 
     return (
         <section className="relative w-full bg-light-bg dark:bg-dark-bg px-6 py-12 flex justify-center items-center overflow-hidden">
-            <div className="absolute w-[95%] bg-white   mx-auto inset-0 z-0 rounded-xl">
-            {/* {
-                theme ? <CTAGradientLight className="rounded-xl" /> : <CTAGradientDark className="rounded-xl" />
-            } */}
+            <div className="absolute w-[95%]    mx-auto inset-0 z-0 rounded-xl">
+                {/* {theme ? (
+                    <CTAGradientLight className="rounded-xl" />
+                ) : (
+                    <CTAGradientDark className="rounded-xl" />
+                )} */}
             </div>
             <div className="relative z-10 max-w-5xl w-full flex flex-col md:flex-row items-center md:items-start px-4 md:px-8">
                 {/* Left: Text */}
@@ -36,7 +38,7 @@ export default function CTASection() {
                             ease: "easeOut",
                         }}
                         className="text-lg text-dark-primary-text/60 dark:text-light-primary-text/60 mb-6 max-w-md">
-                        Join Careerly today and unlock your full potential with
+                        Join Mockraft today and unlock your full potential with
                         AI-powered practice, instant feedback, and a supportive
                         community.
                     </motion.p>
