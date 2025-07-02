@@ -158,9 +158,9 @@ export default function WhyChooseUsSection() {
                         </div>
                         <motion.a
                             href="/signup"
-                            whileHover={{ scale: 1.01 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="mt-4 w-fit bg-gradient-to-br from-light-bg to-light-surface dark:from-dark-bg dark:to-dark-surface font-semibold px-5 py-2 flex gap-2 rounded-full transition">
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="mt-4 w-fit bg-white text-light-primary font-semibold px-5 py-2 flex gap-2 rounded-full transition">
                             <p>Start Free Trial</p>
                             <ArrowRight />
                         </motion.a>

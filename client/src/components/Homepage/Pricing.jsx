@@ -83,7 +83,7 @@ export default function Pricing() {
                     <button
                         className={`relative w-14 h-7 rounded-full flex items-center px-1 transition-colors duration-200 ${
                             billing === "annual"
-                                ? "bg-light-primary dark:bg-dark-primary/30"
+                                ? "bg-light-primary/30 dark:bg-dark-primary/30"
                                 : "bg-gray-200 dark:bg-gray-700"
                         }`}
                         onClick={() =>
@@ -106,19 +106,21 @@ export default function Pricing() {
                             }}
                         />
                     </button>
-                    <span
-                        className={`text-sm font-medium cursor-pointer ${
-                            billing === "annual"
-                                ? "text-light-primary dark:text-dark-primary"
-                                : "text-light-secondary-text dark:text-dark-secondary-text"
-                        }`}
-                        onClick={() => setBilling("annual")}>
-                        ANNUAL
-                    </span>
+                    <div>
+                        <span
+                            className={`text-sm font-medium cursor-pointer ${
+                                billing === "annual"
+                                    ? "text-light-primary dark:text-dark-primary"
+                                    : "text-light-secondary-text dark:text-dark-secondary-text"
+                            }`}
+                            onClick={() => setBilling("annual")}>
+                            ANNUAL
+                        </span>
 
-                    <span className="ml-2 text-xs text-light-success font-bold bg-light-success/10 px-2 py-0.5 rounded">
-                        Save 20%
-                    </span>
+                        <span className="ml-2 text-xs text-light-success font-bold bg-light-success/10 px-2 py-0.5 rounded">
+                            Save 20%
+                        </span>
+                    </div>
                 </motion.div>
                 {/* Plans + Contact */}
                 <div className="grid md:grid-cols-3 grid-row-2 gap-6 items-start">
@@ -295,13 +297,17 @@ export default function Pricing() {
                                 Reach out for enterprise solutions or team
                                 pricing.
                             </motion.p>
-                                                       <motion.a
+                            <motion.a
                                 initial={{ opacity: 0, y: 10 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8, duration: 0.3 }}
+                                whileHover={{
+                                    scale: 1.03,
+                                }}
+                                whileTap={{
+                                    scale: 0.97,
+                                }}
                                 href=""
-                                className="w-full mt-2 py-2 rounded-lg bg-white text-light-primary font-semibold text-center transition hover:bg-gray-100 hover:scale-[1.01]"
-                            >
+                                className="w-full mt-2 py-2 rounded-lg bg-white text-light-primary font-semibold text-center">
                                 Contact Us
                             </motion.a>
                             <motion.p
@@ -309,9 +315,9 @@ export default function Pricing() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.7, duration: 0.5 }}
                                 className="text-xs text-center text-white/80 mt-6">
-                                All plans include unlimited practice,
-                                progress tracking, and access to our
-                                supportive community.
+                                All plans include unlimited practice, progress
+                                tracking, and access to our supportive
+                                community.
                             </motion.p>
                         </div>
                     </motion.div>

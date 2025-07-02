@@ -14,6 +14,7 @@ import SupportContactCard from "../../components/Dashboard/SupportContactCard";
 import UserProfileCard from "../../components/Dashboard/UserProfileCard";
 import Loader from "../../components/main/Loader";
 import { db } from "../../config/firebase";
+import { motion } from "framer-motion"; // <-- Add this import
 
 const QUESTION_TYPES = [
     "technical",
@@ -21,6 +22,25 @@ const QUESTION_TYPES = [
     "system_design",
     "curveball",
 ];
+
+// Animation configs
+const containerStagger = {
+    hidden: {},
+    visible: {
+        transition: {
+            staggerChildren: 0.10,
+            delayChildren: 0.05,
+        },
+    },
+};
+const fadeUp = {
+    hidden: { opacity: 0, y: 24 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring", stiffness: 90, damping: 16 },
+    },
+};
 
 const useMockInterviewStats = () => {
     const { user } = useUser();
@@ -161,27 +181,37 @@ const DashboardContent = () => {
         return <Loader />;
     }
 
-
     return (
-        <div className="flex flex-col gap-10 md:px-4 px-2">
-            <div className="md:ml-0 ml-12">
+        <motion.div
+            className="flex flex-col gap-10 md:px-4 px-2"
+            variants={containerStagger}
+            initial="hidden"
+            animate="visible"
+        >
+            <motion.div className="md:ml-0 ml-12" variants={fadeUp}>
                 <h1 className="text-3xl font-bold">Dashboard</h1>
                 <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
                     Track your interview progress and performance
                 </p>
-            </div>
+            </motion.div>
 
-            <div className="flex flex-col gap-6">
-                <UserProfileCard userData={userData} />
-                <RankLevelSection userPoints={userData?.points || 0} />
-                <StatsOverviewGrid
-                    total={stats.total}
-                    last7Days={stats.last7Days}
-                    avgScore={stats.avgScore}
-                    points={userData?.points || 0}
-                />
+            <motion.div className="flex flex-col gap-6" variants={containerStagger}>
+                <motion.div variants={fadeUp}>
+                    <UserProfileCard userData={userData} />
+                </motion.div>
+                <motion.div variants={fadeUp}>
+                    <RankLevelSection userPoints={userData?.points || 0} />
+                </motion.div>
+                <motion.div variants={fadeUp}>
+                    <StatsOverviewGrid
+                        total={stats.total}
+                        last7Days={stats.last7Days}
+                        avgScore={stats.avgScore}
+                        points={userData?.points || 0}
+                    />
+                </motion.div>
 
-                <div className="flex md:flex-row flex-col md:gap-[2%] gap-4">
+                <motion.div className="flex md:flex-row flex-col md:gap-[2%] gap-4" variants={fadeUp}>
                     <RecentInterviewsSection
                         recentInterviews={stats.recent}
                         userId={userData.id}
@@ -191,16 +221,18 @@ const DashboardContent = () => {
                         typeStats={stats.typeStats}
                         questionTypes={QUESTION_TYPES}
                     />
-                </div>
+                </motion.div>
 
-                <RankProgressBar points={userData?.points || 0} />
+                <motion.div variants={fadeUp}>
+                    <RankProgressBar points={userData?.points || 0} />
+                </motion.div>
 
-                <div className="flex md:flex-row flex-col md:gap-[2%] gap-4">
+                <motion.div className="flex md:flex-row flex-col md:gap-[2%] gap-4" variants={fadeUp}>
                     <PremiumHighlightCard />
                     <SupportContactCard />
-                </div>
-            </div>
-        </div>
+                </motion.div>
+            </motion.div>
+        </motion.div>
     );
 };
 

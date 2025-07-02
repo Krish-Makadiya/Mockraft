@@ -1,11 +1,16 @@
 import { UserButton, useUser } from "@clerk/clerk-react";
-import { PanelLeftClose, PanelLeftOpen, ChartColumnIncreasing  } from "lucide-react";
+import {
+    PanelLeftClose,
+    PanelLeftOpen,
+    ChartColumnIncreasing,
+} from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeProvider";
 
 const Sidebar = ({ tabs }) => {
     const { user } = useUser();
+    const { theme } = useTheme();
     // Initialize isCollapsed from localStorage or default to false
     const [isCollapsed, setIsCollapsed] = useState(() => {
         const saved = localStorage.getItem("sidebarCollapsed");
@@ -34,7 +39,11 @@ const Sidebar = ({ tabs }) => {
             <div
                 className={`
                     fixed inset-0 z-40 bg-black/30 transition-opacity duration-1000
-                    ${isCollapsed ? "pointer-events-none opacity-0" : "pointer-events-auto opacity-100"}
+                    ${
+                        isCollapsed
+                            ? "pointer-events-none opacity-0"
+                            : "pointer-events-auto opacity-100"
+                    }
                     md:hidden
                 `}
                 onClick={handleCollapse}
@@ -44,12 +53,13 @@ const Sidebar = ({ tabs }) => {
             <aside
                 className={`
                     top-0 left-0 h-screen bg-light-surface dark:bg-dark-bg text-light-primary-text dark:text-dark-primary-text flex flex-col px-3 py-5 transition-all duration-300 ease-in-out z-50
-                    ${isCollapsed
-                        ? "w-0 overflow-hidden md:w-20 md:block hidden md:relative fixed"
-                        : "w-full fixed md:w-60 md:sticky md:left-0"}
+                    ${
+                        isCollapsed
+                            ? "w-0 overflow-hidden md:w-20 md:block hidden md:relative fixed"
+                            : "w-full fixed md:w-60 md:sticky md:left-0"
+                    }
                 `}
-                style={{ maxWidth: isCollapsed ? "200px" : "100vw" }}
-            >
+                style={{ maxWidth: isCollapsed ? "200px" : "100vw" }}>
                 <div
                     className={`flex px-2 ${
                         isCollapsed ? "justify-center" : "justify-between"
@@ -58,19 +68,25 @@ const Sidebar = ({ tabs }) => {
                         className={`overflow-hidden transition-all duration-300 ease-in-out ${
                             isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
                         }`}>
-                        <p
+                        <img
                             className="text-2xl font-semibold cursor-pointer whitespace-nowrap"
-                            onClick={() => navigate("/")}>
-                            Mockie
-                        </p>
+                            onClick={() => navigate("/")}
+                            src={
+                                theme
+                                    ? "/logo-light-bnw.png"
+                                    : "/logo-dark-bnw.png"
+                            }
+                            height={36}
+                            width={36}
+                        />
                     </div>
                     <button
                         onClick={handleCollapse}
                         className="rounded-lg hover:bg-light-hover dark:hover:bg-dark-hover p-2 md:opacity-100">
                         {isCollapsed ? (
-                            <PanelLeftOpen size={30} />
+                            <PanelLeftOpen size={26} />
                         ) : (
-                            <PanelLeftClose size={30} />
+                            <PanelLeftClose size={26} />
                         )}
                     </button>
                 </div>
@@ -88,10 +104,11 @@ const Sidebar = ({ tabs }) => {
                                 }`}
                                 onClick={() => {
                                     navigate(tab.path);
-                                    if (window.innerWidth < 768) handleCollapse();
+                                    if (window.innerWidth < 768)
+                                        handleCollapse();
                                 }}>
                                 <div className="flex items-center">
-                                    <tab.icon className="shrink-0" size={25} />
+                                    <tab.icon className="shrink-0" size={24} />
                                     <span
                                         className={`ml-2 transition-all duration-300 ease-in-out ${
                                             isCollapsed
@@ -116,8 +133,8 @@ const Sidebar = ({ tabs }) => {
                                 appearance={{
                                     elements: {
                                         userButtonAvatarBox: "w-12 h-12",
-                                },
-                            }}
+                                    },
+                                }}
                             />
                             <p className="font-medium md:text-base text-lg whitespace-nowrap transition-all duration-300 ease-in-out">
                                 {user.fullName ||
@@ -130,8 +147,8 @@ const Sidebar = ({ tabs }) => {
                                 appearance={{
                                     elements: {
                                         userButtonAvatarBox: "w-20 h-20",
-                                },
-                            }}
+                                    },
+                                }}
                             />
                         </div>
                     )}
@@ -141,11 +158,8 @@ const Sidebar = ({ tabs }) => {
             <button
                 onClick={handleCollapse}
                 className="rounded-lg absolute hover:bg-light-hover dark:hover:bg-dark-hover px-4 py-6 md:opacity-0 opacity-100 md:hidden transition-all duration-300 ease-in-out z-50"
-                style={{ left: 0, top: 0 }}
-            >
-                {isCollapsed && (
-                    <PanelLeftOpen size={30} />
-                )}
+                style={{ left: 0, top: 0 }}>
+                {isCollapsed && <PanelLeftOpen size={26} />}
             </button>
         </>
     );

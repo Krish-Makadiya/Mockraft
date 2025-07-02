@@ -10,11 +10,11 @@ export default function CTASection() {
 
     return (
         <section className="relative w-full bg-light-bg dark:bg-dark-bg px-6 py-12 flex justify-center items-center overflow-hidden">
-            <div className="absolute w-[95%]    mx-auto inset-0 z-0 rounded-xl">
+            <div className="absolute w-full mx-auto inset-0 z-0">
                 {/* {!theme ? (
-                    <CTAGradientLight className="rounded-xl" />
+                    <CTAGradientLight className="" />
                 ) : (
-                    <CTAGradientDark className="rounded-xl" />
+                    <CTAGradientDark className="" />
                 )} */}
             </div>
             <div className="relative z-10 max-w-5xl w-full flex flex-col md:flex-row items-center md:items-start px-4 md:px-8">
@@ -46,7 +46,7 @@ export default function CTASection() {
                         href="/signup"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.97 }}
-                        className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-[#181818] to-[#262626]  text-white font-semibold transition">
+                        className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-dark-bg dark:from-light-bg to-dark-surface dark:to-light-surface  text-white dark:text-black font-semibold transition">
                         Get Started Free
                         <ArrowRight className="w-5 h-5" />
                     </motion.a>
