@@ -187,7 +187,7 @@ export default function Pricing() {
                                                     duration: 0.4,
                                                 }}
                                                 className="flex items-center gap-2 mb-2">
-                                                <span className="text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-light-secondary-text dark:text-dark-secondary-text px-2 py-0.5 rounded">
+                                                <span className={`text-xs font-semibold ${plan.name.toUpperCase() === "STARTER" ? "bg-gray-100 dark:bg-gray-800 text-light-secondary-text dark:text-dark-secondary-text" : "bg-gradient-to-br dark:from-yellow-500 from-yellow-400 dark:to-yellow-600 to-yellow-500 text-white"}  px-2 py-0.5 rounded`}>
                                                     {plan.name.toUpperCase()}
                                                 </span>
                                             </motion.div>

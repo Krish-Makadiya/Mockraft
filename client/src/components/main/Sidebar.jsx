@@ -93,7 +93,7 @@ const Sidebar = ({ tabs }) => {
 
                 <hr className="mt-3 mb-4 border-light-border dark:border-dark-border opacity-20" />
                 <nav className="flex-0">
-                    <ul className="space-y-2">
+                    <ul className="space-y-1">
                         {tabs.map((tab) => (
                             <li
                                 key={tab.id}
@@ -108,9 +108,9 @@ const Sidebar = ({ tabs }) => {
                                         handleCollapse();
                                 }}>
                                 <div className="flex items-center">
-                                    <tab.icon className="shrink-0" size={24} />
+                                    <tab.icon className="shrink-0" size={22} />
                                     <span
-                                        className={`ml-2 transition-all duration-300 ease-in-out ${
+                                        className={`ml-2 transition-all text-sm font-semibold duration-300 ease-in-out ${
                                             isCollapsed
                                                 ? "w-0 opacity-0"
                                                 : "w-auto opacity-100"

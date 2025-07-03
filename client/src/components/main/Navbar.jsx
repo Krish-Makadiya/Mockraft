@@ -87,7 +87,7 @@ const iconAnim = {
     whileTap: { scale: 0.92, rotate: -8 },
 };
 const buttonAnim = {
-    whileHover: { scale: 1.06, boxShadow: "0 2px 12px 0 rgba(45,93,237,0.10)" },
+    whileHover: { scale: 1.06 },
     whileTap: { scale: 0.96 },
 };
 
@@ -113,7 +113,7 @@ export default function Example() {
                                     ? "/logo-dark-bnw.png"
                                     : "/logo-light-bnw.png"
                             }
-                            className="h-12 w-auto"
+                            className="h-10 w-auto"
                         />
                     </motion.a>
                 </div>

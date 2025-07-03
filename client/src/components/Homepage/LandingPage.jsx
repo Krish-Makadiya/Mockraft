@@ -14,7 +14,7 @@ export default function LandingPage() {
                 </h1>
                 <p className="max-w-xl mx-auto text-lg md:text-2xl text-light-primary-text dark:text-dark-primary-text mb-8">
                     Master interviews, track your growth, and join a winning
-                    community.
+                    community, and many more.
                 </p>
                 <motion.div
                     className="flex flex-col sm:flex-row gap-4 justify-center"

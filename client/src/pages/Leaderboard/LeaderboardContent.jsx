@@ -4,6 +4,7 @@ import { db } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import Loader from "../../components/main/Loader";
+import { motion } from "framer-motion";
 
 const rankIcons = [
     <Crown className="md:w-8 w-6 md:h-8 h-6 text-yellow-400" />,
@@ -17,6 +18,30 @@ const gradientClasses = [
     "relative bg-gradient-to-r from-gray-200 via-gray-100 to-transparent dark:from-gray-700 dark:via-gray-800 dark:to-transparent before:absolute before:inset-0 before:bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.03)_0_8px,transparent_8px_16px)] before:opacity-50 before:pointer-events-none before:rounded-xl",
     "relative bg-gradient-to-r from-orange-200 via-orange-100 to-transparent dark:from-orange-800/60 dark:via-orange-900/60 dark:to-transparent before:absolute before:inset-0 before:bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.03)_0_8px,transparent_8px_16px)] before:opacity-50 before:pointer-events-none before:rounded-xl",
 ];
+
+const tableVariant = {
+    hidden: {
+        opacity: 0,
+        y: -20,
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.3, staggerChildren: 0.2, when: "beforeChildren" },
+    },
+};
+
+const childVariant = {
+    hidden: {
+        opacity: 0,
+        x: -30,
+    },
+    visible: {
+        opacity: 1,
+        x: 0,
+        transition: { duration: 0.3 },
+    },
+};
 
 const LeaderboardContent = () => {
     const [users, setUsers] = useState([]);
@@ -58,25 +83,39 @@ const LeaderboardContent = () => {
     return (
         <div className="flex flex-col gap-10">
             {/* Header Card */}
-            <div className="md:ml-0 ml-12">
+            <motion.div
+                initial={{
+                    x: 20,
+                    opacity: 0,
+                }}
+                animate={{
+                    x: 0,
+                    opacity: 1,
+                }}
+                transition={{
+                    duration: 0.3,
+                    type: "spring",
+                    stiffness: 300,
+                }}
+                className="md:ml-0 ml-12">
                 <h1 className="text-3xl font-bold">Leaderboard</h1>
                 <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
                     See how you stack up against others in the community!
                 </p>
-            </div>
+            </motion.div>
 
             {/* Tabs */}
             <div className="flex flex-col gap-4">
                 <div className="flex gap-2">
-                    <button className="px-4 py-1 rounded-full bg-blue-600 text-white font-semibold shadow transition">
+                    <motion.button className="px-4 py-1 rounded-full bg-blue-600 text-white font-semibold shadow transition">
                         All time
-                    </button>
+                    </motion.button>
                 </div>
 
                 {/* Current User Rank at Top */}
                 {currentUserRank && (
                     <div className="">
-                                                <li
+                        <li
                             className={`relative grid md:grid-cols-6 grid-cols-5 items-center text-center py-4 mx-auto transition-all duration-300
                                 bg-gradient-to-r from-blue-200 via-blue-100 to-transparent
                                 dark:from-blue-800 dark:via-blue-900 dark:to-transparent
@@ -84,8 +123,7 @@ const LeaderboardContent = () => {
                                 dark:before:opacity-70 dark:before:pointer-events-none dark:before:rounded-xl
                                 border-2 border-blue-400 dark:border-blue-600 rounded-2xl
                             `}
-                            style={{ minWidth: 0 }}
-                        >
+                            style={{ minWidth: 0 }}>
                             {/* Rank */}
                             <div className="flex justify-center items-center gap-2">
                                 <span className="text-lg text-blue-700 dark:text-blue-200 font-extrabold drop-shadow">
@@ -104,7 +142,8 @@ const LeaderboardContent = () => {
                                     <User className="w-10 h-10 text-blue-500" />
                                 )}
                                 <span className="text-blue-900 dark:text-blue-100 font-semibold text-sm truncate max-w-[120px] md:max-w-none">
-                                    {currentUserRank.fullname || currentUserRank.name}
+                                    {currentUserRank.fullname ||
+                                        currentUserRank.name}
                                 </span>
                             </div>
                             {/* Points */}
@@ -119,7 +158,9 @@ const LeaderboardContent = () => {
                                             ? "bg-yellow-200 dark:bg-yellow-700 text-yellow-800 dark:text-yellow-200"
                                             : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200"
                                     }`}>
-                                    {currentUserRank.plan === "premium" ? "Premium" : "Free"}
+                                    {currentUserRank.plan === "premium"
+                                        ? "Premium"
+                                        : "Free"}
                                 </span>
                             </div>
                             {/* Interviews */}
@@ -137,8 +178,12 @@ const LeaderboardContent = () => {
                 )}
             </div>
 
-            {/* Leaderboard Table */}   
-            <div className="bg-light-surface dark:bg-dark-bg rounded-2xl shadow-lg overflow-hidden">
+            {/* Leaderboard Table */}
+            <motion.div
+                variants={tableVariant}
+                initial="hidden"
+                animate="visible"
+                className="bg-light-surface dark:bg-dark-bg rounded-2xl shadow-lg overflow-hidden">
                 <div className="grid md:grid-cols-6 grid-cols-5 text-center text-gray-500 dark:text-gray-400 w-full py-3 text-sm font-semibold">
                     <span>Rank</span>
                     <span className="md:col-span-1 col-span-2">Name</span>
@@ -149,7 +194,8 @@ const LeaderboardContent = () => {
                 </div>
                 <ul>
                     {top10.map((user, idx) => (
-                        <li
+                        <motion.li
+                            variants={childVariant}
                             key={user.id}
                             className={`grid md:grid-cols-6 grid-cols-5 items-center text-center py-4 transition-all duration-300 ${
                                 idx < 3
@@ -227,10 +273,10 @@ const LeaderboardContent = () => {
                                     </span>
                                 )}
                             </div>
-                        </li>
+                        </motion.li>
                     ))}
                 </ul>
-            </div>
+            </motion.div>
         </div>
     );
 };
