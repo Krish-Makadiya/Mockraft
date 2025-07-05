@@ -6,6 +6,8 @@ import {
     HardHat,
     Info,
     Maximize2,
+    Mic,
+    MicOff,
     Minimize2,
     Moon,
     Sparkles,
@@ -14,7 +16,7 @@ import {
     Users,
     WandSparkles,
 } from "lucide-react";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/main/Loader";
@@ -23,6 +25,8 @@ import { db } from "../../config/firebase";
 import { useTheme } from "../../context/ThemeProvider";
 import { useAlert } from "../../hooks/useAlert";
 import { useUser } from "@clerk/clerk-react";
+import useSpeechToText from "react-hook-speech-to-text";
+import { motion } from "framer-motion";
 
 const ChatMockInterview = () => {
     const { user_id, id } = useParams();
@@ -70,6 +74,18 @@ const ChatMockInterview = () => {
 };
 
 const MockInterviewTest = ({ user_id, id }) => {
+    const {
+        error,
+        interimResult,
+        isRecording,
+        results,
+        startSpeechToText,
+        stopSpeechToText,
+    } = useSpeechToText({
+        continuous: true,
+        useLegacyResults: false,
+    });
+
     const [interviewState, setInterviewState] = useState({
         currentIndex: 0,
         answers: [],
@@ -130,6 +146,38 @@ const MockInterviewTest = ({ user_id, id }) => {
                 handleFullscreenChange
             );
     }, []);
+
+    const lastProcessedTimestamp = useRef(null);
+    useEffect(() => {
+        if (results.length === 0) return;
+
+        const last = results[results.length - 1];
+
+        // Avoid processing the same result again
+        if (last.timestamp === lastProcessedTimestamp.current) return;
+
+        lastProcessedTimestamp.current = last.timestamp;
+
+        const lastTranscript = last.transcript;
+
+        setInterviewState((prevState) => {
+            const updatedAnswers = [...prevState.answers];
+            const currentIndex = prevState.currentIndex;
+
+            const existing = updatedAnswers[currentIndex] || "";
+            const updatedText = (existing + " " + lastTranscript)
+                .trim()
+                .slice(0, 500);
+
+            updatedAnswers[currentIndex] = updatedText;
+
+            return {
+                ...prevState,
+                answers: updatedAnswers,
+                answer: updatedText, // 👈 keeps it synced
+            };
+        });
+    }, [results]);
 
     const fetchMockInterviewDetails = async () => {
         try {
@@ -211,10 +259,6 @@ const MockInterviewTest = ({ user_id, id }) => {
                 questions: questions,
                 updatedAt: new Date(),
             });
-
-            if (!interviewState.details.questions) {
-                toast.success("Questions generated successfully");
-            }
         } catch (error) {
             console.error("Error updating interview:", error);
             toast.error("Failed to save questions");
@@ -248,7 +292,7 @@ const MockInterviewTest = ({ user_id, id }) => {
 
 Output Requirements:
 -Return ONLY a valid JSON object — no additional commentary, explanation, or text.
--Structure the interview as a realistic sequence of 8 questions in the following proportions:
+-Structure the interview as a realistic sequence of 5 questions in the following proportions:
 -40% technical questions (specific to language/framework/tools)
 -30% system design or applied scenario-based questions (avoid any "draw a diagram" or visual design questions; ask only those that can be answered in text)
 -20% behavioral questions (STAR format: Situation, Task, Action, Result)
@@ -266,28 +310,37 @@ Additional Guidelines:
 -Ensure question difficulty increases from easy (1) to hard (5) across the 8 questions.
 -Make the overall tone and content suitable for a real senior technical interview.`;
 
-            const res = await axios.get(
-                "http://localhost:4000/ai/generate-questions",
+            await toast.promise(
+                (async () => {
+                    const res = await axios.get(
+                        "http://localhost:4000/ai/generate-questions",
+                        {
+                            params: { prompt },
+                        }
+                    );
+
+                    const response = res.data;
+                    const jsonString = response
+                        .replace(/```json/g, "")
+                        .replace(/```/g, "")
+                        .trim();
+                    const data = JSON.parse(jsonString);
+
+                    if (data) {
+                        setInterviewState((prev) => ({
+                            ...prev,
+                            questions: data.interview,
+                            currentQuestion: data.interview[0],
+                        }));
+                        addQuestionsToUser(data.interview);
+                    }
+                })(),
                 {
-                    params: { prompt },
+                    loading: "Generating your interview questions...",
+                    success: "Interview questions generated successfully!",
+                    error: "Failed to generate interview questions",
                 }
             );
-
-            const response = res.data;
-            const jsonString = response
-                .replace(/```json/g, "")
-                .replace(/```/g, "")
-                .trim();
-            const data = JSON.parse(jsonString);
-
-            if (data) {
-                setInterviewState((prev) => ({
-                    ...prev,
-                    questions: data.interview,
-                    currentQuestion: data.interview[0],
-                }));
-                addQuestionsToUser(data.interview);
-            }
         } catch (error) {
             console.error("Error generating questions:", error);
             toast.error("Failed to generate interview questions");
@@ -296,18 +349,24 @@ Additional Guidelines:
 
     const nextQuestion = () => {
         if (interviewState.currentIndex < interviewState.questions.length - 1) {
-            // Update the current question's answer
             const updatedQuestions = [...interviewState.questions];
+
+            const currentAnswer =
+                interviewState.answers[interviewState.currentIndex] ||
+                interviewState.answer ||
+                "";
+
             updatedQuestions[interviewState.currentIndex] = {
                 ...updatedQuestions[interviewState.currentIndex],
-                answer: interviewState.answer,
+                answer: currentAnswer,
             };
+
             setInterviewState((prev) => ({
                 ...prev,
                 questions: updatedQuestions,
                 currentIndex: prev.currentIndex + 1,
                 currentQuestion: updatedQuestions[prev.currentIndex + 1],
-                answer: updatedQuestions[prev.currentIndex + 1]?.answer || "",
+                answer: interviewState.answers[prev.currentIndex + 1] || "", // Use stored answer
             }));
         }
     };
@@ -396,6 +455,7 @@ Additional Guidelines:
         }));
 
         // Build the answers array for submission
+        console.log("updated questions: ", updatedQuestions);
         const questionsWithAnswers = updatedQuestions.map((q, i) => ({
             ...q,
             answer: interviewState.answers[i] || "",
@@ -534,77 +594,100 @@ Additional Guidelines:
         return <Loader />;
     }
 
+    if (error)
+        return <p>Web Speech API is not available in this browser 🤷‍</p>;
+
+    const parentVariants = {
+        hidden: {},
+        visible: {
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.05,
+            },
+        },
+    };
+    const childVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.2 },
+        },
+    };
+
     return (
         <div className="flex h-screen  bg-light-surface dark:bg-dark-surface">
             {/* Main Content */}
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <motion.div
+                variants={parentVariants}
+                initial="hidden"
+                animate="visible"
+                className="flex-1 flex flex-col overflow-hidden">
                 {/* Question area */}
                 <main className="flex-1 overflow-y-auto p-4 md:p-6">
                     <div className="max-w-3xl mx-auto">
                         {/* Question header */}
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="flex items-center justify-between w-full">
-                                <div className="flex md:gap-3 gap-2 items-center">
-                                    {questionTypeIcons[
-                                        interviewState.currentQuestion?.type.replace(
-                                            " ",
-                                            "_"
-                                        )
-                                    ] || questionTypeIcons.default}
-                                    <span className="text-sm font-medium px-2 py-1 bg-light-bg dark:bg-dark-bg rounded-md">
-                                        {interviewState.currentQuestion?.type}
-                                    </span>
-                                    <span className="text-xs text-yellow-500 dark:text-yellow-400">
-                                        <span className="flex items-center">
-                                            {getDifficultyStars(
-                                                interviewState.currentQuestion
-                                                    .difficulty
-                                            )}
-                                        </span>
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        onClick={toggleFullscreen}
-                                        className="text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary">
-                                        {interviewState.isFullscreen ? (
-                                            <Minimize2 className="h-6 w-6" />
-                                        ) : (
-                                            <Maximize2 className="h-6 w-6" />
+                        <motion.div variants={childVariants} className="flex items-center justify-between w-full mb-8">
+                            <div className="flex md:gap-3 gap-2 items-center">
+                                {questionTypeIcons[
+                                    interviewState.currentQuestion?.type.replace(
+                                        " ",
+                                        "_"
+                                    )
+                                ] || questionTypeIcons.default}
+                                <span className="text-sm font-medium px-2 py-1 bg-light-bg dark:bg-dark-bg rounded-md">
+                                    {interviewState.currentQuestion?.type}
+                                </span>
+                                <span className="text-xs text-yellow-500 dark:text-yellow-400">
+                                    <span className="flex items-center">
+                                        {getDifficultyStars(
+                                            interviewState.currentQuestion
+                                                .difficulty
                                         )}
-                                    </button>
-
-                                    <Info
-                                        onClick={toggleDrawerHandler}
-                                        className="h-6 w-6  hover:text-light-primary dark:hover:text-dark-primary"
-                                    />
-                                    {theme ? (
-                                        <Sun
-                                            onClick={() => setTheme(!theme)}
-                                            className="h-6 w-6 text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary"
-                                        />
-                                    ) : (
-                                        <Moon
-                                            onClick={() => setTheme(!theme)}
-                                            className="h-6 w-6 text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary"
-                                        />
-                                    )}
-                                </div>
+                                    </span>
+                                </span>
                             </div>
-                        </div>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={toggleFullscreen}
+                                    className="text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary">
+                                    {interviewState.isFullscreen ? (
+                                        <Minimize2 className="h-6 w-6" />
+                                    ) : (
+                                        <Maximize2 className="h-6 w-6" />
+                                    )}
+                                </button>
+
+                                <Info
+                                    onClick={toggleDrawerHandler}
+                                    className="h-6 w-6  hover:text-light-primary dark:hover:text-dark-primary"
+                                />
+                                {theme ? (
+                                    <Sun
+                                        onClick={() => setTheme(!theme)}
+                                        className="h-6 w-6 text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary"
+                                    />
+                                ) : (
+                                    <Moon
+                                        onClick={() => setTheme(!theme)}
+                                        className="h-6 w-6 text-light-primary-text dark:text-dark-primary-text hover:text-light-primary dark:hover:text-dark-primary"
+                                    />
+                                )}
+                            </div>
+                        </motion.div>
 
                         {/* Question text */}
-                        <div className="flex flex-col gap-1 mb-6 text-sm">
+                        <motion.div variants={childVariants} className="flex flex-col gap-1 mb-6 text-sm">
                             <h2 className="text-xl font-medium">
                                 {interviewState.currentQuestion.text}
                             </h2>
                             <p className="text-light-secondary dark:text-dark-secondary text-sm">
                                 -{interviewState.currentQuestion.rationale}
                             </p>
-                        </div>
+                        </motion.div>
 
                         {/* Answer textarea */}
-                        <div className="mb-6 relative">
+                        <motion.div variants={childVariants} className="mb-6 relative">
                             <label
                                 htmlFor="answer"
                                 className="block text-sm text-light-secondary-text dark:text-dark-secondary-text font-medium mb-1">
@@ -616,9 +699,12 @@ Additional Guidelines:
                                 maxLength={500}
                                 className="w-full min-h-[80px] max-h-[300px] rounded-md bg-light-bg dark:bg-dark-bg py-2 px-3 text-base resize-none"
                                 value={
-                                    interviewState.answers[
+                                    (interviewState.answers[
                                         interviewState.currentIndex
-                                    ] || ""
+                                    ] || "") +
+                                    (isRecording && interimResult
+                                        ? " " + interimResult
+                                        : "")
                                 }
                                 onChange={handleAnswerChange}
                                 placeholder="Type your answer here (max 500 characters)..."
@@ -633,10 +719,39 @@ Additional Guidelines:
                                 }{" "}
                                 / 500 characters
                             </div>
-                        </div>
+                            <button
+                                onClick={
+                                    isRecording
+                                        ? stopSpeechToText
+                                        : startSpeechToText
+                                }
+                                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 text-white shadow-md 
+    ${
+        isRecording
+            ? "bg-red-600 hover:bg-red-700"
+            : "bg-green-600 hover:bg-green-700"
+    }
+  `}>
+                                {isRecording ? (
+                                    <>
+                                        <Mic className="animate-pulse w-5 h-5" />
+                                        <span className="text-sm font-medium">
+                                            Recording...
+                                        </span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <MicOff className="w-5 h-5 opacity-80" />
+                                        <span className="text-sm font-medium">
+                                            Start Voice Input
+                                        </span>
+                                    </>
+                                )}
+                            </button>
+                        </motion.div>
 
                         {/* Question navigation */}
-                        <div className="flex justify-between mt-8 pt-4 border-t border-neitral-500 dark:border-neutral-600">
+                        <motion.div variants={childVariants} className="flex justify-between mt-8 pt-4 border-t border-neitral-500 dark:border-neutral-600">
                             <button
                                 onClick={prevQuestion}
                                 disabled={interviewState.currentIndex === 0}
@@ -674,7 +789,7 @@ Additional Guidelines:
                                     <ChevronRight className="w-4 h-4" />
                                 </button>
                             )}
-                        </div>
+                        </motion.div>
                     </div>
                 </main>
 
@@ -701,7 +816,7 @@ Additional Guidelines:
                         </div>
                     </div>
                 </footer>
-            </div>
+            </motion.div>
             <Drawer
                 interviewDetails={interviewState.details}
                 isInfoOpen={interviewState.isInfoOpen}

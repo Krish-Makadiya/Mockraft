@@ -269,8 +269,8 @@ export default function Pricing() {
                     </div>
                     {/* Contact Card */}
                     <motion.div
-                        initial={{ opacity: 0, x: 40 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="w-full h-full self-stretch flex flex-col">
                         <div className="flex-1 rounded-2xl bg-gradient-to-br from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary text-white p-8 shadow-lg flex flex-col items-center justify-center h-full">

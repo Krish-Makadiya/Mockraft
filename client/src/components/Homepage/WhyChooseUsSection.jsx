@@ -51,10 +51,10 @@ const whyChooseItemVariants = {
 };
 
 const whyChooseHighlightVariants = {
-    hidden: { opacity: 0, x: 60, scale: 0.95 },
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
         opacity: 1,
-        x: 0,
+        y: 0,
         scale: 1,
         transition: { duration: 0.3, ease: "easeOut" },
     },

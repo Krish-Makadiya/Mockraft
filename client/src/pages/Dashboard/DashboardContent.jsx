@@ -5,9 +5,7 @@ import { useNavigate } from "react-router-dom";
 import PerformanceAnalysisSection from "../../components/Dashboard/PerformanceAnalysisSection";
 import PremiumHighlightCard from "../../components/Dashboard/PremiumHighlightCard";
 import RankLevelSection from "../../components/Dashboard/RankLevelSection";
-import {
-    RankProgressBar
-} from "../../components/Dashboard/RankProgressBar";
+import { RankProgressBar } from "../../components/Dashboard/RankProgressBar";
 import RecentInterviewsSection from "../../components/Dashboard/RecentInterviewsSection";
 import StatsOverviewGrid from "../../components/Dashboard/StatsOverviewGrid";
 import SupportContactCard from "../../components/Dashboard/SupportContactCard";
@@ -28,17 +26,17 @@ const containerStagger = {
     hidden: {},
     visible: {
         transition: {
-            staggerChildren: 0.10,
+            staggerChildren: 0.1,
             delayChildren: 0.05,
         },
     },
 };
 const fadeUp = {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
         opacity: 1,
         y: 0,
-        transition: { type: "spring", stiffness: 90, damping: 16 },
+        transition: { duration: 0.3, type: "spring", stiffness: 300 },
     },
 };
 
@@ -186,8 +184,7 @@ const DashboardContent = () => {
             className="flex flex-col gap-10 md:px-4 px-2"
             variants={containerStagger}
             initial="hidden"
-            animate="visible"
-        >
+            animate="visible">
             <motion.div className="md:ml-0 ml-12" variants={fadeUp}>
                 <h1 className="text-3xl font-bold">Dashboard</h1>
                 <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
@@ -195,7 +192,9 @@ const DashboardContent = () => {
                 </p>
             </motion.div>
 
-            <motion.div className="flex flex-col gap-6" variants={containerStagger}>
+            <motion.div
+                className="flex flex-col gap-6"
+                variants={containerStagger}>
                 <motion.div variants={fadeUp}>
                     <UserProfileCard userData={userData} />
                 </motion.div>
@@ -211,7 +210,9 @@ const DashboardContent = () => {
                     />
                 </motion.div>
 
-                <motion.div className="flex md:flex-row flex-col md:gap-[2%] gap-4" variants={fadeUp}>
+                <motion.div
+                    className="flex md:flex-row flex-col md:gap-[2%] gap-4"
+                    variants={fadeUp}>
                     <RecentInterviewsSection
                         recentInterviews={stats.recent}
                         userId={userData.id}
@@ -227,7 +228,9 @@ const DashboardContent = () => {
                     <RankProgressBar points={userData?.points || 0} />
                 </motion.div>
 
-                <motion.div className="flex md:flex-row flex-col md:gap-[2%] gap-4" variants={fadeUp}>
+                <motion.div
+                    className="flex md:flex-row flex-col md:gap-[2%] gap-4"
+                    variants={fadeUp}>
                     <PremiumHighlightCard />
                     <SupportContactCard />
                 </motion.div>

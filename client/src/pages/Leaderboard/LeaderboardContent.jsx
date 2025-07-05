@@ -85,11 +85,11 @@ const LeaderboardContent = () => {
             {/* Header Card */}
             <motion.div
                 initial={{
-                    x: 20,
+                    y: 20,
                     opacity: 0,
                 }}
                 animate={{
-                    x: 0,
+                    y: 0,
                     opacity: 1,
                 }}
                 transition={{
