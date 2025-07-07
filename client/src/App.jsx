@@ -1,6 +1,11 @@
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { LayoutDashboard, UserRoundSearch, ChartColumnIncreasing, FileText   } from "lucide-react";
+import {
+    LayoutDashboard,
+    UserRoundSearch,
+    ChartColumnIncreasing,
+    FileText,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -9,11 +14,15 @@ import Navbar from "./components/main/Navbar";
 import { db } from "./config/firebase"; // adjust the import
 import Dashboard from "./pages/Dashboard/Dashboard";
 import ErrorPage from "./pages/ErrorPage";
-import Homepage from "./pages/Homepage";
+import Homepage from "./pages/Home/Homepage";
 import ChatMockInterview from "./pages/MockInterview/ChatMockInterview";
 import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
 import MockInterview from "./pages/MockInterview/MockInterview";
 import Leaderboard from "./pages/Leaderboard/Leaderboard";
+import AboutUsPage from "./pages/Home/AboutUsPage";
+import Pricing from "./components/Homepage/Pricing";
+import PricingPage from "./pages/Home/PricingPage";
+import ContactUsPage from "./pages/Home/ContactUsPage";
 
 const tabs = [
     {
@@ -25,7 +34,7 @@ const tabs = [
     {
         id: 2,
         name: "Mock Interview",
-        icon: FileText ,
+        icon: FileText,
         path: "/mock-interview",
     },
     {
@@ -55,7 +64,7 @@ const useInitializeUser = () => {
                     lastname: user.lastName,
                     id: user.id,
                     avtaar: user.imageUrl,
-                    createdAt: user.createdAt
+                    createdAt: user.createdAt,
                 });
             }
         };
@@ -85,6 +94,9 @@ const App = () => {
                         </div>
                     }
                 />
+                <Route path="/about-us" element={<AboutUsPage />}></Route>
+                <Route path="/pricing" element={<PricingPage />}></Route>
+                <Route path="/contact-us" element={<ContactUsPage />}></Route>
                 <Route
                     path="/dashboard"
                     element={
@@ -129,7 +141,7 @@ const App = () => {
                     path="/leaderboard"
                     element={
                         <ProtectedRoute>
-                            <Leaderboard 
+                            <Leaderboard
                                 tabs={tabs}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}

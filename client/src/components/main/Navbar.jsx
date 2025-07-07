@@ -103,7 +103,7 @@ export default function Example() {
             <nav className="mx-auto flex max-w-7xl items-center justify-between py-4 px-6 lg:px-8">
                 <div className="flex lg:flex-1">
                     <motion.a
-                        href="#"
+                        href="/"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}>
                         <img
@@ -197,21 +197,21 @@ export default function Example() {
                         </PopoverPanel>
                     </Popover>
                     <motion.a
-                        href="#"
+                        href="/about-us"
                         className="text-sm/6 font-semibold"
                         variants={navItemAnim}
                         {...buttonAnim}>
                         About Us
                     </motion.a>
                     <motion.a
-                        href="#"
+                        href="/pricing"
                         className="text-sm/6 font-semibold"
                         variants={navItemAnim}
                         {...buttonAnim}>
                         Pricing
                     </motion.a>
                     <motion.a
-                        href="#"
+                        href="/contact-us"
                         className="text-sm/6 font-semibold"
                         variants={navItemAnim}
                         {...buttonAnim}>

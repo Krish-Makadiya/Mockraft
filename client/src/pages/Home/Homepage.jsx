@@ -1,15 +1,15 @@
-import { useTheme } from "../context/ThemeProvider";
-import Navbar from "../components/main/Navbar";
-import LandingPage from "../components/Homepage/LandingPage";
-import FeatureSection from "../components/Homepage/FeatureSection";
-import WhyChooseUsSection from "../components/Homepage/WhyChooseUsSection";
-import HowItWorksSection from "../components/Homepage/HowItWorksSection";
-import Pricing from "../components/Homepage/Pricing";
-import FAQSection from "../components/Homepage/FAQSection";
-import CTASection from "../components/Homepage/CTASection";
-import Footer from "../components/main/Footer";
-import LightGradient from "../config/HomepageGradient/LightGradient";
-import DarkGradient from "../config/HomepageGradient/DarkGradient";
+import Navbar from "../../components/main/Navbar";
+import LandingPage from "../../components/Homepage/LandingPage";
+import FeatureSection from "../../components/Homepage/FeatureSection";
+import WhyChooseUsSection from "../../components/Homepage/WhyChooseUsSection";
+import HowItWorksSection from "../../components/Homepage/HowItWorksSection";
+import Pricing from "../../components/Homepage/Pricing";
+import FAQSection from "../../components/Homepage/FAQSection";
+import CTASection from "../../components/Homepage/CTASection";
+import Footer from "../../components/main/Footer";
+import LightGradient from "../../config/HomepageGradient/LightGradient";
+import DarkGradient from "../../config/HomepageGradient/DarkGradient";
+import { useTheme } from "../../context/ThemeProvider";
 
 const Homepage = () => {
     const { theme } = useTheme();
