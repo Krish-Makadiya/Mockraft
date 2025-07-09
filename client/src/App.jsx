@@ -5,6 +5,9 @@ import {
     UserRoundSearch,
     ChartColumnIncreasing,
     FileText,
+    BrainCircuit,
+    Puzzle,
+    Calculator,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -23,6 +26,7 @@ import AboutUsPage from "./pages/Home/AboutUsPage";
 import Pricing from "./components/Homepage/Pricing";
 import PricingPage from "./pages/Home/PricingPage";
 import ContactUsPage from "./pages/Home/ContactUsPage";
+import Aptitude from "./pages/Aptitude/Aptitude";
 
 const tabs = [
     {
@@ -39,6 +43,12 @@ const tabs = [
     },
     {
         id: 3,
+        name: "Aptitude",
+        icon: Calculator,
+        path: "/aptitude",
+    },
+    {
+        id: 4,
         name: "Leaderboard",
         icon: ChartColumnIncreasing,
         path: "/leaderboard",
@@ -134,6 +144,18 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <GetAllQuestionInfo />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/aptitude"
+                    element={
+                        <ProtectedRoute>
+                            <Aptitude
+                                tabs={tabs}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
                         </ProtectedRoute>
                     }
                 />

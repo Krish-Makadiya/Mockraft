@@ -126,7 +126,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen }) => {
 
     return (
         <form
-            className="md:w-3/5 w-[90vw]  mx-auto text-light-primary-text dark:text-dark-primary-text"
+            className="md:w-3/5 w-[90vw] mx-auto text-light-primary-text dark:text-dark-primary-text"
             onSubmit={submitHandler}>
             <div className="flex flex-col">
                 <div className="flex items-center md:gap-5 gap-2 md:ml-0 ml-12">

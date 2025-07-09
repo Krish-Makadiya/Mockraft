@@ -1,6 +1,7 @@
 {
     "Arithematic Aptitude": [
         {
+            "id": 1,
             "ques": "A train moving at 72 km/h crosses a pole in 15 seconds. What is the length of the train?",
             "options": ["200 m", "250 m", "300 m", "350 m"],
             "ans": "300 m",
@@ -11,6 +12,7 @@
             "tier": "free"
         },
         {
+            "id": 2,
             "ques": "Two trains of lengths 180 m and 220 m move towards each other at 54 km/h and 72 km/h respectively. How long will they take to completely pass each other?",
             "options": ["12 sec", "14.5 sec", "16 sec", "18 sec"],
             "ans": "16 sec",
@@ -21,6 +23,7 @@
             "tier": "paid"
         },
         {
+            "id": 3,
             "ques": "A 210 m long train takes 25 seconds to cross a platform of length 190 m. What is its speed in km/h?",
             "options": ["57.6 km/h", "60.5 km/h", "64.8 km/h", "72.4 km/h"],
             "ans": "57.6 km/h",
@@ -31,6 +34,7 @@
             "tier": "free"
         },
         {
+            "id": 4,
             "ques": "A train crosses two bridges of lengths 400 m and 240 m in 50 seconds and 38 seconds respectively when moving at constant speed. What is the train's length?",
             "options": ["120 m", "150 m", "180 m", "200 m"],
             "ans": "150 m",
@@ -41,6 +45,7 @@
             "tier": "paid"
         },
         {
+            "id": 5,
             "ques": "A 280 m long train moving at 90 km/h overtakes a motorcycle moving at 54 km/h in the same direction. How long does it take?",
             "options": ["28 sec", "32 sec", "36 sec", "40 sec"],
             "ans": "28 sec",
@@ -51,6 +56,7 @@
             "tier": "free"
         },
         {
+            "id": 6,
             "ques": "A train passes a platform in 45 seconds moving at 60 km/h. If the platform is 250 m long, what is the train's length?",
             "options": ["300 m", "400 m", "500 m", "600 m"],
             "ans": "500 m",
@@ -61,6 +67,7 @@
             "tier": "free"
         },
         {
+            "id": 7,
             "ques": "Two trains travel towards each other at 108 km/h and 72 km/h. When they meet, the faster train has traveled 60 km more than the slower train. What was their initial distance apart?",
             "options": ["180 km", "200 km", "240 km", "300 km"],
             "ans": "240 km",
@@ -71,6 +78,7 @@
             "tier": "paid"
         },
         {
+            "id": 8,
             "ques": "A 150 m long train crosses a man walking at 6 km/h in the opposite direction in 9 seconds. What is the train's speed?",
             "options": ["54 km/h", "60 km/h", "66 km/h", "72 km/h"],
             "ans": "54 km/h",
@@ -81,6 +89,7 @@
             "tier": "free"
         },
         {
+            "id": 9,
             "ques": "A train traveling at 48 km/h completely crosses a pole in 30 seconds. How long would it take to cross a 350 m long bridge?",
             "options": ["45 sec", "52.5 sec", "60 sec", "67.5 sec"],
             "ans": "67.5 sec",
@@ -91,6 +100,7 @@
             "tier": "free"
         },
         {
+            "id": 10,
             "ques": "A train takes 18 seconds to pass a platform and 12 seconds to pass a man running at 12 km/h in the same direction. If the platform is 150 m long, what's the train length?",
             "options": ["120 m", "180 m", "240 m", "300 m"],
             "ans": "240 m",
@@ -101,6 +111,7 @@
             "tier": "paid"
         },
         {
+            "id": 11,
             "ques": "A 250 m long train crosses a bridge in 40 seconds moving at constant speed. If it crosses a pole in 15 seconds, how long is the bridge?",
             "options": ["300 m", "350 m", "416.67 m", "500 m"],
             "ans": "416.67 m",
@@ -111,6 +122,7 @@
             "tier": "free"
         },
         {
+            "id": 12,
             "ques": "Two trains of lengths 200 m and 300 m travel towards each other at 90 km/h and 60 km/h. How much time will they take to be clear of each other?",
             "options": ["12 sec", "15 sec", "18 sec", "20 sec"],
             "ans": "15 sec",
@@ -121,6 +133,7 @@
             "tier": "free"
         },
         {
+            "id": 13,
             "ques": "A train traveling at 80 km/h starts overtaking a car moving at 50 km/h. If the train is 220 m long, how long will the overtaking take?",
             "options": ["26.4 sec", "28.8 sec", "32.4 sec", "36.0 sec"],
             "ans": "26.4 sec",
@@ -131,6 +144,7 @@
             "tier": "free"
         },
         {
+            "id": 14,
             "ques": "A train passes two persons walking at 5 km/h in opposite directions in 12 sec and 15 sec respectively. If the train length is 300 m, what is its speed?",
             "options": ["72 km/h", "75 km/h", "80 km/h", "90 km/h"],
             "ans": "90 km/h",
@@ -141,6 +155,7 @@
             "tier": "paid"
         },
         {
+            "id": 15,
             "ques": "A 180 m long train crosses a pole in 20 seconds. How long will it take to cross a 270 m long platform?",
             "options": ["35 sec", "40 sec", "45 sec", "50 sec"],
             "ans": "50 sec",
@@ -151,6 +166,7 @@
             "tier": "free"
         },
         {
+            "id": 16,
             "ques": "A train moving at 108 km/h crosses another train of equal length moving at 72 km/h in the opposite direction in 15 seconds. How long is each train?",
             "options": ["200 m", "225 m", "250 m", "300 m"],
             "ans": "225 m",
@@ -161,6 +177,7 @@
             "tier": "free"
         },
         {
+            "id": 17,
             "ques": "A train traveling at 60 km/h passes a cyclist going in the same direction in 36 seconds. If the cyclist is moving at 18 km/h and the train is 350 m long, how far was the cyclist ahead when overtaking started?",
             "options": ["150 m", "210 m", "280 m", "350 m"],
             "ans": "210 m",
@@ -171,6 +188,7 @@
             "tier": "paid"
         },
         {
+            "id": 18,
             "ques": "A 300 m long train crosses a tunnel in 1 minute moving at 72 km/h. What is the tunnel length?",
             "options": ["900 m", "1000 m", "1100 m", "1200 m"],
             "ans": "900 m",
@@ -181,6 +199,7 @@
             "tier": "free"
         },
         {
+            "id": 19,
             "ques": "Two trains start from stations 240 km apart at speeds of 80 km/h and 100 km/h towards each other. When they meet, how far has the slower train traveled?",
             "options": ["96 km", "106.67 km", "120 km", "133.33 km"],
             "ans": "106.67 km",
@@ -191,6 +210,7 @@
             "tier": "free"
         },
         {
+            "id": 20,
             "ques": "A train accelerates from 36 km/h to 72 km/h over 1 km while crossing a platform. If it takes 75 seconds, what is the train length?",
             "options": ["150 m", "200 m", "250 m", "300 m"],
             "ans": "250 m",
@@ -201,6 +221,7 @@
             "tier": "free"
         },
         {
+            "id": 21,
             "ques": "A cyclist covers 18 km in 45 minutes. What is the speed in km/h?",
             "options": ["20 km/h", "24 km/h", "28 km/h", "32 km/h"],
             "ans": "24 km/h",
@@ -211,6 +232,7 @@
             "tier": "free"
         },
         {
+            "id": 22,
             "ques": "A car travels at 60 km/h for first 3 hours and at 45 km/h for next 4 hours. What is the average speed for the entire journey?",
             "options": ["48.5 km/h", "50.4 km/h", "51.4 km/h", "52.5 km/h"],
             "ans": "51.4 km/h",
@@ -221,6 +243,7 @@
             "tier": "paid"
         },
         {
+            "id": 23,
             "ques": "Two cities A and B are 275 km apart. A car starts from A at 50 km/h and another from B at 60 km/h. When will they meet?",
             "options": ["2.5 hrs", "2.75 hrs", "3 hrs", "3.25 hrs"],
             "ans": "2.5 hrs",
@@ -231,6 +254,7 @@
             "tier": "free"
         },
         {
+            "id": 24,
             "ques": "Walking at 5/6 of usual speed, a person is 12 minutes late. What is the usual time taken?",
             "options": ["60 min", "72 min", "80 min", "90 min"],
             "ans": "60 min",
@@ -241,6 +265,7 @@
             "tier": "paid"
         },
         {
+            "id": 25,
             "ques": "A person covers 30 km at 6 km/h and another 50 km at 10 km/h. What is the average speed?",
             "options": ["7.5 km/h", "8 km/h", "8.25 km/h", "8.5 km/h"],
             "ans": "8 km/h",
@@ -251,6 +276,7 @@
             "tier": "free"
         },
         {
+            "id": 26,
             "ques": "A bus covers 600 km in 8 hours. If it travels at 50 km/h for first 5 hours, what should be its speed for the remaining journey?",
             "options": ["70 km/h", "75 km/h", "80 km/h", "85 km/h"],
             "ans": "70 km/h",
@@ -261,6 +287,7 @@
             "tier": "free"
         },
         {
+            "id": 27,
             "ques": "Two cyclists start towards each other from 120 km apart. First at 18 km/h, second at 22 km/h. When will they be 20 km apart?",
             "options": ["2.2 hrs", "2.5 hrs", "2.8 hrs", "3 hrs"],
             "ans": "2.5 hrs",
@@ -271,6 +298,7 @@
             "tier": "paid"
         },
         {
+            "id": 28,
             "ques": "A man travels 300 km partly by train and car. He takes 4 hrs if travels 60 km by train and rest by car. If he travels 100 km by train and rest by car, he takes 10 mins longer. What is train speed?",
             "options": ["60 km/h", "75 km/h", "90 km/h", "100 km/h"],
             "ans": "60 km/h",
@@ -281,6 +309,7 @@
             "tier": "paid"
         },
         {
+            "id": 29,
             "ques": "A car reduces speed by 25% due to bad weather. It reaches 45 minutes late. What is the usual time?",
             "options": ["2.25 hrs", "2.5 hrs", "2.75 hrs", "3 hrs"],
             "ans": "2.25 hrs",
@@ -291,6 +320,7 @@
             "tier": "free"
         },
         {
+            "id": 30,
             "ques": "A bus covers 400 km at constant speed. If speed increased by 10 km/h, it would take 1 hour less. What is original speed?",
             "options": ["40 km/h", "50 km/h", "60 km/h", "70 km/h"],
             "ans": "40 km/h",
@@ -301,6 +331,7 @@
             "tier": "free"
         },
         {
+            "id": 31,
             "ques": "A person travels first 200 km at 40 km/h, next 300 km at 60 km/h, last 500 km at 50 km/h. What is average speed?",
             "options": ["48 km/h", "50 km/h", "52 km/h", "54 km/h"],
             "ans": "50 km/h",
@@ -311,6 +342,7 @@
             "tier": "free"
         },
         {
+            "id": 32,
             "ques": "A train travels 20% faster than car. Both start together. Train stops for 12 minutes and reaches 15 minutes before car. What is the distance?",
             "options": ["60 km", "75 km", "90 km", "120 km"],
             "ans": "90 km",
@@ -321,6 +353,7 @@
             "tier": "paid"
         },
         {
+            "id": 33,
             "ques": "A man covers 30 km upstream in 5 hours. If speed in still water is 7 km/h, what is stream speed?",
             "options": ["1 km/h", "2 km/h", "3 km/h", "4 km/h"],
             "ans": "1 km/h",
@@ -331,6 +364,7 @@
             "tier": "free"
         },
         {
+            "id": 34,
             "ques": "Two cars start from same point. First at 8 AM (60 km/h), second at 10 AM (80 km/h). When will second catch first?",
             "options": ["2 PM", "3 PM", "4 PM", "5 PM"],
             "ans": "4 PM",
@@ -341,6 +375,7 @@
             "tier": "free"
         },
         {
+            "id": 35,
             "ques": "A person travels 600 km. Had he increased speed by 20 km/h, he would save 2 hours. Original speed?",
             "options": ["80 km/h", "90 km/h", "100 km/h", "110 km/h"],
             "ans": "100 km/h",
@@ -351,6 +386,7 @@
             "tier": "paid"
         },
         {
+            "id": 36,
             "ques": "A man covers 40 km at 8 km/h and 60 km at 12 km/h. What is average speed?",
             "options": ["9.2 km/h", "9.6 km/h", "10 km/h", "10.4 km/h"],
             "ans": "9.6 km/h",
@@ -361,6 +397,7 @@
             "tier": "free"
         },
         {
+            "id": 37,
             "ques": "A bus travels 240 km. With 20 km/h more speed, it would take 1 hour less. Original speed?",
             "options": ["40 km/h", "50 km/h", "60 km/h", "70 km/h"],
             "ans": "60 km/h",
@@ -371,6 +408,7 @@
             "tier": "free"
         },
         {
+            "id": 38,
             "ques": "A person travels first half at 20 km/h and second half at 30 km/h. What is average speed?",
             "options": ["22 km/h", "24 km/h", "25 km/h", "26 km/h"],
             "ans": "24 km/h",
@@ -381,6 +419,7 @@
             "tier": "free"
         },
         {
+            "id": 39,
             "ques": "Two trains same direction: 200m at 72 km/h, 300m at 90 km/h. Time to pass each other?",
             "options": ["50 sec", "60 sec", "70 sec", "80 sec"],
             "ans": "60 sec",
@@ -391,6 +430,7 @@
             "tier": "free"
         },
         {
+            "id": 40,
             "ques": "A man travels 150 km. Had he traveled 5 km/h faster, he would save 30 minutes. Original speed?",
             "options": ["40 km/h", "45 km/h", "50 km/h", "55 km/h"],
             "ans": "50 km/h",
@@ -401,6 +441,7 @@
             "tier": "paid"
         },
         {
+            "id": 41,
             "ques": "A can complete a work in 12 days. B is 50% more efficient than A. How many days will B take to complete the same work?",
             "options": ["6 days", "8 days", "9 days", "10 days"],
             "ans": "8 days",
@@ -411,6 +452,7 @@
             "tier": "free"
         },
         {
+            "id": 42,
             "ques": "6 men can complete a work in 8 days. How many days will 12 men take to complete the same work?",
             "options": ["2 days", "3 days", "4 days", "6 days"],
             "ans": "4 days",
@@ -421,6 +463,7 @@
             "tier": "free"
         },
         {
+            "id": 43,
             "ques": "A and B can complete a work in 15 days. A alone can complete it in 20 days. How many days will B alone take?",
             "options": ["30 days", "45 days", "60 days", "75 days"],
             "ans": "60 days",
@@ -431,6 +474,7 @@
             "tier": "free"
         },
         {
+            "id": 44,
             "ques": "3 men and 4 women can complete a work in 10 days. 6 men and 8 women can complete it in 5 days. How many days will 1 man take?",
             "options": ["60 days", "75 days", "90 days", "120 days"],
             "ans": "120 days",
@@ -441,6 +485,7 @@
             "tier": "paid"
         },
         {
+            "id": 45,
             "ques": "A completes 60% of a work in 18 days. He then calls B and they complete the remaining work in 4 days. How long would B alone take to complete the entire work?",
             "options": ["24 days", "30 days", "36 days", "40 days"],
             "ans": "30 days",
@@ -451,6 +496,7 @@
             "tier": "free"
         },
         {
+            "id": 46,
             "ques": "A and B together can complete a work in 12 days. After working for 5 days, B leaves and A completes the remaining work in 14 days. How long would B alone take to complete the work?",
             "options": ["24 days", "30 days", "36 days", "42 days"],
             "ans": "36 days",
@@ -461,6 +507,7 @@
             "tier": "paid"
         },
         {
+            "id": 47,
             "ques": "15 workers can build a wall in 20 days. How many additional workers are needed to build it in 12 days?",
             "options": ["8", "10", "12", "15"],
             "ans": "10",
@@ -471,6 +518,7 @@
             "tier": "free"
         },
         {
+            "id": 48,
             "ques": "A is twice as efficient as B. Together they complete a work in 18 days. How long would A alone take?",
             "options": ["24 days", "27 days", "30 days", "36 days"],
             "ans": "27 days",
@@ -481,6 +529,7 @@
             "tier": "free"
         },
         {
+            "id": 49,
             "ques": "A can complete a work in 20 days. B can complete it in 30 days. They work together for 5 days. What fraction of work is left?",
             "options": ["5/12", "7/12", "1/2", "3/4"],
             "ans": "7/12",
@@ -491,6 +540,7 @@
             "tier": "free"
         },
         {
+            "id": 50,
             "ques": "Pipes A and B can fill a tank in 12 and 18 minutes respectively. Both are opened together, but after 4 minutes, A is closed. How long will B take to fill the remaining tank?",
             "options": ["5 min", "7 min", "9 min", "11 min"],
             "ans": "9 min",
@@ -501,6 +551,7 @@
             "tier": "free"
         },
         {
+            "id": 51,
             "ques": "A works twice as fast as B. If both together complete a work in 24 days, how long would A take alone?",
             "options": ["30 days", "36 days", "40 days", "42 days"],
             "ans": "36 days",
@@ -511,6 +562,7 @@
             "tier": "free"
         },
         {
+            "id": 52,
             "ques": "15 men can complete a work in 10 days working 8 hours daily. How many hours daily must 20 men work to complete it in 6 days?",
             "options": ["6 hours", "8 hours", "10 hours", "12 hours"],
             "ans": "10 hours",
@@ -521,6 +573,7 @@
             "tier": "free"
         },
         {
+            "id": 53,
             "ques": "A and B can complete a work in 20 days. B and C in 25 days. C and A in 30 days. How long will A alone take?",
             "options": ["24 days", "36 days", "42 days", "48 days"],
             "ans": "48 days",
@@ -531,6 +584,7 @@
             "tier": "paid"
         },
         {
+            "id": 54,
             "ques": "12 workers earn ₹7,200 for completing a work in 8 days. How much will 15 workers earn for completing the same work in 6 days?",
             "options": ["₹6,750", "₹7,500", "₹8,100", "₹9,000"],
             "ans": "₹6,750",
@@ -541,6 +595,7 @@
             "tier": "free"
         },
         {
+            "id": 55,
             "ques": "A can complete 1/3 of a work in 10 days. B can complete 1/4 of the same work in 8 days. How long will they take to complete the work together?",
             "options": ["12 days", "15 days", "18 days", "20 days"],
             "ans": "15 days",
@@ -551,6 +606,7 @@
             "tier": "paid"
         },
         {
+            "id": 56,
             "ques": "A and B can complete a work in 15 days. After working for 6 days, A leaves and B completes the remaining work in 24 days. How long would A alone take?",
             "options": ["20 days", "24 days", "30 days", "36 days"],
             "ans": "20 days",
@@ -561,6 +617,7 @@
             "tier": "free"
         },
         {
+            "id": 57,
             "ques": "5 machines can produce 20,000 units in 8 days. How many days will 8 machines take to produce 30,000 units?",
             "options": ["6 days", "7.5 days", "9 days", "10.5 days"],
             "ans": "7.5 days",
@@ -571,6 +628,7 @@
             "tier": "free"
         },
         {
+            "id": 58,
             "ques": "A and B can complete a work in 24 days. A, B and C together complete it in 18 days. How long would C alone take?",
             "options": ["48 days", "54 days", "60 days", "72 days"],
             "ans": "72 days",
@@ -581,6 +639,7 @@
             "tier": "free"
         },
         {
+            "id": 59,
             "ques": "A completes a work in 16 days. B is 20% less efficient than A. How many days will they take to complete the work together?",
             "options": ["7.11 days", "8.89 days", "9.6 days", "10.24 days"],
             "ans": "8.89 days",
@@ -591,6 +650,7 @@
             "tier": "paid"
         },
         {
+            "id": 60,
             "ques": "8 children complete a work in 12 days working 5 hours daily. How many hours daily must 10 children work to complete it in 8 days?",
             "options": ["4 hours", "5 hours", "6 hours", "7 hours"],
             "ans": "6 hours",
@@ -601,6 +661,7 @@
             "tier": "free"
         },
         {
+            "id": 61,
             "ques": "A can complete a work in 12 days. After working for 4 days, he is joined by B and they complete the remaining work in 4 days. How long would B alone take?",
             "options": ["12 days", "16 days", "18 days", "24 days"],
             "ans": "24 days",
@@ -611,6 +672,7 @@
             "tier": "paid"
         },
         {
+            "id": 62,
             "ques": "A sum of money at simple interest amounts to ₹2,800 in 2 years and to ₹3,200 in 4 years. What is the principal amount?",
             "options": ["₹2,200", "₹2,400", "₹2,500", "₹2,600"],
             "ans": "₹2,400",
@@ -621,6 +683,7 @@
             "tier": "free"
         },
         {
+            "id": 63,
             "ques": "A sum of ₹5,000 becomes ₹6,500 at simple interest in 5 years. What is the annual interest rate?",
             "options": ["5%", "6%", "7%", "8%"],
             "ans": "6%",
@@ -631,6 +694,7 @@
             "tier": "free"
         },
         {
+            "id": 64,
             "ques": "How many years will it take for ₹8,000 to double at 8% simple interest?",
             "options": ["10 years", "12.5 years", "15 years", "20 years"],
             "ans": "12.5 years",
@@ -641,6 +705,7 @@
             "tier": "free"
         },
         {
+            "id": 65,
             "ques": "₹10,000 is invested at 5% simple interest for 4 years. After 2 years, the interest rate increased to 7%. What is the total interest earned?",
             "options": ["₹2,200", "₹2,400", "₹2,600", "₹2,800"],
             "ans": "₹2,400",
@@ -651,6 +716,7 @@
             "tier": "paid"
         },
         {
+            "id": 66,
             "ques": "A sum of money triples itself in 15 years at simple interest. What is the annual interest rate?",
             "options": ["10%", "12.5%", "13.33%", "15%"],
             "ans": "13.33%",
@@ -661,6 +727,7 @@
             "tier": "free"
         },
         {
+            "id": 67,
             "ques": "The simple interest on a sum is 4/9 of the principal. If the annual interest rate is 10%, what is the time period?",
             "options": ["4 years", "4.44 years", "5 years", "5.5 years"],
             "ans": "4.44 years",
@@ -671,6 +738,7 @@
             "tier": "paid"
         },
         {
+            "id": 68,
             "ques": "A person invested equal sums at 8% and 10% simple interest. After 3 years, the total interest was ₹5,400. What was the total principal invested?",
             "options": ["₹15,000", "₹18,000", "₹20,000", "₹24,000"],
             "ans": "₹20,000",
@@ -681,6 +749,7 @@
             "tier": "paid"
         },
         {
+            "id": 69,
             "ques": "The difference between simple interest at 12% and 10% on a sum for 5 years is ₹800. What is the principal?",
             "options": ["₹7,000", "₹8,000", "₹9,000", "₹10,000"],
             "ans": "₹8,000",
@@ -691,6 +760,7 @@
             "tier": "free"
         },
         {
+            "id": 70,
             "ques": "A sum becomes ₹9,600 in 4 years and ₹10,400 in 6 years at simple interest. What is the principal?",
             "options": ["₹7,500", "₹8,000", "₹8,400", "₹8,800"],
             "ans": "₹8,000",
@@ -701,6 +771,7 @@
             "tier": "free"
         },
         {
+            "id": 71,
             "ques": "At what simple interest rate will ₹12,000 become ₹15,600 in 4 years?",
             "options": ["6.5%", "7%", "7.5%", "8%"],
             "ans": "7.5%",
@@ -711,6 +782,7 @@
             "tier": "free"
         },
         {
+            "id": 72,
             "ques": "A sum invested at simple interest amounts to ₹14,400 in 3 years and ₹16,000 in 5 years. What is the interest rate?",
             "options": ["8%", "10%", "12%", "15%"],
             "ans": "10%",
@@ -721,6 +793,7 @@
             "tier": "paid"
         },
         {
+            "id": 73,
             "ques": "₹15,000 is invested at 10% simple interest for 3 years. If the interest is reinvested each year, what is the final amount?",
             "options": ["₹19,500", "₹19,800", "₹20,000", "₹20,500"],
             "ans": "₹19,500",
@@ -731,6 +804,7 @@
             "tier": "free"
         },
         {
+            "id": 74,
             "ques": "A sum of money doubles in 8 years at simple interest. How many times will it become in 20 years?",
             "options": ["2.5 times", "3 times", "3.5 times", "4 times"],
             "ans": "3.5 times",
@@ -741,6 +815,7 @@
             "tier": "paid"
         },
         {
+            "id": 75,
             "ques": "The simple interest on a sum for 5 years is 60% of the principal. What is the annual interest rate?",
             "options": ["10%", "12%", "15%", "18%"],
             "ans": "12%",
@@ -751,6 +826,7 @@
             "tier": "free"
         },
         {
+            "id": 76,
             "ques": "A person invested ₹25,000 at 8% simple interest for 4 years and ₹35,000 at 6% for 5 years. What is the total interest earned?",
             "options": ["₹18,500", "₹19,000", "₹19,500", "₹20,000"],
             "ans": "₹19,500",
@@ -761,6 +837,7 @@
             "tier": "free"
         },
         {
+            "id": 77,
             "ques": "The simple interest on a sum at 9% after 7 years is ₹6,300. What is the principal?",
             "options": ["₹10,000", "₹12,000", "₹14,000", "₹15,000"],
             "ans": "₹10,000",
@@ -771,6 +848,7 @@
             "tier": "free"
         },
         {
+            "id": 78,
             "ques": "A sum of money becomes 5 times in 20 years at simple interest. What is the interest rate?",
             "options": ["15%", "18%", "20%", "25%"],
             "ans": "20%",
@@ -781,6 +859,7 @@
             "tier": "free"
         },
         {
+            "id": 79,
             "ques": "The simple interest on ₹8,000 at 12% for a certain period is ₹2,880. What is the time period?",
             "options": ["2.5 years", "3 years", "3.5 years", "4 years"],
             "ans": "3 years",
@@ -791,6 +870,7 @@
             "tier": "free"
         },
         {
+            "id": 80,
             "ques": "A sum was divided equally and invested at 6% and 9% simple interest. After 4 years, the total interest was ₹4,800. What was the original sum?",
             "options": ["₹12,000", "₹15,000", "₹16,000", "₹18,000"],
             "ans": "₹16,000",
@@ -801,6 +881,7 @@
             "tier": "paid"
         },
         {
+            "id": 81,
             "ques": "The simple interest on a sum for 4 years is half the principal. What is the annual interest rate?",
             "options": ["10.5%", "12.5%", "15%", "18%"],
             "ans": "12.5%",
@@ -811,6 +892,7 @@
             "tier": "free"
         },
         {
+            "id": 82,
             "ques": "A sum of ₹20,000 is lent at simple interest. After 3 years, ₹6,000 is repaid, and the rest is repaid after another 2 years with total interest ₹8,000. What was the interest rate?",
             "options": ["8%", "10%", "12%", "15%"],
             "ans": "10%",
@@ -821,6 +903,7 @@
             "tier": "paid"
         },
         {
+            "id": 83,
             "ques": "What is the compound interest on ₹15,000 for 2 years at 8% per annum compounded annually?",
             "options": ["₹1,200", "₹1,248", "₹2,496", "₹2,598"],
             "ans": "₹2,496",
@@ -831,6 +914,7 @@
             "tier": "free"
         },
         {
+            "id": 84,
             "ques": "A sum of money doubles itself in 5 years at compound interest. How many years will it take to become 8 times?",
             "options": ["10 years", "15 years", "20 years", "25 years"],
             "ans": "15 years",
@@ -841,6 +925,7 @@
             "tier": "free"
         },
         {
+            "id": 85,
             "ques": "The difference between compound interest and simple interest on ₹20,000 at 10% per annum for 2 years is:",
             "options": ["₹200", "₹400", "₹500", "₹1,000"],
             "ans": "₹200",
@@ -851,6 +936,7 @@
             "tier": "free"
         },
         {
+            "id": 86,
             "ques": "A sum of ₹25,000 is compounded half-yearly at 8% per annum. What is the amount after 1.5 years?",
             "options": ["₹28,000", "₹28,122.56", "₹28,243.20", "₹29,000"],
             "ans": "₹28,243.20",
@@ -861,6 +947,7 @@
             "tier": "free"
         },
         {
+            "id": 87,
             "ques": "If the compound interest on a sum for 2 years at 12.5% per annum is ₹1,125, the principal is:",
             "options": ["₹4,000", "₹4,500", "₹5,000", "₹5,500"],
             "ans": "₹4,000",
@@ -871,6 +958,7 @@
             "tier": "paid"
         },
         {
+            "id": 88,
             "ques": "The compound interest on ₹10,000 at 20% per annum compounded half-yearly for 1 year is:",
             "options": ["₹2,000", "₹2,100", "₹2,200", "₹2,400"],
             "ans": "₹2,100",
@@ -881,6 +969,7 @@
             "tier": "free"
         },
         {
+            "id": 89,
             "ques": "A principal becomes ₹19,965 after 3 years at 10% compound interest. What was the principal?",
             "options": ["₹14,000", "₹14,500", "₹15,000", "₹15,500"],
             "ans": "₹15,000",
@@ -891,6 +980,7 @@
             "tier": "free"
         },
         {
+            "id": 90,
             "ques": "The effective annual rate for 12% per annum compounded quarterly is:",
             "options": ["12.00%", "12.36%", "12.55%", "12.68%"],
             "ans": "12.55%",
@@ -901,6 +991,7 @@
             "tier": "paid"
         },
         {
+            "id": 91,
             "ques": "A sum of money invested at compound interest amounts to ₹24,200 in 2 years and ₹26,620 in 3 years. What is the rate of interest?",
             "options": ["8%", "10%", "12%", "15%"],
             "ans": "10%",
@@ -911,6 +1002,7 @@
             "tier": "free"
         },
         {
+            "id": 92,
             "ques": "₹8,000 compounded annually at 15% for 3 years yields the same amount as what principal at 20% compounded annually for 2 years?",
             "options": ["₹9,000", "₹9,500", "₹10,000", "₹10,500"],
             "ans": "₹10,000",
@@ -921,6 +1013,7 @@
             "tier": "paid"
         },
         {
+            "id": 93,
             "ques": "The compound interest on ₹50,000 at 4% per annum for 2 years compounded annually is:",
             "options": ["₹4,000", "₹4,080", "₹4,800", "₹5,000"],
             "ans": "₹4,080",
@@ -931,6 +1024,7 @@
             "tier": "free"
         },
         {
+            "id": 94,
             "ques": "A sum of ₹12,000 is deposited for compound interest at 10% per annum. After how many years will it exceed ₹15,000?",
             "options": ["2 years", "3 years", "4 years", "5 years"],
             "ans": "3 years",
@@ -941,6 +1035,7 @@
             "tier": "free"
         },
         {
+            "id": 95,
             "ques": "The difference between CI and SI on a sum for 3 years at 5% per annum is ₹61. Find the principal.",
             "options": ["₹8,000", "₹8,200", "₹8,400", "₹8,600"],
             "ans": "₹8,000",
@@ -951,6 +1046,7 @@
             "tier": "paid"
         },
         {
+            "id": 96,
             "ques": "A principal of ₹20,000 is invested at 8% compound interest compounded quarterly. What is the amount after 9 months?",
             "options": ["₹21,200", "₹21,224.32", "₹21,240.50", "₹21,260.40"],
             "ans": "₹21,224.32",
@@ -961,6 +1057,7 @@
             "tier": "free"
         },
         {
+            "id": 97,
             "ques": "The compound interest on a certain sum for 2 years at 10% is ₹840. The simple interest at the same rate for the same period is:",
             "options": ["₹800", "₹820", "₹840", "₹860"],
             "ans": "₹800",
@@ -971,6 +1068,7 @@
             "tier": "free"
         },
         {
+            "id": 98,
             "ques": "A sum of money becomes ₹13,310 in 3 years at 10% compound interest. What was the principal?",
             "options": ["₹10,000", "₹10,500", "₹11,000", "₹11,500"],
             "ans": "₹10,000",
@@ -981,6 +1079,7 @@
             "tier": "free"
         },
         {
+            "id": 99,
             "ques": "If the compound interest for the 3rd year at 8% per annum on a certain sum is ₹1,944, then what is the sum?",
             "options": ["₹22,000", "₹23,000", "₹24,000", "₹25,000"],
             "ans": "₹25,000",
@@ -991,6 +1090,7 @@
             "tier": "paid"
         },
         {
+            "id": 100,
             "ques": "The compound interest on ₹15,000 for 2 years at 10% per annum, compounded annually is:",
             "options": ["₹3,000", "₹3,100", "₹3,150", "₹3,300"],
             "ans": "₹3,150",
@@ -1001,6 +1101,7 @@
             "tier": "free"
         },
         {
+            "id": 101,
             "ques": "A sum of money doubles in 6 years at compound interest. In how many years will it become 8 times?",
             "options": ["12 years", "15 years", "18 years", "24 years"],
             "ans": "18 years",
@@ -1011,6 +1112,7 @@
             "tier": "free"
         },
         {
+            "id": 102,
             "ques": "The difference between CI and SI on ₹12,000 for 2 years at 10% per annum, compounded annually is:",
             "options": ["₹100", "₹110", "₹120", "₹130"],
             "ans": "₹120",
@@ -1021,6 +1123,7 @@
             "tier": "paid"
         },
         {
+            "id": 103,
             "ques": "A principal of ₹30,000 is invested at 12% compound interest compounded half-yearly. What is the amount after 1 year?",
             "options": ["₹33,000", "₹33,600", "₹33,708", "₹33,900"],
             "ans": "₹33,708",
@@ -1031,6 +1134,7 @@
             "tier": "free"
         },
         {
+            "id": 104,
             "ques": "A shopkeeper buys 80 pens for ₹1,200 and sells them at ₹20 per pen. What is his profit percentage?",
             "options": ["25%", "33.33%", "40%", "50%"],
             "ans": "33.33%",
@@ -1041,6 +1145,7 @@
             "tier": "free"
         },
         {
+            "id": 105,
             "ques": "A trader sells two bicycles at ₹4,000 each. On one he gains 25% and on the other he loses 20%. What is his net profit or loss percentage?",
             "options": ["2% gain", "2% loss", "4% gain", "4% loss"],
             "ans": "2% loss",
@@ -1051,6 +1156,7 @@
             "tier": "paid"
         },
         {
+            "id": 106,
             "ques": "A merchant marks his goods 40% above cost price but offers a 15% discount. What is his net profit percentage?",
             "options": ["16%", "19%", "21%", "25%"],
             "ans": "19%",
@@ -1061,6 +1167,7 @@
             "tier": "free"
         },
         {
+            "id": 107,
             "ques": "By selling 45 mangoes for ₹270, a seller loses 10%. How many mangoes should he sell for ₹330 to gain 20%?",
             "options": ["40", "45", "50", "55"],
             "ans": "50",
@@ -1071,6 +1178,7 @@
             "tier": "paid"
         },
         {
+            "id": 108,
             "ques": "A book was sold for ₹270 with a profit of 20%. If it was sold for ₹240, what would have been the profit or loss percentage?",
             "options": ["5% profit", "5% loss", "6.67% profit", "6.67% loss"],
             "ans": "6.67% profit",
@@ -1081,6 +1189,7 @@
             "tier": "free"
         },
         {
+            "id": 109,
             "ques": "A shopkeeper sells an item for ₹1,620 after giving a 10% discount on the marked price. Had he not given the discount, he would have gained 20%. What is the cost price of the item?",
             "options": ["₹1,350", "₹1,400", "₹1,500", "₹1,600"],
             "ans": "₹1,500",
@@ -1091,6 +1200,7 @@
             "tier": "paid"
         },
         {
+            "id": 110,
             "ques": "A trader buys apples at 10 for ₹100 and sells them at 8 for ₹100. What is his profit percentage?",
             "options": ["20%", "25%", "30%", "35%"],
             "ans": "25%",
@@ -1101,6 +1211,7 @@
             "tier": "free"
         },
         {
+            "id": 111,
             "ques": "A man sold two watches for ₹3,000 each. On one he gained 20% and on the other he lost 20%. What is his overall profit or loss?",
             "options": ["1% gain", "1% loss", "4% gain", "4% loss"],
             "ans": "4% loss",
@@ -1111,6 +1222,7 @@
             "tier": "free"
         },
         {
+            "id": 112,
             "ques": "A shopkeeper marks his goods 25% above cost price but allows 10% discount for cash payment. What is his net profit percentage?",
             "options": ["12.5%", "15%", "17.5%", "20%"],
             "ans": "12.5%",
@@ -1121,6 +1233,7 @@
             "tier": "free"
         },
         {
+            "id": 113,
             "ques": "A dealer sold two machines for ₹15,000 each. On one he gained 25% and on the other he lost 25%. What is his net profit or loss?",
             "options": [
                 "No profit no loss",
@@ -1136,6 +1249,7 @@
             "tier": "paid"
         },
         {
+            "id": 114,
             "ques": "By selling 20 articles, a trader gains the cost price of 5 articles. What is his profit percentage?",
             "options": ["20%", "25%", "30%", "33.33%"],
             "ans": "25%",
@@ -1146,6 +1260,7 @@
             "tier": "free"
         },
         {
+            "id": 115,
             "ques": "A shopkeeper allows a discount of 20% but still makes a profit of 25%. What is the ratio of cost price to marked price?",
             "options": ["3:5", "4:5", "2:3", "5:6"],
             "ans": "4:5",
@@ -1156,6 +1271,7 @@
             "tier": "paid"
         },
         {
+            "id": 116,
             "ques": "A fruit seller buys 100 apples for ₹500. 10% are rotten. At what price per dozen should he sell the rest to gain 20%?",
             "options": ["₹60", "₹66", "₹72", "₹75"],
             "ans": "₹72",
@@ -1166,6 +1282,7 @@
             "tier": "free"
         },
         {
+            "id": 117,
             "ques": "The cost price of 25 items equals the selling price of 20 items. What is the profit percentage?",
             "options": ["20%", "25%", "30%", "35%"],
             "ans": "25%",
@@ -1176,6 +1293,7 @@
             "tier": "free"
         },
         {
+            "id": 118,
             "ques": "A man buys a cycle for ₹1,800 and sells it at a loss of 15%. With that money he buys another cycle and sells it at 20% profit. What is his overall profit/loss?",
             "options": ["₹36 loss", "₹36 profit", "₹54 loss", "₹54 profit"],
             "ans": "₹36 loss",
@@ -1186,6 +1304,7 @@
             "tier": "free"
         },
         {
+            "id": 119,
             "ques": "A trader marks his goods 30% above cost but allows 15% discount. What is his profit percentage?",
             "options": ["10.5%", "12.5%", "14.5%", "15.5%"],
             "ans": "10.5%",
@@ -1196,6 +1315,7 @@
             "tier": "free"
         },
         {
+            "id": 120,
             "ques": "A shopkeeper sells an article at 10% profit. Had he bought it at 10% less and sold it for ₹10 more, he would have gained 25%. What is the original cost price?",
             "options": ["₹800", "₹1,000", "₹1,200", "₹1,500"],
             "ans": "₹1,000",
@@ -1206,6 +1326,7 @@
             "tier": "paid"
         },
         {
+            "id": 121,
             "ques": "A chair is sold for ₹1,800 at a loss of 10%. What should be the selling price to gain 15%?",
             "options": ["₹2,100", "₹2,200", "₹2,300", "₹2,400"],
             "ans": "₹2,300",
@@ -1216,6 +1337,7 @@
             "tier": "free"
         },
         {
+            "id": 122,
             "ques": "A trader allows two successive discounts of 20% and 15%. What is the equivalent single discount?",
             "options": ["32%", "34%", "35%", "36%"],
             "ans": "32%",
@@ -1226,6 +1348,7 @@
             "tier": "free"
         },
         {
+            "id": 123,
             "ques": "A shopkeeper sells an article at 8% profit. Had he sold it for ₹150 more, he would have gained 14%. What is the cost price?",
             "options": ["₹2,000", "₹2,200", "₹2,500", "₹2,800"],
             "ans": "₹2,500",
@@ -1236,6 +1359,7 @@
             "tier": "free"
         },
         {
+            "id": 124,
             "ques": "A man sold an article at a loss of 10%. Had he sold it for ₹150 more, he would have gained 10%. What is the cost price?",
             "options": ["₹600", "₹700", "₹750", "₹800"],
             "ans": "₹750",
@@ -1246,6 +1370,7 @@
             "tier": "paid"
         },
         {
+            "id": 125,
             "ques": "A and B invest ₹12,000 and ₹18,000 respectively in a business. After one year, C joins with ₹30,000. If the annual profit is ₹45,000 after two years of A and B's investment, what is C's share?",
             "options": ["₹9,000", "₹10,000", "₹12,000", "₹15,000"],
             "ans": "₹9,000",
@@ -1256,6 +1381,7 @@
             "tier": "free"
         },
         {
+            "id": 126,
             "ques": "X and Y start a business with ₹80,000 and ₹1,20,000 respectively. After 6 months, Z joins with ₹1,50,000. If Y withdraws ₹40,000 after 9 months, find Y's share in ₹1,05,000 annual profit.",
             "options": ["₹36,000", "₹39,000", "₹42,000", "₹45,000"],
             "ans": "₹42,000",
@@ -1266,6 +1392,7 @@
             "tier": "paid"
         },
         {
+            "id": 127,
             "ques": "P and Q invest in 3:5 ratio. After 4 months, R joins with investment equal to Q. If annual profit is ₹1,24,000, what is Q's share?",
             "options": ["₹40,000", "₹48,000", "₹50,000", "₹60,000"],
             "ans": "₹50,000",
@@ -1276,6 +1403,7 @@
             "tier": "free"
         },
         {
+            "id": 128,
             "ques": "A starts business with ₹50,000. After 3 months, B joins with ₹60,000. C joins after another 3 months with ₹70,000. Find share of B in ₹1,14,000 annual profit.",
             "options": ["₹30,000", "₹32,000", "₹36,000", "₹40,000"],
             "ans": "₹36,000",
@@ -1286,6 +1414,7 @@
             "tier": "free"
         },
         {
+            "id": 129,
             "ques": "Three partners invest ₹2,00,000, ₹3,00,000 and ₹4,00,000 respectively. First is working partner receiving 20% profit as salary. Remaining profit divided by investment. If profit is ₹5,00,000, find share of third partner.",
             "options": ["₹1,52,000", "₹1,60,000", "₹1,76,000", "₹1,84,000"],
             "ans": "₹1,76,000",
@@ -1296,6 +1425,7 @@
             "tier": "paid"
         },
         {
+            "id": 130,
             "ques": "M and N invest ₹45,000 and ₹60,000. After 6 months, M adds ₹15,000 and N withdraws ₹20,000. Find profit ratio at year-end.",
             "options": ["9:10", "10:9", "11:10", "13:12"],
             "ans": "9:10",
@@ -1306,6 +1436,7 @@
             "tier": "free"
         },
         {
+            "id": 131,
             "ques": "A and B invest in 5:6 ratio for 8 months. Then A doubles investment and B halves investment for next 4 months. Find annual profit ratio.",
             "options": ["1:1", "5:6", "10:9", "15:14"],
             "ans": "10:9",
@@ -1316,6 +1447,7 @@
             "tier": "paid"
         },
         {
+            "id": 132,
             "ques": "X starts business with ₹1,00,000. After 6 months, Y joins. At year-end, profit is divided in 3:2 ratio. What did Y invest?",
             "options": ["₹75,000", "₹80,000", "₹1,00,000", "₹1,20,000"],
             "ans": "₹80,000",
@@ -1326,6 +1458,7 @@
             "tier": "free"
         },
         {
+            "id": 133,
             "ques": "A,B,C invest ₹20,000, ₹30,000, ₹40,000. A is working partner getting 15% profit + investment share. If profit is ₹2,00,000, find A's total share.",
             "options": ["₹66,000", "₹70,000", "₹74,000", "₹78,000"],
             "ans": "₹74,000",
@@ -1336,6 +1469,7 @@
             "tier": "paid"
         },
         {
+            "id": 134,
             "ques": "Three partners divide profit in 4:5:6 ratio. Their investments were for 8, 10 and 12 months respectively. What was their capital ratio?",
             "options": ["4:5:6", "15:12:10", "24:25:27", "30:24:20"],
             "ans": "15:12:10",
@@ -1346,6 +1480,7 @@
             "tier": "free"
         },
         {
+            "id": 135,
             "ques": "A and B invest ₹40,000 and ₹60,000. After 4 months, C joins with ₹50,000. If B leaves after 8 months, find profit ratio at year-end.",
             "options": ["8:9:5", "16:18:10", "32:36:25", "40:36:25"],
             "ans": "32:36:25",
@@ -1356,6 +1491,7 @@
             "tier": "free"
         },
         {
+            "id": 136,
             "ques": "P and Q start business with ₹24,000 and ₹30,000. After 6 months, P withdraws 1/3 and Q adds 1/5. Find profit ratio at year-end.",
             "options": ["28:45", "14:25", "7:15", "35:72"],
             "ans": "28:45",
@@ -1366,6 +1502,7 @@
             "tier": "paid"
         },
         {
+            "id": 137,
             "ques": "A and B invest ₹3,00,000 and ₹5,00,000. After 8 months, A adds ₹1,00,000 and B withdraws ₹2,00,000. Find profit ratio at year-end.",
             "options": ["17:18", "17:19", "19:17", "18:17"],
             "ans": "17:18",
@@ -1376,6 +1513,7 @@
             "tier": "free"
         },
         {
+            "id": 138,
             "ques": "X and Y invest capital in 5:3 ratio. After 4 months, X withdraws 1/5 and Y adds 1/3. Find profit ratio at year-end.",
             "options": ["5:4", "25:21", "50:39", "75:52"],
             "ans": "50:39",
@@ -1386,6 +1524,7 @@
             "tier": "free"
         },
         {
+            "id": 139,
             "ques": "A starts business with ₹80,000. After 5 months, B joins and after another 3 months, C joins. Profits divided equally at year-end. What did B invest if all investments equal?",
             "options": ["₹80,000", "₹1,00,000", "₹1,20,000", "₹1,50,000"],
             "ans": "₹1,20,000",
@@ -1396,6 +1535,7 @@
             "tier": "paid"
         },
         {
+            "id": 140,
             "ques": "Three partners invest ₹1,20,000, ₹1,80,000 and ₹2,40,000. They agree that 30% profit distributed equally and rest by investment. If profit ₹3,00,000, find smallest share.",
             "options": ["₹82,000", "₹88,000", "₹90,000", "₹94,000"],
             "ans": "₹88,000",
@@ -1406,6 +1546,7 @@
             "tier": "free"
         },
         {
+            "id": 141,
             "ques": "A and B invest ₹25,000 and ₹35,000. After 4 months, C joins with ₹40,000. If annual profit is ₹1,65,000, find difference between A and C's shares.",
             "options": ["₹15,000", "₹18,000", "₹20,000", "₹22,000"],
             "ans": "₹15,000",
@@ -1416,6 +1557,7 @@
             "tier": "free"
         },
         {
+            "id": 142,
             "ques": "P and Q start business. P invests ₹1,00,000 for entire year. Q invests ₹1,50,000 but withdraws after 8 months. If profit ratio P:Q=8:9, find Q's investment.",
             "options": ["₹1,50,000", "₹1,80,000", "₹2,00,000", "₹2,25,000"],
             "ans": "₹2,25,000",
@@ -1426,6 +1568,7 @@
             "tier": "free"
         },
         {
+            "id": 143,
             "ques": "A,B,C invest ₹50,000, ₹70,000, ₹1,00,000. A manages business receiving 10% profit as salary. If remaining profit divided by investment, and total profit ₹3,30,000, find B's share.",
             "options": ["₹84,000", "₹90,000", "₹99,000", "₹1,05,000"],
             "ans": "₹99,000",
@@ -1436,6 +1579,7 @@
             "tier": "free"
         },
         {
+            "id": 144,
             "ques": "Three partners invest for 6, 8 and 12 months. Profit ratio 4:5:6. Find capital ratio.",
             "options": ["16:15:12", "16:10:9", "32:20:18", "48:30:24"],
             "ans": "16:15:12",
@@ -1446,6 +1590,7 @@
             "tier": "free"
         },
         {
+            "id": 145,
             "ques": "A and B invest ₹45,000 and ₹60,000. After 6 months, A withdraws half and B doubles investment. Find profit ratio at year-end.",
             "options": ["3:8", "9:32", "18:64", "27:128"],
             "ans": "9:32",
@@ -1456,6 +1601,7 @@
             "tier": "paid"
         },
         {
+            "id": 146,
             "ques": "X and Y start business. X invests ₹1,20,000 for 8 months. Y invests ₹1,80,000 for entire year. If profit ratio X:Y=2:3, find how long X stayed?",
             "options": ["6 months", "8 months", "10 months", "12 months"],
             "ans": "10 months",
@@ -1466,6 +1612,7 @@
             "tier": "free"
         },
         {
+            "id": 147,
             "ques": "If 25% of a number is 175, what is 45% of that number?",
             "options": ["285", "305", "315", "325"],
             "ans": "315",
@@ -1476,6 +1623,7 @@
             "tier": "free"
         },
         {
+            "id": 148,
             "ques": "A number is increased by 30% and then decreased by 25%. What is the net percentage change?",
             "options": [
                 "2.5% decrease",
@@ -1491,6 +1639,7 @@
             "tier": "free"
         },
         {
+            "id": 149,
             "ques": "In a class of 75 students, 40% are girls. If 10 more girls join, what percentage of the class will be girls?",
             "options": ["44%", "46%", "48%", "50%"],
             "ans": "48%",
@@ -1501,6 +1650,7 @@
             "tier": "free"
         },
         {
+            "id": 150,
             "ques": "The population of a town increased from 80,000 to 92,000 in one year. What is the percentage increase?",
             "options": ["12.5%", "15%", "17.5%", "20%"],
             "ans": "15%",
@@ -1511,6 +1661,7 @@
             "tier": "free"
         },
         {
+            "id": 151,
             "ques": "If the price of sugar increases by 20%, by what percentage should consumption decrease so that expenditure remains the same?",
             "options": ["16.67%", "20%", "25%", "33.33%"],
             "ans": "16.67%",
@@ -1521,6 +1672,7 @@
             "tier": "paid"
         },
         {
+            "id": 152,
             "ques": "A's salary is 25% more than B's. By what percentage is B's salary less than A's?",
             "options": ["20%", "25%", "30%", "33.33%"],
             "ans": "20%",
@@ -1531,6 +1683,7 @@
             "tier": "free"
         },
         {
+            "id": 153,
             "ques": "In an exam, a student scored 30% and failed by 15 marks. Another student scored 50% and got 25 marks more than passing. What is the passing percentage?",
             "options": ["35%", "38%", "40%", "42%"],
             "ans": "38%",
@@ -1541,6 +1694,7 @@
             "tier": "paid"
         },
         {
+            "id": 154,
             "ques": "If 60% of (x - y) = 40% of (x + y), what percent of x is y?",
             "options": ["10%", "15%", "20%", "25%"],
             "ans": "20%",
@@ -1551,6 +1705,7 @@
             "tier": "free"
         },
         {
+            "id": 155,
             "ques": "A number when increased by 40% becomes 420. What is the number?",
             "options": ["280", "300", "320", "350"],
             "ans": "300",
@@ -1561,6 +1716,7 @@
             "tier": "free"
         },
         {
+            "id": 156,
             "ques": "The price of an item is reduced by 30%. What percentage increase in consumption is needed to maintain the same expenditure?",
             "options": ["30%", "35.71%", "42.85%", "50%"],
             "ans": "42.85%",
@@ -1571,6 +1727,7 @@
             "tier": "paid"
         },
         {
+            "id": 157,
             "ques": "In an election between two candidates, one got 55% votes and won by 20,000 votes. What was the total votes polled?",
             "options": ["100,000", "150,000", "200,000", "250,000"],
             "ans": "200,000",
@@ -1581,6 +1738,7 @@
             "tier": "free"
         },
         {
+            "id": 158,
             "ques": "If the length of a rectangle is increased by 20% and width decreased by 20%, what is the percentage change in area?",
             "options": [
                 "4% increase",
@@ -1596,6 +1754,7 @@
             "tier": "free"
         },
         {
+            "id": 159,
             "ques": "A's income is 40% more than B's, and B's income is 30% more than C's. By what percentage is A's income more than C's?",
             "options": ["72%", "75%", "82%", "85%"],
             "ans": "82%",
@@ -1606,6 +1765,7 @@
             "tier": "paid"
         },
         {
+            "id": 160,
             "ques": "In a test, 80% passed in English, 70% in Math, and 15% failed in both. What percentage passed in both subjects?",
             "options": ["35%", "45%", "55%", "65%"],
             "ans": "65%",
@@ -1616,6 +1776,7 @@
             "tier": "paid"
         },
         {
+            "id": 161,
             "ques": "A number is 20% less than another number. By what percentage is the second number more than the first?",
             "options": ["20%", "25%", "30%", "33.33%"],
             "ans": "25%",
@@ -1626,6 +1787,7 @@
             "tier": "free"
         },
         {
+            "id": 162,
             "ques": "If the price of an item is increased by 25%, by what percentage must the new price be reduced to restore the original price?",
             "options": ["20%", "25%", "30%", "33.33%"],
             "ans": "20%",
@@ -1636,6 +1798,7 @@
             "tier": "free"
         },
         {
+            "id": 163,
             "ques": "In a school, 35% students play cricket, 45% play football, and 15% play both. What percentage play neither?",
             "options": ["25%", "30%", "35%", "40%"],
             "ans": "35%",
@@ -1646,6 +1809,7 @@
             "tier": "free"
         },
         {
+            "id": 164,
             "ques": "The value of a machine depreciates 10% annually. What will be its value after 2 years if current value is ₹1,00,000?",
             "options": ["₹80,000", "₹81,000", "₹85,000", "₹90,000"],
             "ans": "₹81,000",
@@ -1656,6 +1820,7 @@
             "tier": "free"
         },
         {
+            "id": 165,
             "ques": "A's marks in an exam are 20% less than B's, and B's marks are 25% more than C's. If C scored 320, what did A score?",
             "options": ["300", "304", "308", "312"],
             "ans": "304",
@@ -1666,6 +1831,7 @@
             "tier": "free"
         },
         {
+            "id": 166,
             "ques": "If 70% of a number is added to 120, the result is the number itself. What is the number?",
             "options": ["300", "350", "400", "450"],
             "ans": "400",
@@ -1676,6 +1842,7 @@
             "tier": "paid"
         },
         {
+            "id": 167,
             "ques": "A man spends 75% of his income. If his income increases by 20% and savings increase by 40%, what percentage of income does he spend now?",
             "options": ["65%", "68%", "70%", "72%"],
             "ans": "68%",
@@ -1686,6 +1853,7 @@
             "tier": "paid"
         },
         {
+            "id": 168,
             "ques": "The sum of present ages of a father and son is 60 years. Six years ago, the father's age was five times the son's age. What is the son's present age?",
             "options": ["12 years", "14 years", "16 years", "18 years"],
             "ans": "14 years",
@@ -1696,6 +1864,7 @@
             "tier": "free"
         },
         {
+            "id": 169,
             "ques": "Ten years ago, A was half of B's age. Today, A is 30 years old. What will be B's age 5 years from now?",
             "options": ["40 years", "45 years", "50 years", "55 years"],
             "ans": "45 years",
@@ -1706,6 +1875,7 @@
             "tier": "free"
         },
         {
+            "id": 170,
             "ques": "The ratio of present ages of P and Q is 5:3. After 6 years, their ages will be in ratio 7:5. What is P's present age?",
             "options": ["15 years", "20 years", "25 years", "30 years"],
             "ans": "15 years",
@@ -1716,6 +1886,7 @@
             "tier": "free"
         },
         {
+            "id": 171,
             "ques": "A mother is 24 years older than her daughter. In 4 years, the mother will be three times as old as her daughter. What is the daughter's present age?",
             "options": ["8 years", "10 years", "12 years", "14 years"],
             "ans": "8 years",
@@ -1726,6 +1897,7 @@
             "tier": "free"
         },
         {
+            "id": 172,
             "ques": "The sum of ages of 4 children born at 2-year intervals is 52 years. What is the age of the youngest child?",
             "options": ["9 years", "10 years", "11 years", "12 years"],
             "ans": "10 years",
@@ -1736,6 +1908,7 @@
             "tier": "free"
         },
         {
+            "id": 173,
             "ques": "Five years ago, the average age of A, B, C was 25 years. Today, C joins them and the average becomes 30 years. How old is C?",
             "options": ["30 years", "35 years", "40 years", "45 years"],
             "ans": "30 years",
@@ -1746,6 +1919,7 @@
             "tier": "paid"
         },
         {
+            "id": 174,
             "ques": "The age of a man is three times his son's age. After 15 years, he will be twice as old as his son. What is the son's present age?",
             "options": ["15 years", "20 years", "25 years", "30 years"],
             "ans": "15 years",
@@ -1756,6 +1930,7 @@
             "tier": "free"
         },
         {
+            "id": 175,
             "ques": "The ratio of ages of A to B is 3:5. After 10 years, this ratio becomes 2:3. What is the difference in their present ages?",
             "options": ["10 years", "12 years", "15 years", "20 years"],
             "ans": "10 years",
@@ -1766,6 +1941,7 @@
             "tier": "free"
         },
         {
+            "id": 176,
             "ques": "Ten years ago, the age of a father was four times his son. Today, it is only twice. What is the son's present age?",
             "options": ["15 years", "20 years", "25 years", "30 years"],
             "ans": "15 years",
@@ -1776,6 +1952,7 @@
             "tier": "free"
         },
         {
+            "id": 177,
             "ques": "The average age of a family of 5 members is 24 years. If the youngest is 8 years old, what was the average age 4 years ago?",
             "options": ["18 years", "19 years", "20 years", "21 years"],
             "ans": "20 years",
@@ -1786,6 +1963,7 @@
             "tier": "free"
         },
         {
+            "id": 178,
             "ques": "A is twice as old as B was 5 years ago. If B is now 25 years old, how old is A now?",
             "options": ["35 years", "40 years", "45 years", "50 years"],
             "ans": "40 years",
@@ -1796,6 +1974,7 @@
             "tier": "free"
         },
         {
+            "id": 179,
             "ques": "The ages of A and B differ by 16 years. Six years ago, the elder was three times as old as the younger. What is the present age of the elder?",
             "options": ["20 years", "24 years", "28 years", "32 years"],
             "ans": "28 years",
@@ -1806,16 +1985,18 @@
             "tier": "paid"
         },
         {
+            "id": 180,
             "ques": "The ratio of ages of a father and son is 17:7. After 6 years, the ratio becomes 3:1. What was the son's age 5 years ago?",
             "options": ["10 years", "12 years", "14 years", "16 years"],
             "ans": "14 years",
-            "explanation": "Let father=17x, son=7x. After 6 years: (17x+6)/(7x+6)=3/1 → 17x+6=21x+18 → 6-18=21x-17x → -12=4x → x=-3? Impossible. Correction: (17x+6)/(7x+6)=3/1 → 17x+6=3(7x+6) → 17x+6=21x+18 → 6-18=21x-17x → -12=4x → x=-3. Error. Revised: (17x+6)/(7x+6)=3/1 → 17x+6=21x+18 → 6-18=21x-17x → -12=4x → x=-3. Since invalid, based on standard methods, correct answer is 14 with different ratios.",
+            "explanation": "Let father=17x, son=7x. After 6 years: (17x+6)/(7x+6)=3/1 → 17x+6=9x+18 → 6-18=9x-17x → -12=4x → x=-3? Impossible. Correction: (17x+6)/(7x+6)=3/1 → 17x+6=3(7x+6) → 17x+6=21x+18 → 6-18=21x-17x → -12=4x → x=-3. Error. Revised: (17x+6)/(7x+6)=3/1 → 17x+6=21x+18 → 6-18=21x-17x → -12=4x → x=-3. Since invalid, based on standard methods, correct answer is 14 with different ratios.",
             "difficulty": 4,
             "type": "Arithmetic Aptitude",
             "subtype": "Problems on Ages",
             "tier": "paid"
         },
         {
+            "id": 181,
             "ques": "Three years ago, the average age of A, B, C was 27 years. Today, D joins them and the average becomes 30 years. How old is D?",
             "options": ["30 years", "33 years", "36 years", "39 years"],
             "ans": "36 years",
@@ -1826,6 +2007,7 @@
             "tier": "paid"
         },
         {
+            "id": 182,
             "ques": "A father is 40 years old and his son is 10 years old. How many years ago was the father six times as old as his son?",
             "options": ["2 years", "4 years", "5 years", "6 years"],
             "ans": "4 years",
@@ -1836,6 +2018,7 @@
             "tier": "free"
         },
         {
+            "id": 183,
             "ques": "The sum of present ages of a man and his wife is 85 years. 20 years ago, the man was twice as old as his wife. What is the wife's present age?",
             "options": ["30 years", "35 years", "40 years", "45 years"],
             "ans": "35 years",
@@ -1846,6 +2029,7 @@
             "tier": "paid"
         },
         {
+            "id": 184,
             "ques": "The ratio of ages of a mother and daughter is 4:1. After 20 years, the ratio will be 2:1. What is the daughter's present age?",
             "options": ["10 years", "15 years", "20 years", "25 years"],
             "ans": "10 years",
@@ -1856,6 +2040,7 @@
             "tier": "free"
         },
         {
+            "id": 185,
             "ques": "The difference in ages between a boy and his younger brother is 6 years. Their father is twice as old as the elder son. After 10 years, the sum of all ages will be 100 years. What is the father's present age?",
             "options": ["34 years", "36 years", "38 years", "40 years"],
             "ans": "36 years",
@@ -1866,6 +2051,7 @@
             "tier": "paid"
         },
         {
+            "id": 186,
             "ques": "A man is 24 years older than his son. In two years, his age will be twice his son's age. What is the son's present age?",
             "options": ["20 years", "22 years", "24 years", "26 years"],
             "ans": "22 years",
@@ -1876,6 +2062,7 @@
             "tier": "free"
         },
         {
+            "id": 187,
             "ques": "The sum of ages of 5 friends is 125 years. The youngest is 15 years old. What was the average age 5 years ago?",
             "options": ["18 years", "20 years", "22 years", "24 years"],
             "ans": "20 years",
@@ -1886,6 +2073,7 @@
             "tier": "free"
         },
         {
+            "id": 188,
             "ques": "Three years ago, the ratio of ages of A and B was 5:3. After 7 years, it will be 7:5. What is B's present age?",
             "options": ["15 years", "18 years", "21 years", "24 years"],
             "ans": "18 years",
@@ -1896,6 +2084,7 @@
             "tier": "paid"
         },
         {
+            "id": 189,
             "ques": "A father is 30 years older than his son. After 5 years, he will be thrice as old as his son. What is the son's present age?",
             "options": ["5 years", "10 years", "15 years", "20 years"],
             "ans": "10 years",
@@ -1906,6 +2095,7 @@
             "tier": "free"
         },
         {
+            "id": 190,
             "ques": "If January 1, 2000 was a Saturday, what day of the week was January 1, 2001?",
             "options": ["Sunday", "Monday", "Tuesday", "Wednesday"],
             "ans": "Monday",
@@ -1916,6 +2106,7 @@
             "tier": "free"
         },
         {
+            "id": 191,
             "ques": "What day of the week was March 15, 2004 if January 1, 2004 was a Thursday?",
             "options": ["Monday", "Tuesday", "Wednesday", "Thursday"],
             "ans": "Monday",
@@ -1926,6 +2117,7 @@
             "tier": "paid"
         },
         {
+            "id": 192,
             "ques": "If February 20, 2005 was a Sunday, what day was February 20, 2006?",
             "options": ["Sunday", "Monday", "Tuesday", "Wednesday"],
             "ans": "Monday",
@@ -1936,6 +2128,7 @@
             "tier": "free"
         },
         {
+            "id": 193,
             "ques": "What was the day of the week on April 15, 2000 if January 1, 2000 was a Saturday?",
             "options": ["Saturday", "Sunday", "Monday", "Tuesday"],
             "ans": "Saturday",
@@ -1946,6 +2139,7 @@
             "tier": "paid"
         },
         {
+            "id": 194,
             "ques": "Today is Friday. What day of the week will it be after 100 days?",
             "options": ["Sunday", "Monday", "Tuesday", "Wednesday"],
             "ans": "Sunday",
@@ -1956,6 +2150,7 @@
             "tier": "free"
         },
         {
+            "id": 195,
             "ques": "If January 1, 2008 was a Tuesday, what day was January 1, 2009?",
             "options": ["Tuesday", "Wednesday", "Thursday", "Friday"],
             "ans": "Thursday",
@@ -1966,6 +2161,7 @@
             "tier": "free"
         },
         {
+            "id": 196,
             "ques": "What was the day of the week on India's Independence Day (August 15) in 1947?",
             "options": ["Friday", "Saturday", "Sunday", "Monday"],
             "ans": "Friday",
@@ -1976,6 +2172,7 @@
             "tier": "paid"
         },
         {
+            "id": 197,
             "ques": "If March 1, 2003 was a Saturday, what day was March 1, 2004?",
             "options": ["Saturday", "Sunday", "Monday", "Tuesday"],
             "ans": "Monday",
@@ -1986,6 +2183,7 @@
             "tier": "paid"
         },
         {
+            "id": 198,
             "ques": "Today is Wednesday. What day of the week was it 50 days ago?",
             "options": ["Monday", "Tuesday", "Wednesday", "Thursday"],
             "ans": "Tuesday",
@@ -1996,6 +2194,7 @@
             "tier": "free"
         },
         {
+            "id": 199,
             "ques": "What was the day of the week on January 26, 1950 (India's Republic Day)?",
             "options": ["Thursday", "Friday", "Saturday", "Sunday"],
             "ans": "Thursday",
@@ -2006,6 +2205,7 @@
             "tier": "paid"
         },
         {
+            "id": 200,
             "ques": "If April 10, 2005 was a Sunday, what day was April 10, 2006?",
             "options": ["Sunday", "Monday", "Tuesday", "Wednesday"],
             "ans": "Monday",
@@ -2016,6 +2216,7 @@
             "tier": "free"
         },
         {
+            "id": 201,
             "ques": "What day of the week will be on December 31, 2099 if January 1, 2000 was a Saturday?",
             "options": ["Thursday", "Friday", "Saturday", "Sunday"],
             "ans": "Thursday",
@@ -2026,6 +2227,7 @@
             "tier": "paid"
         },
         {
+            "id": 202,
             "ques": "If today is Monday, what day of the week will it be after 3 weeks and 4 days?",
             "options": ["Monday", "Tuesday", "Friday", "Saturday"],
             "ans": "Friday",
@@ -2036,6 +2238,7 @@
             "tier": "free"
         },
         {
+            "id": 203,
             "ques": "What was the day of the week on July 20, 1969 (Moon landing day)?",
             "options": ["Sunday", "Monday", "Tuesday", "Wednesday"],
             "ans": "Sunday",
@@ -2046,6 +2249,7 @@
             "tier": "paid"
         },
         {
+            "id": 204,
             "ques": "If January 5, 2007 was a Friday, what day was January 5, 2008?",
             "options": ["Friday", "Saturday", "Sunday", "Monday"],
             "ans": "Saturday",
@@ -2056,6 +2260,7 @@
             "tier": "free"
         },
         {
+            "id": 205,
             "ques": "Today is Sunday. What day of the week will it be 365 days from today?",
             "options": ["Sunday", "Monday", "Tuesday", "Wednesday"],
             "ans": "Monday",
@@ -2066,6 +2271,7 @@
             "tier": "free"
         },
         {
+            "id": 206,
             "ques": "What was the day of the week on November 19, 1863 (Gettysburg Address)?",
             "options": ["Tuesday", "Wednesday", "Thursday", "Friday"],
             "ans": "Thursday",
@@ -2076,6 +2282,7 @@
             "tier": "paid"
         },
         {
+            "id": 207,
             "ques": "If December 25, 2005 was a Sunday, what day was December 25, 2006?",
             "options": ["Sunday", "Monday", "Tuesday", "Wednesday"],
             "ans": "Monday",
@@ -2086,6 +2293,7 @@
             "tier": "free"
         },
         {
+            "id": 208,
             "ques": "What day of the week was September 11, 2001?",
             "options": ["Monday", "Tuesday", "Wednesday", "Thursday"],
             "ans": "Tuesday",
@@ -2096,6 +2304,7 @@
             "tier": "free"
         },
         {
+            "id": 209,
             "ques": "If today is Thursday, what day of the week was it 200 days ago?",
             "options": ["Monday", "Tuesday", "Wednesday", "Thursday"],
             "ans": "Tuesday",
@@ -2106,6 +2315,7 @@
             "tier": "free"
         },
         {
+            "id": 210,
             "ques": "What is the angle between the hour and minute hands of a clock at 3:15?",
             "options": ["0°", "7.5°", "15°", "22.5°"],
             "ans": "7.5°",
@@ -2116,6 +2326,7 @@
             "tier": "free"
         },
         {
+            "id": 211,
             "ques": "How many times do the clock hands coincide in a day?",
             "options": ["11", "12", "22", "24"],
             "ans": "22",
@@ -2126,6 +2337,7 @@
             "tier": "free"
         },
         {
+            "id": 212,
             "ques": "At what time between 4 and 5 will the clock hands be at right angles?",
             "options": ["4:05 5/11", "4:38 2/11", "4:40", "Both A and B"],
             "ans": "Both A and B",
@@ -2136,6 +2348,7 @@
             "tier": "paid"
         },
         {
+            "id": 213,
             "ques": "A clock shows 2 pm. Through how many degrees has the hour hand rotated when it shows 6 pm?",
             "options": ["120°", "135°", "150°", "180°"],
             "ans": "120°",
@@ -2146,6 +2359,7 @@
             "tier": "free"
         },
         {
+            "id": 214,
             "ques": "If a clock loses 5 minutes every hour, what time will it show after 12 hours if it was set correctly at noon?",
             "options": ["11:00 am", "11:00 pm", "1:00 pm", "1:00 am"],
             "ans": "11:00 pm",
@@ -2156,6 +2370,7 @@
             "tier": "free"
         },
         {
+            "id": 215,
             "ques": "The angle between the minute hand and hour hand at 7:20 is:",
             "options": ["80°", "90°", "100°", "120°"],
             "ans": "100°",
@@ -2166,6 +2381,7 @@
             "tier": "paid"
         },
         {
+            "id": 216,
             "ques": "How many times do clock hands form a straight line in a day?",
             "options": ["22", "24", "44", "48"],
             "ans": "44",
@@ -2176,6 +2392,7 @@
             "tier": "paid"
         },
         {
+            "id": 217,
             "ques": "A watch gains 3 seconds every 5 minutes. If it was set right at 8 am, what time will it show at 8 pm the same day?",
             "options": ["8:07:12 pm", "8:07:36 pm", "8:08:00 pm", "8:08:24 pm"],
             "ans": "8:07:12 pm",
@@ -2186,6 +2403,7 @@
             "tier": "free"
         },
         {
+            "id": 218,
             "ques": "At what time between 9 and 10 are the clock hands 18 minutes apart?",
             "options": ["9:12", "9:24", "9:36", "9:48"],
             "ans": "9:24",
@@ -2196,6 +2414,7 @@
             "tier": "paid"
         },
         {
+            "id": 219,
             "ques": "If the time in a mirror is 3:45, what is the actual time?",
             "options": ["8:15", "8:45", "9:15", "9:45"],
             "ans": "8:15",
@@ -2206,6 +2425,7 @@
             "tier": "free"
         },
         {
+            "id": 220,
             "ques": "How many degrees does the minute hand move in 18 minutes?",
             "options": ["90°", "108°", "120°", "135°"],
             "ans": "108°",
@@ -2216,6 +2436,7 @@
             "tier": "free"
         },
         {
+            "id": 221,
             "ques": "A clock strikes once at 1 o'clock, twice at 2 o'clock, etc. How many times does it strike in 24 hours?",
             "options": ["78", "156", "180", "200"],
             "ans": "156",
@@ -2226,6 +2447,7 @@
             "tier": "free"
         },
         {
+            "id": 222,
             "ques": "The angle between clock hands at 4:10 is:",
             "options": ["55°", "60°", "65°", "70°"],
             "ans": "65°",
@@ -2236,6 +2458,7 @@
             "tier": "paid"
         },
         {
+            "id": 223,
             "ques": "If a clock shows 5:15 when the correct time is 5:20, how many minutes does it lose per hour?",
             "options": ["1 min", "1.5 min", "2 min", "2.5 min"],
             "ans": "1 min",
@@ -2246,6 +2469,7 @@
             "tier": "free"
         },
         {
+            "id": 224,
             "ques": "At what time between 2 and 3 will the minute hand be 8 minutes ahead of the hour hand?",
             "options": ["2:12", "2:24", "2:36", "2:48"],
             "ans": "2:24",
@@ -2256,6 +2480,7 @@
             "tier": "paid"
         },
         {
+            "id": 225,
             "ques": "A clock is set right at 5 am. It loses 16 minutes in 24 hours. What will be the correct time when the clock shows 10 pm the next day?",
             "options": ["10:58 pm", "11:00 pm", "11:02 pm", "11:04 pm"],
             "ans": "11:00 pm",
@@ -2266,6 +2491,7 @@
             "tier": "paid"
         },
         {
+            "id": 226,
             "ques": "How many times do clock hands form a 90° angle between 9 am and 9 pm?",
             "options": ["11", "12", "22", "24"],
             "ans": "22",
@@ -2276,6 +2502,7 @@
             "tier": "free"
         },
         {
+            "id": 227,
             "ques": "What is the reflex angle between clock hands at 8:20?",
             "options": ["200°", "220°", "240°", "260°"],
             "ans": "220°",
@@ -2286,6 +2513,7 @@
             "tier": "paid"
         },
         {
+            "id": 228,
             "ques": "A watch which gains uniformly is 2 minutes slow at noon on Sunday and is 4 minutes 48 seconds fast at 2 pm on the following Sunday. When was it correct?",
             "options": [
                 "Tuesday 10 am",
@@ -2301,6 +2529,7 @@
             "tier": "paid"
         },
         {
+            "id": 229,
             "ques": "At what time between 5 and 6 are the clock hands 3 minutes apart?",
             "options": ["5:12", "5:24", "5:36", "Both A and C"],
             "ans": "Both A and C",
@@ -2311,6 +2540,7 @@
             "tier": "paid"
         },
         {
+            "id": 230,
             "ques": "How many degrees does the hour hand move in 45 minutes?",
             "options": ["15°", "22.5°", "30°", "37.5°"],
             "ans": "22.5°",
@@ -2320,8 +2550,5 @@
             "subtype": "Clock",
             "tier": "free"
         }
-    ],
-    "Verbal_Abiliy": {},
-    "Logical_Reasoning": {},
-    "Verbal_Reasoning": {}
+    ]
 }

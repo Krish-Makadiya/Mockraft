@@ -1,0 +1,566 @@
+import React, { useEffect, useState } from "react";
+import { useUser } from "@clerk/clerk-react";
+import { db } from "../../config/firebase";
+import {
+    collection,
+    getDocs,
+    setDoc,
+    doc,
+    updateDoc,
+    increment,
+    serverTimestamp,
+} from "firebase/firestore";
+import {
+    Check,
+    Info,
+    BookOpen,
+    Brain,
+    MessageSquare,
+    BarChart,
+    Star,
+    Lock,
+    Filter,
+    X,
+} from "lucide-react";
+import Loader from "../../components/main/Loader";
+import { Popover, Transition } from "@headlessui/react";
+
+const QUESTIONS_PER_PAGE = 5;
+
+const getColorClass = (isCorrect, answered) => {
+    if (!answered) return "";
+    if (isCorrect)
+        return "border-light-success dark:border-dark-success bg-light-success/10 dark:bg-dark-success/10";
+    return "border-light-fail dark:border-dark-fail bg-light-fail/10 dark:bg-dark-fail/10";
+};
+
+const typeCards = [
+    {
+        key: "Arithematic Aptitude",
+        label: "Arithmetic",
+        color: "from-blue-300 via-blue-400 to-blue-500 dark:from-blue-900 dark:via-blue-800 dark:to-blue-700",
+        icon: <BookOpen className="text-blue-700 dark:text-blue-200 h-8 w-8" />,
+    },
+    {
+        key: "Logical Reasoning",
+        label: "Logical",
+        color: "from-green-300 via-green-400 to-green-500 dark:from-green-800 dark:via-green-700 dark:to-green-600",
+        icon: <Brain className="text-green-700 dark:text-green-200 h-8 w-8" />,
+    },
+    {
+        key: "Verbal Ability",
+        label: "Verbal",
+        color: "from-yellow-200 via-yellow-300 to-yellow-400 dark:from-yellow-800 dark:via-yellow-700 dark:to-yellow-600",
+        icon: (
+            <MessageSquare className="text-yellow-700 dark:text-yellow-200 h-8 w-8" />
+        ),
+    },
+    // {
+    //     key: "Data Interpretation",
+    //     label: "Data Interpretation",
+    //     color: "from-purple-200 via-purple-300 to-purple-400 dark:from-purple-900 dark:via-purple-800 dark:to-purple-700",
+    //     icon: (
+    //         <BarChart className="text-purple-700 dark:text-purple-200 h-8 w-8" />
+    //     ),
+    // },
+];
+
+const AptitudeHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) => {
+    const [questions, setQuestions] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [answers, setAnswers] = useState({}); // { [id]: selectedOption }
+    const [showExplanation, setShowExplanation] = useState({}); // { [id]: bool }
+    const [loading, setLoading] = useState(true);
+    const [solvedQuestions, setSolvedQuestions] = useState({}); // { [id]: { correct, selectedOption } }
+    const { user, isLoaded } = useUser();
+    const [typeCounts, setTypeCounts] = useState({});
+    const [filters, setFilters] = useState({
+        difficulty: "",
+        subtype: "",
+        tier: "",
+    });
+    const [isStarred, setIsStarred] = useState(false);
+
+    // Extract unique subtypes from questions
+    const subtypes = Array.from(new Set(questions.map((q) => q.subtype)));
+    const difficulties = [1, 2, 3, 4, 5];
+    const tiers = ["free", "paid"];
+
+    function handleFilterChange(e) {
+        const { name, value } = e.target;
+        setFilters((prev) => ({ ...prev, [name]: value }));
+        setCurrentPage(1); // Reset to first page on filter change
+    }
+
+    // Filtered questions
+    const filteredQuestions = questions.filter((q) => {
+        return (
+            (!filters.difficulty ||
+                q.difficulty === Number(filters.difficulty)) &&
+            (!filters.subtype || q.subtype === filters.subtype) &&
+            (!filters.tier || q.tier === filters.tier)
+        );
+    });
+
+    // Fetch questions and solved questions
+    useEffect(() => {
+        fetch("/aptitude.json")
+            .then((res) => res.json())
+            .then((data) => {
+                const counts = {};
+                Object.keys(data).forEach((type) => {
+                    counts[type] = data[type].length;
+                });
+                setTypeCounts(counts);
+                const arr = data["Arithematic Aptitude"] || [];
+                setQuestions(arr);
+                setLoading(false);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (!user) return;
+        // Fetch solved questions for this user
+        const fetchSolved = async () => {
+            const solvedRef = collection(
+                db,
+                `users/${user.id}/aptitude-questions`
+            );
+            const snap = await getDocs(solvedRef);
+            const solved = {};
+            snap.forEach((doc) => {
+                solved[doc.id] = doc.data();
+            });
+            setSolvedQuestions(solved);
+            // Pre-fill answers and explanations for solved questions
+            const preAnswers = {};
+            const preExplanations = {};
+            Object.entries(solved).forEach(([qid, data]) => {
+                preAnswers[qid] = data.selectedOption;
+                preExplanations[qid] = true;
+            });
+            setAnswers((prev) => ({ ...preAnswers, ...prev }));
+            setShowExplanation((prev) => ({ ...preExplanations, ...prev }));
+        };
+        fetchSolved();
+    }, [user]);
+
+    const totalPages = Math.ceil(filteredQuestions.length / QUESTIONS_PER_PAGE);
+    const startIdx = (currentPage - 1) * QUESTIONS_PER_PAGE;
+    const currentQuestions = filteredQuestions.slice(
+        startIdx,
+        startIdx + QUESTIONS_PER_PAGE
+    );
+
+    const handleOptionChange = async (qid, option) => {
+        setAnswers((prev) => ({ ...prev, [qid]: option }));
+        setShowExplanation((prev) => ({ ...prev, [qid]: true }));
+        const q = filteredQuestions.find((q) => q.id === qid);
+        const isCorrect = option === q.ans;
+        // If already solved, do nothing
+        if (!user || solvedQuestions[qid]) return;
+        if (isCorrect) {
+            // Save to Firestore
+            const docRef = doc(
+                db,
+                `users/${user.id}/aptitude-questions/${qid}`
+            );
+            await setDoc(docRef, {
+                questionId: qid,
+                correct: true,
+                selectedOption: option,
+                answeredAt: serverTimestamp(),
+            });
+            // Increment points
+            const userRef = doc(db, "users", user.id);
+            await updateDoc(userRef, { points: increment(2) });
+            // Update local solvedQuestions state
+            setSolvedQuestions((prev) => ({
+                ...prev,
+                [qid]: { correct: true, selectedOption: option },
+            }));
+        }
+    };
+
+    const toggleExplanation = (qid) => {
+        setShowExplanation((prev) => ({ ...prev, [qid]: !prev[qid] }));
+    };
+
+    if (loading || !isLoaded) {
+        return <Loader />;
+    }
+
+    return (
+        <div className="flex flex-col min-h-screen bg-light-bg dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text gap-8 px-2 md:px-4">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-10 mb-2">
+                <div className="md:ml-0 ml-2">
+                    <h1 className="text-3xl font-bold">Aptitude</h1>
+                    <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
+                        Build your problem-solving foundation and crack
+                        placement aptitude with confidence.
+                    </p>
+                </div>
+                <div className="flex gap-2">
+                    <button onClick={()=>setIsCreateModalOpen(true)}
+                        className="rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary px-4 py-2 text-white font-medium shadow hover:scale-[1.02] hover:shadow-lg transition-all duration-200"
+                        >
+                        New Aptitude
+                    </button>
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-8 w-full mx-auto animate-fadeIn">
+                <div className="grid grid-cols-3 gap-4 w-full">
+                    {typeCards.map((card) => (
+                        <div
+                            key={card.key}
+                            className={`flex justify-between md:p-6 p-3 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 bg-gradient-to-r ${card.color}`}>
+                            <div className="flex flex-col gap-2">
+                                <p className="md:text-lg text-sm text-blue-900 dark:text-blue-100 font-semibold">
+                                    {card.label}
+                                </p>
+                                <p className="text-4xl font-bold text-blue-900 dark:text-blue-100">
+                                    {typeCounts[card.key] || 0} +
+                                </p>
+                            </div>
+                            <div className="flex items-center justify-center">
+                                {card.icon}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="flex flex-col gap-4">
+                    <div className="flex justify-end">
+                        <Popover className="relative">
+                            {({ open, close }) => (
+                                <>
+                                    <div className="flex items-center gap-2">
+                                        {(filters.difficulty ||
+                                            filters.subtype ||
+                                            filters.tier) && (
+                                            <button
+                                                onClick={() => {
+                                                    setFilters({
+                                                        difficulty: "",
+                                                        subtype: "",
+                                                        tier: "",
+                                                    });
+                                                    setCurrentPage(1);
+                                                }}
+                                                className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-light-fail dark:text-dark-fail hover:bg-light-fail/10 dark:hover:bg-dark-fail/10 rounded-lg transition-all duration-200">
+                                                <X className="h-4 w-4" />
+                                                Reset
+                                            </button>
+                                        )}
+                                        <Popover.Button
+                                            className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-sm transition-all duration-200
+                                            ${
+                                                open
+                                                    ? "bg-light-primary/10 dark:bg-dark-primary/10 text-light-primary dark:text-dark-primary"
+                                                    : "bg-white dark:bg-dark-bg hover:bg-light-surface dark:hover:bg-dark-surface"
+                                            }
+                                            ${
+                                                (filters.difficulty ||
+                                                    filters.subtype ||
+                                                    filters.tier) &&
+                                                "ring-2 ring-light-primary dark:ring-dark-primary"
+                                            }
+                                        `}>
+                                            <Filter className="h-4 w-4" />
+                                            <span className="text-sm font-medium">
+                                                {filters.difficulty ||
+                                                filters.subtype ||
+                                                filters.tier
+                                                    ? `Filters (${
+                                                            [
+                                                                filters.difficulty,
+                                                                filters.subtype,
+                                                                filters.tier,
+                                                            ].filter(Boolean)
+                                                                .length
+                                                        })`
+                                                    : "Filters"}
+                                            </span>
+                                        </Popover.Button>
+                                    </div>
+                                    <Transition
+                                        as={React.Fragment}
+                                        enter="transition duration-200 ease-out"
+                                        enterFrom="transform scale-95 opacity-0"
+                                        enterTo="transform scale-100 opacity-100"
+                                        leave="transition duration-150 ease-in"
+                                        leaveFrom="transform scale-100 opacity-100"
+                                        leaveTo="transform scale-95 opacity-0">
+                                        <Popover.Panel className="absolute right-0 z-50 mt-2 w-80 origin-top-left">
+                                            <div className="bg-white dark:bg-dark-bg rounded-xl shadow-lg ring-1 ring-black/5 p-6 space-y-4">
+                                                {/* Difficulty Filter */}
+                                                <div className="space-y-2">
+                                                    <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
+                                                        Difficulty
+                                                    </label>
+                                                    <select
+                                                        name="difficulty"
+                                                        value={
+                                                            filters.difficulty
+                                                        }
+                                                        onChange={
+                                                            handleFilterChange
+                                                        }
+                                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                                        <option value="">
+                                                            All Difficulties
+                                                        </option>
+                                                        {difficulties.map(
+                                                            (d) => (
+                                                                <option
+                                                                    key={d}
+                                                                    value={d}>
+                                                                    Difficulty{" "}
+                                                                    {d}
+                                                                </option>
+                                                            )
+                                                        )}
+                                                    </select>
+                                                </div>
+                                                {/* Subtype Filter */}
+                                                <div className="space-y-2">
+                                                    <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
+                                                        Subtype
+                                                    </label>
+                                                    <select
+                                                        name="subtype"
+                                                        value={filters.subtype}
+                                                        onChange={
+                                                            handleFilterChange
+                                                        }
+                                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                                        <option value="">
+                                                            All Subtypes
+                                                        </option>
+                                                        {subtypes.map((s) => (
+                                                            <option
+                                                                key={s}
+                                                                value={s}>
+                                                                {s}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                {/* Tier Filter */}
+                                                <div className="space-y-2">
+                                                    <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
+                                                        Tier
+                                                    </label>
+                                                    <select
+                                                        name="tier"
+                                                        value={filters.tier}
+                                                        onChange={
+                                                            handleFilterChange
+                                                        }
+                                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                                        <option value="">
+                                                            All Tiers
+                                                        </option>
+                                                        {tiers.map((t) => (
+                                                            <option
+                                                                key={t}
+                                                                value={t}>
+                                                                {t
+                                                                    .charAt(0)
+                                                                    .toUpperCase() +
+                                                                    t.slice(1)}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </Popover.Panel>
+                                    </Transition>
+                                </>
+                            )}
+                        </Popover>
+                    </div>
+                    {currentQuestions.map((q, idx) => {
+                        const answered = answers[q.id] !== undefined;
+                        const isCorrect = answered && answers[q.id] === q.ans;
+                        const alreadySolved = solvedQuestions[q.id]?.correct;
+                        const isPaid = q.tier === "paid";
+                        return (
+                            <div
+                                key={q.id}
+                                className={`relative rounded-xl p-4 w-[100%] mx-auto bg-light-surface dark:bg-dark-bg md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
+                                    isCorrect || alreadySolved,
+                                    answered || alreadySolved
+                                )} ${
+                                    isPaid
+                                        ? "opacity-60 pointer-events-none"
+                                        : ""
+                                }`}>
+                                {/* Premium overlay for paid questions */}
+                                {isPaid && (
+                                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gradient-to-b from-yellow-100 to-yellow-300 dark:from-yellow-800 dark:to-yellow-600 rounded-xl">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Lock className="text-yellow-600 dark:text-yellow-200 h-6 w-6" />
+                                            <span className="font-bold text-yellow-800 dark:text-yellow-100 text-lg">
+                                                Premium
+                                            </span>
+                                        </div>
+                                        <span className="text-xs text-yellow-900 dark:text-yellow-200">
+                                            Unlock with Premium Access
+                                        </span>
+                                    </div>
+                                )}
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-xs font-semibold text-white bg-dark-primary p-2 rounded-md flex items-center gap-2">
+                                            Q{q.id}
+                                        </span>
+                                        {/* Difficulty stars */}
+                                        <span className="flex items-center gap-0.5 ml-1">
+                                            {[...Array(5)].map((_, i) => (
+                                                <Star
+                                                    key={i}
+                                                    className={`h-4 w-4 ${
+                                                        i < q.difficulty
+                                                            ? "text-yellow-400 fill-yellow-400"
+                                                            : "text-gray-300 dark:text-gray-600"
+                                                    }`}
+                                                    fill={
+                                                        i < q.difficulty
+                                                            ? "#facc15"
+                                                            : "none"
+                                                    }
+                                                />
+                                            ))}
+                                        </span>
+                                        {alreadySolved && (
+                                            <Check className="inline-block text-light-success dark:text-dark-success h-6 w-6" />
+                                        )}
+                                        <span className="text-xs font-semibold text-white bg-light-bg dark:bg-dark-surface p-2 rounded-md flex items-center gap-1">
+                                            {q.type}
+                                        </span>
+                                    </div>
+                                    <span className="text-xs font-semibold text-white bg-light-bg dark:bg-dark-surface p-2 rounded-md flex items-center gap-1">
+                                        <Info className="h-4 w-4" />
+                                        {q.subtype}
+                                    </span>
+                                </div>
+                                <div className="font-medium max-w-[80%] mb-3 text-base md:text-lg">
+                                    {q.ques}
+                                </div>
+                                <div className="flex flex-col gap-2 mb-2">
+                                    {q.options.map((opt) => (
+                                        <label
+                                            key={opt}
+                                            className={`flex items-center w-fit gap-2 px-3 py-2 rounded-lg cursor-pointer  transition-colors duration-150
+                                            ${
+                                                answered || alreadySolved
+                                                    ? opt === q.ans
+                                                        ? "border-light-success dark:border-dark-success bg-light-success/20 dark:bg-dark-success/20"
+                                                        : opt === answers[q.id]
+                                                        ? "border-light-fail dark:border-dark-fail bg-light-fail/20 dark:bg-dark-fail/20"
+                                                        : "border-gray-200 dark:border-gray-700"
+                                                    : "border-gray-200 dark:border-gray-700 hover:border-light-primary dark:hover:border-dark-primary"
+                                            }
+                                            ${
+                                                isPaid
+                                                    ? "opacity-60 pointer-events-none"
+                                                    : ""
+                                            }
+                                        `}>
+                                            <input
+                                                type="radio"
+                                                name={`q-${q.id}`}
+                                                value={opt}
+                                                disabled={
+                                                    answered ||
+                                                    alreadySolved ||
+                                                    isPaid
+                                                }
+                                                checked={
+                                                    alreadySolved
+                                                        ? opt === q.ans
+                                                        : answers[q.id] === opt
+                                                }
+                                                onChange={() =>
+                                                    handleOptionChange(
+                                                        q.id,
+                                                        opt
+                                                    )
+                                                }
+                                                className="accent-light-primary dark:accent-dark-primary"
+                                            />
+                                            <span className="text-sm md:text-base">
+                                                {opt}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
+                                {(answered || alreadySolved) && !isPaid && (
+                                    <div className="mt-2">
+                                        <button
+                                            className="text-xs underline text-light-primary dark:text-dark-primary focus:outline-none"
+                                            onClick={() =>
+                                                toggleExplanation(q.id)
+                                            }>
+                                            {showExplanation[q.id]
+                                                ? "Hide Explanation"
+                                                : "Show Explanation"}
+                                        </button>
+                                        {showExplanation[q.id] && (
+                                            <div className="mt-2 p-3 rounded bg-light-surface dark:bg-dark-surface border border-gray-100 dark:border-gray-700 text-sm animate-fadeIn">
+                                                <div className="mb-1 font-semibold">
+                                                    {isCorrect ||
+                                                    alreadySolved ? (
+                                                        <span className="text-light-success dark:text-dark-success">
+                                                            Correct!
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-light-fail dark:text-dark-fail">
+                                                            Incorrect.
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <b>Answer:</b> {q.ans}
+                                                </div>
+                                                <div className="mt-1">
+                                                    <b>Explanation:</b>{" "}
+                                                    {q.explanation}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center items-center gap-4 mt-8 mb-8">
+                <button
+                    className="px-3 py-1 rounded border bg-light-surface dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text border-gray-200 dark:border-gray-700 disabled:opacity-50"
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <span className="text-sm">
+                    Page {currentPage} of {totalPages}
+                </span>
+                <button
+                    className="px-3 py-1 rounded border bg-light-surface dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text border-gray-200 dark:border-gray-700 disabled:opacity-50"
+                    onClick={() =>
+                        setCurrentPage((p) => Math.min(totalPages, p + 1))
+                    }
+                    disabled={currentPage === totalPages}>
+                    Next
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default AptitudeHomepage;
