@@ -65,7 +65,7 @@ const typeCards = [
     // },
 ];
 
-const AptitudeHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) => {
+const AptitudeAllQuestionHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) => {
     const [questions, setQuestions] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [answers, setAnswers] = useState({}); // { [id]: selectedOption }
@@ -79,7 +79,6 @@ const AptitudeHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) => {
         subtype: "",
         tier: "",
     });
-    const [isStarred, setIsStarred] = useState(false);
 
     // Extract unique subtypes from questions
     const subtypes = Array.from(new Set(questions.map((q) => q.subtype)));
@@ -112,7 +111,7 @@ const AptitudeHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) => {
                     counts[type] = data[type].length;
                 });
                 setTypeCounts(counts);
-                const arr = data["Arithematic Aptitude"] || [];
+                const arr = data["questions"] || [];
                 setQuestions(arr);
                 setLoading(false);
             });
@@ -563,4 +562,4 @@ const AptitudeHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) => {
     );
 };
 
-export default AptitudeHomepage;
+export default AptitudeAllQuestionHomepage;

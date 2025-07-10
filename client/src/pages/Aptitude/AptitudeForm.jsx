@@ -1,6 +1,10 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
-import { Info, ChevronDown, CircleArrowLeft } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { ChevronDown, CircleArrowLeft, Info } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { db } from "../../config/firebase";
 import { useAlert } from "../../hooks/useAlert";
+import Loader from "../../components/main/Loader";
 
 // Example types and subtypes (should be extracted from aptitude.json in real use)
 const typeToSubtypes = {
@@ -161,8 +165,10 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
         return obj;
     });
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const { showAlert, AlertComponent } = useAlert();
+    const { user } = useUser();
 
     const subtopics = useMemo(() => {
         return form.majorType
@@ -212,13 +218,72 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
         }
     };
 
-    const handleNumQuestions = (e) => {
-        let val = parseInt(e.target.value, 10);
-        if (isNaN(val) || val < 1) val = 1;
-        setForm((prev) => ({ ...prev, numQuestions: val }));
-    };
+    const setAptitudeInfo = async () => {
+        setLoading(true);
+        try {
+            // 1. Fetch questions from aptitude.json
+            const res = await fetch("/aptitude.json");
+            const data = await res.json();
+            const allQuestions = data.questions || [];
 
-    const setAptitudeInfo = () => {};
+            // 2. Filter questions by selected majorType and subtopic
+            let selectedQuestions = [];
+            form.majorType.forEach((type) => {
+                // Get subtopics for this type that are selected
+                const subtopicsForType = form.subtopic.filter((sub) => {
+                    // Only include subtopics that belong to this type
+                    return (typeToSubtypes[type] || []).includes(sub);
+                });
+                // Filter questions for this type and selected subtopics
+                let filtered = allQuestions.filter(
+                    (q) =>
+                        q.type === type &&
+                        q.tier === "free" &&
+                        subtopicsForType.includes(q.subtype)
+                );
+                // Shuffle filtered questions
+                filtered = filtered.sort(() => Math.random() - 0.5);
+                // Pick the number of questions as per questionsPerType
+                selectedQuestions.push(
+                    ...filtered.slice(0, questionsPerType[type] || 1)
+                );
+            });
+
+            // 3. Log selected questions
+            console.log("Selected Questions:", selectedQuestions);
+
+            // 4. Save to Firestore at users/{user.id}/aptitude-test
+            if (!user?.id) throw new Error("User not found");
+            const testDocRef = doc(
+                collection(db, `users/${user.id}/aptitude-test`)
+            );
+            await setDoc(testDocRef, {
+                config: {
+                    ...form,
+                    questionsPerType,
+                },
+                questions: selectedQuestions,
+                createdAt: new Date().toISOString(),
+            });
+            // Optionally, show a success alert or close modal
+            showAlert({
+                title: "Test Created!",
+                message: "Your aptitude test has been saved.",
+                type: "success",
+                onConfirm: () => setIsCreateModalOpen(false),
+                confirmText: "OK",
+            });
+        } catch (err) {
+            console.error(err);
+            showAlert({
+                title: "Error",
+                message: err.message || "Failed to create test.",
+                type: "error",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -251,6 +316,10 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
             cancelText: "Keep Working",
         });
     };
+
+    if(loading){
+        return <Loader/>
+    }
 
     const totalTime = form.numQuestions * 1;
 
@@ -301,7 +370,7 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                 </div>
                 {/* Major Types - Custom Checkbox Group */}
                 <div className="border-b border-neutral-300 dark:border-neutral-600 pb-12 flex flex-col gap-8">
-                    <div>
+                <div>
                         <h2 className="md:text-xl text-[18px] font-semibold">
                             Select Major & Minor Types
                         </h2>
@@ -391,13 +460,13 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                                     {type}
                                 </span>
                             </label>
-                        ))}
-                    </div>
-                    {/* Subtopic */}
-                    <div>
+                            ))}
+                </div>
+                {/* Subtopic */}
+                <div>
                         <label className="block text-base font-medium">
                             Subtopics
-                        </label>
+                    </label>
                         <SubtopicPopdown
                             subtopics={subtopics}
                             selected={form.subtopic}
@@ -453,9 +522,10 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                     {form.majorType.map((type) => (
                         <div key={type} className="flex items-center gap-3">
                             <span className="w-40">{type}</span>
-                            <input
-                                type="number"
-                                min={1}
+                    <input
+                        type="number"
+                        min={1}
+                                max={30}
                                 value={questionsPerType[type] || 1}
                                 onChange={(e) => {
                                     const val = Math.max(
@@ -486,18 +556,18 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                                 0
                             )}
                         </span>
-                    </div>
+            </div>
                     <div className="flex items-center gap-2 bg-light-success/10 dark:bg-dark-success/20 rounded px-4 py-2">
                         <span className="font-semibold text-base text-light-success dark:text-dark-success">
                             Total Time:
-                        </span>
+                </span>
                         <span className="font-bold text-lg text-light-success dark:text-dark-success">
                             {Object.values(questionsPerType).reduce(
                                 (a, b) => a + b,
                                 0
                             ) * 1}{" "}
                             min
-                        </span>
+                </span>
                     </div>
                 </div>
             </div>

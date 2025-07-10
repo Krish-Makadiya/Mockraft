@@ -1,6 +1,5 @@
-{
-    "Arithematic Aptitude": [
-        {
+{"questions": [{
+        
             "id": 1,
             "ques": "A train moving at 72 km/h crosses a pole in 15 seconds. What is the length of the train?",
             "options": ["200 m", "250 m", "300 m", "350 m"],
@@ -2549,6 +2548,4 @@
             "type": "Arithmetic Aptitude",
             "subtype": "Clock",
             "tier": "free"
-        }
-    ]
-}
+        }]}

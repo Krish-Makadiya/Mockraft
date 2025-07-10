@@ -1,21 +1,14 @@
 import { useState } from "react";
-import AptitudeHomepage from "./AptitudeHomepage";
-import AptitudeForm from  "./AptitudeForm"
+import AptitudeForm from "./AptitudeForm";
+import AptitudeAllQuestionHomepage from "./AptitudeHomepage";
 
-const MockInterviewContent = () => {
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
-    return isCreateModalOpen ? (
+const AptitudeContent = () => {
+    return (
         <AptitudeForm
-            setIsCreateModalOpen={setIsCreateModalOpen}
-            isCreateModalOpen={isCreateModalOpen}
-        />
-    ) : (
-        <AptitudeHomepage
             setIsCreateModalOpen={setIsCreateModalOpen}
             isCreateModalOpen={isCreateModalOpen}
         />
     );
 };
 
-export default MockInterviewContent;
+export default AptitudeContent;

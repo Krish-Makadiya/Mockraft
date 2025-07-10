@@ -1,11 +1,9 @@
-import { useUser } from "@clerk/clerk-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Sidebar from "../../components/main/Sidebar";
-import { useTheme } from "../../context/ThemeProvider";
-import MockInterviewContent from "../MockInterview/MockInterviewContent";
 import AptitudeContent from "./AptitudeContent";
+import AptitudeAllQuestionHomepage from "./AptitudeHomepage";
 
-const Aptitude = ({ tabs }) => {
+const AptitudeAllQuestions = ({ tabs }) => {
     const location = useLocation();
 
     const getActiveTab = () => {
@@ -20,10 +18,10 @@ const Aptitude = ({ tabs }) => {
             <Sidebar tabs={tabs} getActiveTab={getActiveTab} />
 
             <div className="h-full w-full bg-light-bg dark:bg-dark-surface md:py-10 md:px-8 py-5">
-                <AptitudeContent />
+                <AptitudeAllQuestionHomepage />{" "}
             </div>
         </div>
     );
 };
 
-export default Aptitude;
+export default AptitudeAllQuestions;

@@ -26,7 +26,8 @@ import AboutUsPage from "./pages/Home/AboutUsPage";
 import Pricing from "./components/Homepage/Pricing";
 import PricingPage from "./pages/Home/PricingPage";
 import ContactUsPage from "./pages/Home/ContactUsPage";
-import Aptitude from "./pages/Aptitude/Aptitude";
+import AptitudeAllQuestions from "./pages/Aptitude/AptitudeAllQuestions";
+import Aptitude from "./pages/AptitudeTest/Aptitude";
 
 const tabs = [
     {
@@ -49,6 +50,12 @@ const tabs = [
     },
     {
         id: 4,
+        name: "Question Bank",
+        icon: Calculator,
+        path: "/aptitude/all-questions",
+    },
+    {
+        id: 5,
         name: "Leaderboard",
         icon: ChartColumnIncreasing,
         path: "/leaderboard",
@@ -144,6 +151,18 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <GetAllQuestionInfo />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/aptitude/all-questions"
+                    element={
+                        <ProtectedRoute>
+                            <AptitudeAllQuestions
+                                tabs={tabs}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
                         </ProtectedRoute>
                     }
                 />
