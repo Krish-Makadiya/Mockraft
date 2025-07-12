@@ -28,6 +28,7 @@ import PricingPage from "./pages/Home/PricingPage";
 import ContactUsPage from "./pages/Home/ContactUsPage";
 import AptitudeAllQuestions from "./pages/Aptitude/AptitudeAllQuestions";
 import Aptitude from "./pages/AptitudeTest/Aptitude";
+import AptitudeTest from "./pages/AptitudeTest/AptitudeTest"
 
 const tabs = [
     {
@@ -175,6 +176,14 @@ const App = () => {
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}
                             />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/:user_id/aptitude/:testId"
+                    element={
+                        <ProtectedRoute>
+                            <AptitudeTest />
                         </ProtectedRoute>
                     }
                 />

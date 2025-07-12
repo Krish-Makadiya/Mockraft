@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { Calculator, Clock, Star } from "lucide-react";
+import Loader from "../../components/main/Loader";
 
-const AptitudeTestCard = ({ test }) => {
+const AptitudeTestCard = ({ test, userId }) => {
     const [bookmarked, setBookmarked] = useState(false);
+    const navigate = useNavigate();
     // Status: for now, always 'Ready'. You can add logic for 'Completed' if needed.
     return (
-        <div className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface md:p-4 p-3 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer">
+        <div
+            className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface md:p-4 p-3 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer"
+            onClick={() => navigate(`/${userId}/aptitude/${test.id}`)}
+        >
             <div className="flex items-start gap-4">
                 <div className="bg-gradient-to-br from-light-primary/20 to-light-primary/10 dark:from-dark-primary/20 dark:to-dark-primary/10 p-3 rounded-lg">
                     <Calculator className="w-5 h-5 text-light-primary dark:text-dark-primary" />
@@ -44,7 +50,7 @@ const AptitudeTestCard = ({ test }) => {
                             </span>
                         ))}
                     </div>
-                    <div className="flex flex-wrap gap-1 mb-2">
+                    <div className="flex flex-wrap gap-1 my-3">
                         {(test.config?.subtopic || []).map((sub) => (
                             <span
                                 key={sub}
@@ -53,43 +59,41 @@ const AptitudeTestCard = ({ test }) => {
                             </span>
                         ))}
                     </div>
-                    <div className="flex justify-between items-center mt-3">
-                        <div className="flex flex-col gap-1">
+                    <div className="flex justify-between items-center mt-2">
+                        <div className="flex flex-col gap-3">
                             <div className="flex flex-wrap gap-2">
                                 <div className="inline-flex items-center text-xs bg-gradient-to-r from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 px-2 py-1 rounded-md">
                                     <Calculator className="w-3 h-3 mr-1 text-light-primary dark:text-dark-primary" />
                                     {test.questions?.length || 0} Questions
                                 </div>
                             </div>
-                            <div className="flex items-center mt-2 gap-3">
-                                <div className="flex items-center mt-3 gap-3">
-                                    <div className="flex items-center text-xs text-light-secondary-text/70 dark:text-dark-secondary-text/70">
-                                        <Clock className="w-3 h-3 mr-1" />
-                                        Created{" "}
-                                        {test.createdAt?.seconds
-                                            ? new Date(
-                                                  test.createdAt.seconds * 1000
-                                              ).toLocaleDateString("en-US", {
-                                                  year: "numeric",
-                                                  month: "short",
-                                                  day: "numeric",
-                                              })
-                                            : "recently"}
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <div
-                                            className={`h-2 w-2 rounded-full ${
-                                                test.isCompleted
-                                                    ? "bg-gradient-to-r from-green-400 to-green-500"
-                                                    : "bg-gradient-to-r from-yellow-400 to-yellow-500"
-                                            }`}
-                                        />
-                                        <span className="text-xs text-light-secondary-text dark:text-dark-secondary-text">
-                                            {test.isCompleted
-                                                ? "Completed"
-                                                : "In Progress"}
-                                        </span>
-                                    </div>
+                            <div className="flex items-center gap-3">
+                                <div className="flex items-center text-xs text-light-secondary-text/70 dark:text-dark-secondary-text/70">
+                                    <Clock className="w-3 h-3 mr-1" />
+                                    Created{" "}
+                                    {test.createdAt?.seconds
+                                        ? new Date(
+                                              test.createdAt.seconds * 1000
+                                            ).toLocaleDateString("en-US", {
+                                                year: "numeric",
+                                                month: "short",
+                                                day: "numeric",
+                                            })
+                                        : "recently"}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <div
+                                        className={`h-2 w-2 rounded-full ${
+                                            test.isCompleted
+                                                ? "bg-gradient-to-r from-green-400 to-green-500"
+                                                : "bg-gradient-to-r from-yellow-400 to-yellow-500"
+                                        }`}
+                                    />
+                                    <span className="text-xs text-light-secondary-text dark:text-dark-secondary-text">
+                                        {test.isCompleted
+                                            ? "Completed"
+                                            : "In Progress"}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -97,8 +101,10 @@ const AptitudeTestCard = ({ test }) => {
                             <button
                                 className="px-4 py-2 rounded-lg bg-light-secondary dark:bg-dark-secondary text-white text-sm font-semibold shadow hover:bg-light-secondary-hover dark:hover:bg-dark-secondary-hover transition-all"
                                 onClick={(e) => {
-                                    e.stopPropagation(); /* Add navigation logic here if needed */
-                                }}>
+                                    e.stopPropagation();
+                                    navigate(`/${userId}/aptitude/${test.id}`);
+                                }}
+                            >
                                 View Details
                             </button>
                         </div>
@@ -130,6 +136,10 @@ const AptitudeTestHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
         fetchTests();
     }, [user]);
 
+    if (loading) {
+        return <Loader />;
+    }
+
     return (
         <div className="flex flex-col min-h-screen bg-light-bg dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text gap-8 px-2 md:px-4">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-10 mb-2">
@@ -148,18 +158,14 @@ const AptitudeTestHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                     </button>
                 </div>
             </div>
-            <div>
-                {loading ? (
-                    <div className="text-center py-8 text-gray-400">
-                        Loading...
-                    </div>
-                ) : tests.length === 0 ? (
+            <div className="flex flex-col gap-3">
+                {tests.length === 0 ? (
                     <div className="text-center py-8 text-gray-400">
                         No aptitude tests found.
                     </div>
                 ) : (
                     tests.map((test) => (
-                        <AptitudeTestCard key={test.id} test={test} />
+                        <AptitudeTestCard key={test.id} test={test} userId={user?.id} />
                     ))
                 )}
             </div>
