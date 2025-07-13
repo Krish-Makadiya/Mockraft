@@ -102,7 +102,7 @@ const App = () => {
     }
 
     return (
-        <div className="h-screen select-none font-[poppins] bg-light-bg dark:bg-dark-bg text-light-primary-text dark:text-dark-primary-text">
+        <div className=" select-none font-[poppins] bg-light-bg dark:bg-dark-bg text-light-primary-text dark:text-dark-primary-text">
             <Routes>
                 <Route
                     path="/"
