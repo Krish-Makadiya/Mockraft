@@ -263,6 +263,7 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                     questionsPerType,
                 },
                 questions: selectedQuestions,
+                isCompleted: false,
                 createdAt: new Date().toISOString(),
             });
             // Optionally, show a success alert or close modal
@@ -317,8 +318,8 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
         });
     };
 
-    if(loading){
-        return <Loader/>
+    if (loading) {
+        return <Loader />;
     }
 
     const totalTime = form.numQuestions * 1;
@@ -370,7 +371,7 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                 </div>
                 {/* Major Types - Custom Checkbox Group */}
                 <div className="border-b border-neutral-300 dark:border-neutral-600 pb-12 flex flex-col gap-8">
-                <div>
+                    <div>
                         <h2 className="md:text-xl text-[18px] font-semibold">
                             Select Major & Minor Types
                         </h2>
@@ -460,13 +461,13 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                                     {type}
                                 </span>
                             </label>
-                            ))}
-                </div>
-                {/* Subtopic */}
-                <div>
+                        ))}
+                    </div>
+                    {/* Subtopic */}
+                    <div>
                         <label className="block text-base font-medium">
                             Subtopics
-                    </label>
+                        </label>
                         <SubtopicPopdown
                             subtopics={subtopics}
                             selected={form.subtopic}
@@ -522,9 +523,9 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                     {form.majorType.map((type) => (
                         <div key={type} className="flex items-center gap-3">
                             <span className="w-40">{type}</span>
-                    <input
-                        type="number"
-                        min={1}
+                            <input
+                                type="number"
+                                min={1}
                                 max={30}
                                 value={questionsPerType[type] || 1}
                                 onChange={(e) => {
@@ -556,18 +557,18 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                                 0
                             )}
                         </span>
-            </div>
+                    </div>
                     <div className="flex items-center gap-2 bg-light-success/10 dark:bg-dark-success/20 rounded px-4 py-2">
                         <span className="font-semibold text-base text-light-success dark:text-dark-success">
                             Total Time:
-                </span>
+                        </span>
                         <span className="font-bold text-lg text-light-success dark:text-dark-success">
                             {Object.values(questionsPerType).reduce(
                                 (a, b) => a + b,
                                 0
                             ) * 1}{" "}
                             min
-                </span>
+                        </span>
                     </div>
                 </div>
             </div>

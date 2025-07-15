@@ -8,6 +8,9 @@ import {
     BrainCircuit,
     Puzzle,
     Calculator,
+    Book,
+    Sigma,
+    Brain,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -28,7 +31,8 @@ import PricingPage from "./pages/Home/PricingPage";
 import ContactUsPage from "./pages/Home/ContactUsPage";
 import AptitudeAllQuestions from "./pages/Aptitude/AptitudeAllQuestions";
 import Aptitude from "./pages/AptitudeTest/Aptitude";
-import AptitudeTest from "./pages/AptitudeTest/AptitudeTest"
+import AptitudeTest from "./pages/AptitudeTest/AptitudeTest";
+import AptitudeTestAnalysis from "./pages/AptitudeTest/AptitudeTestAnalysis"
 
 const tabs = [
     {
@@ -46,13 +50,13 @@ const tabs = [
     {
         id: 3,
         name: "Aptitude",
-        icon: Calculator,
+        icon: Brain,
         path: "/aptitude",
     },
     {
         id: 4,
         name: "Question Bank",
-        icon: Calculator,
+        icon: Book,
         path: "/aptitude/all-questions",
     },
     {
@@ -184,6 +188,14 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <AptitudeTest />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/:user_id/aptitude/:testId/analysis"
+                    element={
+                        <ProtectedRoute>
+                            <AptitudeTestAnalysis />
                         </ProtectedRoute>
                     }
                 />

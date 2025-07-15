@@ -10,11 +10,19 @@ const AptitudeTestCard = ({ test, userId }) => {
     const [bookmarked, setBookmarked] = useState(false);
     const navigate = useNavigate();
     // Status: for now, always 'Ready'. You can add logic for 'Completed' if needed.
+
+    const cardClickHandler = () => {
+        if (test.isCompleted) {
+            navigate(`/${userId}/aptitude/${test.id}/analysis`);
+        } else {
+            navigate(`/${userId}/aptitude/${test.id}`);
+        }
+    };
+
     return (
         <div
             className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface md:p-4 p-3 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer"
-            onClick={() => navigate(`/${userId}/aptitude/${test.id}`)}
-        >
+            onClick={cardClickHandler}>
             <div className="flex items-start gap-4">
                 <div className="bg-gradient-to-br from-light-primary/20 to-light-primary/10 dark:from-dark-primary/20 dark:to-dark-primary/10 p-3 rounded-lg">
                     <Calculator className="w-5 h-5 text-light-primary dark:text-dark-primary" />
@@ -71,14 +79,22 @@ const AptitudeTestCard = ({ test, userId }) => {
                                 <div className="flex items-center text-xs text-light-secondary-text/70 dark:text-dark-secondary-text/70">
                                     <Clock className="w-3 h-3 mr-1" />
                                     Created{" "}
-                                    {test.createdAt?.seconds
-                                        ? new Date(
-                                              test.createdAt.seconds * 1000
-                                            ).toLocaleDateString("en-US", {
-                                                year: "numeric",
-                                                month: "short",
-                                                day: "numeric",
-                                            })
+                                    {test.createdAt
+                                        ? test.createdAt.seconds
+                                            ? new Date(
+                                                  test.createdAt.seconds * 1000
+                                              ).toLocaleDateString("en-US", {
+                                                  year: "numeric",
+                                                  month: "short",
+                                                  day: "numeric",
+                                              })
+                                            : new Date(
+                                                  test.createdAt
+                                              ).toLocaleDateString("en-US", {
+                                                  year: "numeric",
+                                                  month: "short",
+                                                  day: "numeric",
+                                              })
                                         : "recently"}
                                 </div>
                                 <div className="flex items-center gap-1">
@@ -100,11 +116,7 @@ const AptitudeTestCard = ({ test, userId }) => {
                         <div className="md:px-5 px-3 flex items-center">
                             <button
                                 className="px-4 py-2 rounded-lg bg-light-secondary dark:bg-dark-secondary text-white text-sm font-semibold shadow hover:bg-light-secondary-hover dark:hover:bg-dark-secondary-hover transition-all"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    navigate(`/${userId}/aptitude/${test.id}`);
-                                }}
-                            >
+                                onClick={cardClickHandler}>
                                 View Details
                             </button>
                         </div>
@@ -165,7 +177,11 @@ const AptitudeTestHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                     </div>
                 ) : (
                     tests.map((test) => (
-                        <AptitudeTestCard key={test.id} test={test} userId={user?.id} />
+                        <AptitudeTestCard
+                            key={test.id}
+                            test={test}
+                            userId={user?.id}
+                        />
                     ))
                 )}
             </div>

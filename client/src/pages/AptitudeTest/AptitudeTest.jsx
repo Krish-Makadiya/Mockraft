@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import Loader from "../../components/main/Loader";
 import AptitudeDrawer from "../../components/Aptitude/AptitudeDrawer";
@@ -39,13 +39,11 @@ const AptitudeTest = () => {
     const navigate = useNavigate();
     const [test, setTest] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(0);
     const [answers, setAnswers] = useState([]);
-    const [savedAnswers, setSavedAnswers] = useState([]);
     const [submitted, setSubmitted] = useState(false);
-    const [testDuration, setTestDuration] = useState(0);
     const initialDurationRef = useRef(0);
     const [isOpen, setIsOpen] = useState(true);
+    const [isCompleted, setIsCompleted] = useState(null);
 
     useEffect(() => {
         const fetchTest = async () => {
@@ -65,11 +63,10 @@ const AptitudeTest = () => {
                 }
                 const data = testSnap.data();
                 setTest(data.questions);
+                setIsCompleted(data.isCompleted);
                 setAnswers(Array(data.questions.length).fill(""));
-                // Timer: use test.config.testDuration (in min) or questions.length min
                 const duration =
                     data.config?.testDuration || data.questions.length;
-                setTestDuration(duration * 60); // seconds
                 initialDurationRef.current = duration * 60; // Store in ref
             } catch (err) {
                 setTest(null);
@@ -78,7 +75,6 @@ const AptitudeTest = () => {
             }
         };
         fetchTest();
-        // eslint-disable-next-line
     }, [user_id, testId]);
 
     if (loading) return <Loader />;
@@ -89,7 +85,7 @@ const AptitudeTest = () => {
             </div>
         );
 
-    const handleAnswer = (idx, value) => {
+    const handleSaveAnswer = (idx, value) => {
         setAnswers((prev) => {
             const updated = [...prev];
             updated[idx] = value;
@@ -97,28 +93,49 @@ const AptitudeTest = () => {
         });
     };
 
-    const handleSave = async (idx, value) => {
+    const handleClearAnswer = (idx) => {
         setAnswers((prev) => {
             const updated = [...prev];
-            updated[idx] = value || updated[idx]; // Use value if provided, else keep current
-            return updated;
-        });
-        setSavedAnswers((prev) => {
-            const updated = [...prev];
-            updated[idx] = value || updated[idx]; // Use value if provided, else keep current
-            return updated;
-        });
-
-        setTest((prev) => {
-            const updated = [...prev];
-            updated[idx] = { ...updated[idx], isCompleted: true };
+            updated[idx] = "";
             return updated;
         });
     };
 
-    const handleSubmit = () => {
-        setSubmitted(true);
-    };
+
+const handleSubmit = async () => {
+    setSubmitted(true);
+
+    // 1. Map answers to questions
+    const results = test.map((q, idx) => ({
+        ...q,
+        userAnswer: answers[idx] || "",
+    }));
+
+    // 2. Calculate correct answers
+    const correctAnswers = results.filter(q => q.userAnswer === q.ans).length;
+    console.log(correctAnswers);
+
+    try {
+        // 3. Update the test document
+        const testRef = doc(db, "users", user_id, "aptitude-test", testId);
+        await updateDoc(testRef, {
+            questions: results,
+            isCompleted: true,
+            submittedAt: new Date().toISOString(),
+        });
+
+        // 4. Increment user's total points
+        const userRef = doc(db, "users", user_id);
+        await updateDoc(userRef, {
+            points: increment(correctAnswers),
+        });
+    } catch (error) {
+        console.error("Error updating test or user points:", error);
+    }
+
+    // 5. Navigate to /aptitude
+    navigate("/aptitude");
+};
 
     return (
         <div className="w-full h-full">
@@ -154,11 +171,11 @@ const AptitudeTest = () => {
                                         {q.ques}
                                     </span>
                                 </div>
-                                <span className="text-[12px] bg-dark-primary self-baseline rounded-sm px-2 py-1">
+                                <span className="text-[12px] bg-dark-surface/60 self-baseline rounded-sm px-2 py-1">
                                     {q.type}
                                 </span>
                             </div>
-                            <div className="flex flex-col gap-2 mt-2 ml-10">
+                            <div className="flex flex-col gap-2 mt-2 ml-10 ">
                                 {q.options &&
                                     q.options.map((opt, oidx) => (
                                         <label
@@ -170,7 +187,7 @@ const AptitudeTest = () => {
                                                 value={opt}
                                                 checked={answers[idx] === opt}
                                                 onChange={() =>
-                                                    handleAnswer(idx, opt)
+                                                    handleSaveAnswer(idx, opt)
                                                 }
                                                 disabled={submitted}
                                                 className="accent-light-secondary dark:accent-dark-secondary"
@@ -183,39 +200,10 @@ const AptitudeTest = () => {
                                 <div className="flex justify-end w-full gap-2">
                                     <button
                                         type="button"
-                                        className={`mt-1 px-3 py-1 rounded text-xs transition
-    ${
-        !answers[idx]
-            ? "bg-gray-100 dark:bg-dark-surface text-xs text-gray-600 dark:text-gray-500 border border-gray-200 dark:border-gray-700 cursor-not-allowed disabled:opacity-50"
-            : answers[idx] && savedAnswers[idx] === answers[idx]
-            ? "dark:bg-dark-success bg-light-success dark:text-black text-white"
-            : "bg-light-primary text-white hover:bg-light-primary-hover dark:bg-dark-primary dark:hover:bg-dark-primary-hover"
-    }
-  `}
+                                        className="mt-1 p-1 rounded-md dark:disabled:bg-dark-surface disabled:bg-light-bg disabled:text-gray-500 bg-light-bg dark:bg-dark-surface text-xs text-black/50 dark:text-white/60 hover:bg-light-bg/60 dark:hover:bg-dark-surface/60 cursor-pointer  border border-gray-200 dark:border-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
                                         onClick={() =>
-                                            handleSave(idx, answers[idx])
+                                            handleClearAnswer(idx, "")
                                         }
-                                        disabled={
-                                            !answers[idx] ||
-                                            (answers[idx] &&
-                                                savedAnswers[idx] ===
-                                                    answers[idx]) ||
-                                            submitted
-                                        }>
-                                        {answers[idx] &&
-                                        savedAnswers[idx] === answers[idx] ? (
-                                            <div className="flex gap-1 items-center">
-                                                <Check className="h-4 w-4" />
-                                                Saved
-                                            </div>
-                                        ) : (
-                                            "Save"
-                                        )}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="mt-1 p-1 rounded dark:disabled:bg-dark-surface disabled:bg-light-bg disabled:text-gray-500 bg-light-fail dark:bg-dark-fail text-xs text-white dark:text-black hover:bg-light-fail-hover dark:hover:bg-dark-fail-hover transition  border border-gray-200 dark:border-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
-                                        onClick={() => handleAnswer(idx, "")}
                                         disabled={submitted || !answers[idx]}>
                                         <Trash className="h-5 w-5" />
                                     </button>
