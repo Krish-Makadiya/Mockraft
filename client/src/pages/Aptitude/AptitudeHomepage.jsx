@@ -21,6 +21,7 @@ import {
     Lock,
     Filter,
     X,
+    ListFilter,
 } from "lucide-react";
 import Loader from "../../components/main/Loader";
 import { Popover, Transition } from "@headlessui/react";
@@ -65,7 +66,10 @@ const typeCards = [
     // },
 ];
 
-const AptitudeAllQuestionHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) => {
+const AptitudeAllQuestionHomepage = ({
+    IsCreateModalOpen,
+    setIsCreateModalOpen,
+}) => {
     const [questions, setQuestions] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [answers, setAnswers] = useState({}); // { [id]: selectedOption }
@@ -192,42 +196,21 @@ const AptitudeAllQuestionHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) 
     return (
         <div className="flex flex-col min-h-screen bg-light-bg dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text gap-8 px-2 md:px-4">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-10 mb-2">
-                <div className="md:ml-0 ml-2">
-                    <h1 className="text-3xl font-bold">Aptitude</h1>
+                <div className="md:ml-0 ml-12">
+                    <h1 className="text-3xl font-bold">Question Bank</h1>
                     <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
                         Build your problem-solving foundation and crack
                         placement aptitude with confidence.
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <button onClick={()=>setIsCreateModalOpen(true)}
-                        className="rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary px-4 py-2 text-white font-medium shadow hover:scale-[1.02] hover:shadow-lg transition-all duration-200"
-                        >
+                    <button
+                        onClick={() => setIsCreateModalOpen(true)}
+                        className="rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary px-4 py-2 text-white font-medium shadow hover:scale-[1.02] hover:shadow-lg transition-all duration-200">
                         New Aptitude
                     </button>
                 </div>
             </div>
-
-            <div className="flex flex-col gap-8 w-full mx-auto animate-fadeIn">
-                <div className="grid grid-cols-3 gap-4 w-full">
-                    {typeCards.map((card) => (
-                        <div
-                            key={card.key}
-                            className={`flex justify-between md:p-6 p-3 rounded-2xl shadow-md items-center transition-all duration-200 hover:shadow-lg hover:-translate-y-1 bg-gradient-to-r ${card.color}`}>
-                            <div className="flex flex-col gap-2">
-                                <p className="md:text-lg text-sm text-blue-900 dark:text-blue-100 font-semibold">
-                                    {card.label}
-                                </p>
-                                <p className="text-4xl font-bold text-blue-900 dark:text-blue-100">
-                                    {typeCounts[card.key] || 0} +
-                                </p>
-                            </div>
-                            <div className="flex items-center justify-center">
-                                {card.icon}
-                            </div>
-                        </div>
-                    ))}
-                </div>
 
                 <div className="flex flex-col gap-4">
                     <div className="flex justify-end">
@@ -272,13 +255,13 @@ const AptitudeAllQuestionHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) 
                                                 filters.subtype ||
                                                 filters.tier
                                                     ? `Filters (${
-                                                            [
-                                                                filters.difficulty,
-                                                                filters.subtype,
-                                                                filters.tier,
-                                                            ].filter(Boolean)
-                                                                .length
-                                                        })`
+                                                          [
+                                                              filters.difficulty,
+                                                              filters.subtype,
+                                                              filters.tier,
+                                                          ].filter(Boolean)
+                                                              .length
+                                                      })`
                                                     : "Filters"}
                                             </span>
                                         </Popover.Button>
@@ -380,79 +363,91 @@ const AptitudeAllQuestionHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) 
                             )}
                         </Popover>
                     </div>
-                    {currentQuestions.map((q, idx) => {
-                        const answered = answers[q.id] !== undefined;
-                        const isCorrect = answered && answers[q.id] === q.ans;
-                        const alreadySolved = solvedQuestions[q.id]?.correct;
-                        const isPaid = q.tier === "paid";
-                        return (
-                            <div
-                                key={q.id}
-                                className={`relative rounded-xl p-4 w-[100%] mx-auto bg-light-surface dark:bg-dark-bg md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
-                                    isCorrect || alreadySolved,
-                                    answered || alreadySolved
-                                )} ${
-                                    isPaid
-                                        ? "opacity-60 pointer-events-none"
-                                        : ""
-                                }`}>
-                                {/* Premium overlay for paid questions */}
-                                {isPaid && (
-                                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gradient-to-b from-yellow-100 to-yellow-300 dark:from-yellow-800 dark:to-yellow-600 rounded-xl">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Lock className="text-yellow-600 dark:text-yellow-200 h-6 w-6" />
-                                            <span className="font-bold text-yellow-800 dark:text-yellow-100 text-lg">
-                                                Premium
+                    {currentQuestions.length === 0 ? (
+                        <div className="w-full flex flex-col items-center justify-center py-20 text-center">
+                            <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-8">
+                                <ListFilter className="h-12 w-12 mx-auto text-neutral-400 mb-3" />
+                                <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text mb-2">
+                                    No matches found
+                                </h3>
+                                <p className="text-sm text-light-secondary-text dark:text-dark-secondary-text">
+                                    Try adjusting your filters or create a new
+                                    interview
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        currentQuestions.map((q, idx) => {
+                            const answered = answers[q.id] !== undefined;
+                            const isCorrect =
+                                answered && answers[q.id] === q.ans;
+                            const alreadySolved =
+                                solvedQuestions[q.id]?.correct;
+                            const isPaid = q.tier === "paid";
+                            return (
+                                <div
+                                    key={q.id}
+                                    className={`relative rounded-xl p-4 w-[100%] mx-auto bg-light-surface dark:bg-dark-bg md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
+                                        isCorrect || alreadySolved,
+                                        answered || alreadySolved
+                                    )} ${
+                                        isPaid
+                                            ? "opacity-60 pointer-events-none"
+                                            : ""
+                                    }`}>
+                                    {/* Premium overlay for paid questions */}
+                                    {isPaid && (
+                                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gradient-to-b from-yellow-100 to-yellow-300 dark:from-yellow-800 dark:to-yellow-600 rounded-xl">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Lock className="text-yellow-600 dark:text-yellow-200 h-6 w-6" />
+                                                <span className="font-bold text-yellow-800 dark:text-yellow-100 text-lg">
+                                                    Premium
+                                                </span>
+                                            </div>
+                                            <span className="text-xs text-yellow-900 dark:text-yellow-200">
+                                                Unlock with Premium Access
                                             </span>
                                         </div>
-                                        <span className="text-xs text-yellow-900 dark:text-yellow-200">
-                                            Unlock with Premium Access
-                                        </span>
-                                    </div>
-                                )}
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-xs font-semibold text-white bg-dark-primary p-2 rounded-md flex items-center gap-2">
-                                            Q{q.id}
-                                        </span>
-                                        {/* Difficulty stars */}
-                                        <span className="flex items-center gap-0.5 ml-1">
-                                            {[...Array(5)].map((_, i) => (
-                                                <Star
-                                                    key={i}
-                                                    className={`h-4 w-4 ${
-                                                        i < q.difficulty
-                                                            ? "text-yellow-400 fill-yellow-400"
-                                                            : "text-gray-300 dark:text-gray-600"
-                                                    }`}
-                                                    fill={
-                                                        i < q.difficulty
-                                                            ? "#facc15"
-                                                            : "none"
-                                                    }
-                                                />
-                                            ))}
-                                        </span>
-                                        {alreadySolved && (
-                                            <Check className="inline-block text-light-success dark:text-dark-success h-6 w-6" />
-                                        )}
+                                    )}
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-xs font-semibold text-white bg-dark-primary p-2 rounded-md flex items-center gap-2">
+                                                Q{q.id}
+                                            </span>
+                                            {/* Difficulty stars */}
+                                            <span className="flex items-center gap-0.5 ml-1">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <Star
+                                                        key={i}
+                                                        className={`h-4 w-4 ${
+                                                            i < q.difficulty
+                                                                ? "text-yellow-400 fill-yellow-400"
+                                                                : "text-gray-300 dark:text-gray-600"
+                                                        }`}
+                                                        fill={
+                                                            i < q.difficulty
+                                                                ? "#facc15"
+                                                                : "none"
+                                                        }
+                                                    />
+                                                ))}
+                                            </span>
+                                            {alreadySolved && (
+                                                <Check className="inline-block text-light-success dark:text-dark-success h-6 w-6" />
+                                            )}
+                                        </div>
                                         <span className="text-xs font-semibold text-white bg-light-bg dark:bg-dark-surface p-2 rounded-md flex items-center gap-1">
                                             {q.type}
                                         </span>
                                     </div>
-                                    <span className="text-xs font-semibold text-white bg-light-bg dark:bg-dark-surface p-2 rounded-md flex items-center gap-1">
-                                        <Info className="h-4 w-4" />
-                                        {q.subtype}
-                                    </span>
-                                </div>
-                                <div className="font-medium max-w-[80%] mb-3 text-base md:text-lg">
-                                    {q.ques}
-                                </div>
-                                <div className="flex flex-col gap-2 mb-2">
-                                    {q.options.map((opt) => (
-                                        <label
-                                            key={opt}
-                                            className={`flex items-center w-fit gap-2 px-3 py-2 rounded-lg cursor-pointer  transition-colors duration-150
+                                    <div className="font-medium max-w-[80%] mb-3 text-base md:text-lg">
+                                        {q.ques}
+                                    </div>
+                                    <div className="flex flex-col gap-2 mb-2">
+                                        {q.options.map((opt) => (
+                                            <label
+                                                key={opt}
+                                                className={`flex items-center w-fit gap-2 px-3 py-2 rounded-lg cursor-pointer  transition-colors duration-150
                                             ${
                                                 answered || alreadySolved
                                                     ? opt === q.ans
@@ -468,96 +463,102 @@ const AptitudeAllQuestionHomepage = ({IsCreateModalOpen, setIsCreateModalOpen}) 
                                                     : ""
                                             }
                                         `}>
-                                            <input
-                                                type="radio"
-                                                name={`q-${q.id}`}
-                                                value={opt}
-                                                disabled={
-                                                    answered ||
-                                                    alreadySolved ||
-                                                    isPaid
-                                                }
-                                                checked={
-                                                    alreadySolved
-                                                        ? opt === q.ans
-                                                        : answers[q.id] === opt
-                                                }
-                                                onChange={() =>
-                                                    handleOptionChange(
-                                                        q.id,
-                                                        opt
-                                                    )
-                                                }
-                                                className="accent-light-primary dark:accent-dark-primary"
-                                            />
-                                            <span className="text-sm md:text-base">
-                                                {opt}
-                                            </span>
-                                        </label>
-                                    ))}
-                                </div>
-                                {(answered || alreadySolved) && !isPaid && (
-                                    <div className="mt-2">
-                                        <button
-                                            className="text-xs underline text-light-primary dark:text-dark-primary focus:outline-none"
-                                            onClick={() =>
-                                                toggleExplanation(q.id)
-                                            }>
-                                            {showExplanation[q.id]
-                                                ? "Hide Explanation"
-                                                : "Show Explanation"}
-                                        </button>
-                                        {showExplanation[q.id] && (
-                                            <div className="mt-2 p-3 rounded bg-light-surface dark:bg-dark-surface border border-gray-100 dark:border-gray-700 text-sm animate-fadeIn">
-                                                <div className="mb-1 font-semibold">
-                                                    {isCorrect ||
-                                                    alreadySolved ? (
-                                                        <span className="text-light-success dark:text-dark-success">
-                                                            Correct!
-                                                        </span>
-                                                    ) : (
-                                                        <span className="text-light-fail dark:text-dark-fail">
-                                                            Incorrect.
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <b>Answer:</b> {q.ans}
-                                                </div>
-                                                <div className="mt-1">
-                                                    <b>Explanation:</b>{" "}
-                                                    {q.explanation}
-                                                </div>
-                                            </div>
-                                        )}
+                                                <input
+                                                    type="radio"
+                                                    name={`q-${q.id}`}
+                                                    value={opt}
+                                                    disabled={
+                                                        answered ||
+                                                        alreadySolved ||
+                                                        isPaid
+                                                    }
+                                                    checked={
+                                                        alreadySolved
+                                                            ? opt === q.ans
+                                                            : answers[q.id] ===
+                                                              opt
+                                                    }
+                                                    onChange={() =>
+                                                        handleOptionChange(
+                                                            q.id,
+                                                            opt
+                                                        )
+                                                    }
+                                                    className="accent-light-primary dark:accent-dark-primary"
+                                                />
+                                                <span className="text-sm md:text-base">
+                                                    {opt}
+                                                </span>
+                                            </label>
+                                        ))}
                                     </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                                    {(answered || alreadySolved) && !isPaid && (
+                                        <div className="mt-2">
+                                            <button
+                                                className="text-xs underline text-light-primary dark:text-dark-primary focus:outline-none"
+                                                onClick={() =>
+                                                    toggleExplanation(q.id)
+                                                }>
+                                                {showExplanation[q.id]
+                                                    ? "Hide Explanation"
+                                                    : "Show Explanation"}
+                                            </button>
+                                            {showExplanation[q.id] && (
+                                                <div className="mt-2 p-3 rounded bg-light-surface dark:bg-dark-surface border border-gray-100 dark:border-gray-700 text-sm animate-fadeIn">
+                                                    <div className="mb-1 font-semibold">
+                                                        {isCorrect ||
+                                                        alreadySolved ? (
+                                                            <span className="text-light-success dark:text-dark-success">
+                                                                Correct!
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-light-fail dark:text-dark-fail">
+                                                                Incorrect.
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <b>Answer:</b> {q.ans}
+                                                    </div>
+                                                    <div className="mt-1">
+                                                        <b>Explanation:</b>{" "}
+                                                        {q.explanation}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })
+                    )}
                 </div>
-            </div>
 
             {/* Pagination Controls */}
-            <div className="flex justify-center items-center gap-4 mt-8 mb-8">
-                <button
-                    className="px-3 py-1 rounded border bg-light-surface dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text border-gray-200 dark:border-gray-700 disabled:opacity-50"
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}>
-                    Previous
-                </button>
-                <span className="text-sm">
-                    Page {currentPage} of {totalPages}
-                </span>
-                <button
-                    className="px-3 py-1 rounded border bg-light-surface dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text border-gray-200 dark:border-gray-700 disabled:opacity-50"
-                    onClick={() =>
-                        setCurrentPage((p) => Math.min(totalPages, p + 1))
-                    }
-                    disabled={currentPage === totalPages}>
-                    Next
-                </button>
-            </div>
+
+            {currentQuestions.length > 0 && (
+                <div className="flex justify-center items-center gap-4 mt-8 mb-8">
+                    <button
+                        className="px-3 py-1 rounded border bg-light-surface dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text border-gray-200 dark:border-gray-700 disabled:opacity-50"
+                        onClick={() =>
+                            setCurrentPage((p) => Math.max(1, p - 1))
+                        }
+                        disabled={currentPage === 1}>
+                        Previous
+                    </button>
+                    <span className="text-sm">
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                        className="px-3 py-1 rounded border bg-light-surface dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text border-gray-200 dark:border-gray-700 disabled:opacity-50"
+                        onClick={() =>
+                            setCurrentPage((p) => Math.min(totalPages, p + 1))
+                        }
+                        disabled={currentPage === totalPages}>
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
