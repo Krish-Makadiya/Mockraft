@@ -9,7 +9,7 @@ import { Clock4, FileText, CheckCircle, Clock, ChevronRight } from "lucide-react
  */
 export default function RecentInterviewsSection({ recentInterviews = [], userId, navigate }) {
     return (
-        <div className="md:w-[49%] w-full bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
+        <div className="md:w-[49%] w-full bg-light-surface dark:bg-dark-bg rounded-xl md:p-6 p-4 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
             <div className="flex items-center gap-4">
                 <div className="bg-light-bg dark:bg-dark-surface p-3 rounded-full shadow-sm">
                     <Clock4 size={24} />
@@ -25,7 +25,7 @@ export default function RecentInterviewsSection({ recentInterviews = [], userId,
             </div>
             <div>
                 {recentInterviews.length > 0 ? (
-                    <ul className="mt-4 space-y-4">
+                    <ul className="mt-4 space-y-4 ">
                         {recentInterviews.map((interview) => (
                             <li
                                 key={interview.id}

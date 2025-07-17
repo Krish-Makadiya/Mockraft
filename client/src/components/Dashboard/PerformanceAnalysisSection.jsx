@@ -15,7 +15,7 @@ const QUESTION_TYPES = [
 
 export default function PerformanceAnalysisSection({ typeStats, questionTypes = QUESTION_TYPES }) {
     return (
-        <div className="md:w-[49%] w-full bg-light-surface dark:bg-dark-bg rounded-xl p-6 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
+        <div className="md:w-[49%] w-full bg-light-surface dark:bg-dark-bg rounded-xl md:p-6 p-4 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
             <div className="flex items-center gap-4">
                 <div className="bg-light-bg dark:bg-dark-surface p-3 rounded-full shadow-sm">
                     <ChartBar size={24} />

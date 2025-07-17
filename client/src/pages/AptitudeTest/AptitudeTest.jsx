@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
+import { doc, getDoc, increment, updateDoc, setDoc, doc as firestoreDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import Loader from "../../components/main/Loader";
 import AptitudeDrawer from "../../components/Aptitude/AptitudeDrawer";
@@ -122,7 +122,22 @@ const handleSubmit = async () => {
             questions: results,
             isCompleted: true,
             submittedAt: new Date().toISOString(),
+            point: correctAnswers,
         });
+
+        // 3.1. Mark each question as completed in aptitude-questions ONLY if correct
+        for (let i = 0; i < results.length; i++) {
+            const q = results[i];
+            if (q.userAnswer === q.ans) {
+                const qRef = firestoreDoc(db, `users/${user_id}/aptitude-questions/${q.id}`);
+                await setDoc(qRef, {
+                    correct: true,
+                    completed: true,
+                    userAnswer: q.userAnswer,
+                    questionId: q.id,
+                }, { merge: true });
+            }
+        }
 
         // 4. Increment user's total points
         const userRef = doc(db, "users", user_id);
