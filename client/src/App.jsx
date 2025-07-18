@@ -57,7 +57,7 @@ const tabs = [
         id: 4,
         name: "Question Bank",
         icon: Book,
-        path: "/aptitude/all-questions",
+        path: "/aptitude-all-questions",
     },
     {
         id: 5,
@@ -160,7 +160,7 @@ const App = () => {
                     }
                 />
                 <Route
-                    path="/aptitude/all-questions"
+                    path="/aptitude-all-questions"
                     element={
                         <ProtectedRoute>
                             <AptitudeAllQuestions

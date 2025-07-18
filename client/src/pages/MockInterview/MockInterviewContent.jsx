@@ -1,7 +1,6 @@
 import { useState } from "react";
 import MockInterviewForm from "./MockInterviewForm";
-import MockInterviewHomepage from "./MockInterviewHomepage";
-
+import MockInterviewHomepage from "./MockInterviewHomepage"
 
 const MockInterviewContent = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);

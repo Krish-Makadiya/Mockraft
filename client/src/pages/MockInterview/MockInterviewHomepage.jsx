@@ -61,7 +61,6 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
     const getFilteredInterviews = () => {
         return allInterviews
             .filter((interview) => {
-                // First check if starred filter is active
                 if (isStarred && !interview.isBookmarked) {
                     return false;
                 }
@@ -95,6 +94,16 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
             });
     };
 
+    const handleBookmarkToggle = (id, newValue) => {
+        setAllInterviews((prev) =>
+            prev.map((interview) =>
+                interview.id === id
+                    ? { ...interview, isBookmarked: newValue }
+                    : interview
+            )
+        );
+    };
+
     const parentVariants = {
         hidden: {},
         visible: {
@@ -109,9 +118,7 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
         visible: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.3,
-                    type: "spring",
-                    stiffness: 300, },
+            transition: { duration: 0.3, type: "spring", stiffness: 300 },
         },
     };
 
@@ -125,7 +132,7 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                 variants={childVariants}
                 className="flex justify-between items-center gap-10">
                 <div className="md:ml-0 ml-12">
-                    <h1 className="text-3xl font-bold">Mock Interviews</h1>
+                    <h1 className="text-3xl font-bold">Mock Interview</h1>
                     <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
                         Prepare for your next interview with our mock interview
                         sessions.
@@ -133,17 +140,15 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                 </div>
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
-                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary md:px-4 px-2 md:py-3 py-2 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary md:px-4 md:py-3 px-2 py-1 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                     aria-label="Create new mock interview">
-                    <span className="absolute inset-0 bg-gradient-to-r from-light-secondary to-light-primary dark:from-dark-secondary dark:to-dark-primary  opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"></span>
-
                     <FilePlus2
                         className="relative md:h-6 h-10 md:w-6 w-10 text-white transition-transform duration-200 
                                                 ease-out group-hover:scale-[1.02]"
                     />
 
                     <span className="relative hidden font-medium text-white sm:inline-block">
-                        New Interview
+                        New Aptitude
                     </span>
                 </button>
             </motion.div>
@@ -168,6 +173,7 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                                 <MockInterviewCard
                                     key={interview.id}
                                     interview={interview}
+                                    onBookmarkToggle={handleBookmarkToggle}
                                 />
                             ))}
                         </motion.div>

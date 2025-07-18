@@ -349,13 +349,15 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
                     <label
                         htmlFor="testName"
                         className="block text-sm font-medium">
-                        Mock-Interview Name
+                        Aptitude test Name
                     </label>
 
                     <input
                         id="testName"
                         name="testName"
                         type="text"
+                        min={3}
+                        maxLength={20}
                         placeholder="Enter the name of the Aptitude"
                         value={form.testName}
                         onChange={handleChange}

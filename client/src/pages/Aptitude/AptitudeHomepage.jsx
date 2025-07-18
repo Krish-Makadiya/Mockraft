@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import Loader from "../../components/main/Loader";
 import { Popover, Transition } from "@headlessui/react";
+import { motion } from "framer-motion";
 
 const QUESTIONS_PER_PAGE = 5;
 
@@ -193,9 +194,33 @@ const AptitudeAllQuestionHomepage = ({
         return <Loader />;
     }
 
+    const parentVariants = {
+        hidden: {},
+        visible: {
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.05,
+            },
+        },
+    };
+    const childVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.3, type: "spring", stiffness: 300 },
+        },
+    };
+
     return (
-        <div className="flex flex-col min-h-screen bg-light-bg dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text gap-8 px-2 md:px-4">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-10 mb-2">
+        <motion.div
+            variants={parentVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col min-h-screen bg-light-bg dark:bg-dark-surface text-light-primary-text dark:text-dark-primary-text gap-8 px-2 md:px-4">
+            <motion.div
+                variants={childVariants}
+                className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-10 mb-2">
                 <div className="md:ml-0 ml-12">
                     <h1 className="text-3xl font-bold">Question Bank</h1>
                     <p className="md:text-sm text-xs text-light-secondary-text dark:text-dark-secondary-text">
@@ -203,40 +228,33 @@ const AptitudeAllQuestionHomepage = ({
                         placement aptitude with confidence.
                     </p>
                 </div>
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => setIsCreateModalOpen(true)}
-                        className="rounded-lg bg-gradient-to-r from-light-primary to-light-secondary dark:from-dark-primary dark:to-dark-secondary px-4 py-2 text-white font-medium shadow hover:scale-[1.02] hover:shadow-lg transition-all duration-200">
-                        New Aptitude
-                    </button>
-                </div>
-            </div>
+            </motion.div>
 
-                <div className="flex flex-col gap-4">
-                    <div className="flex justify-end">
-                        <Popover className="relative">
-                            {({ open, close }) => (
-                                <>
-                                    <div className="flex items-center gap-2">
-                                        {(filters.difficulty ||
-                                            filters.subtype ||
-                                            filters.tier) && (
-                                            <button
-                                                onClick={() => {
-                                                    setFilters({
-                                                        difficulty: "",
-                                                        subtype: "",
-                                                        tier: "",
-                                                    });
-                                                    setCurrentPage(1);
-                                                }}
-                                                className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-light-fail dark:text-dark-fail hover:bg-light-fail/10 dark:hover:bg-dark-fail/10 rounded-lg transition-all duration-200">
-                                                <X className="h-4 w-4" />
-                                                Reset
-                                            </button>
-                                        )}
-                                        <Popover.Button
-                                            className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-sm transition-all duration-200
+            <div className="flex flex-col gap-4">
+                <motion.div variants={childVariants} className="flex justify-end">
+                    <Popover className="relative">
+                        {({ open, close }) => (
+                            <>
+                                <div className="flex items-center gap-2">
+                                    {(filters.difficulty ||
+                                        filters.subtype ||
+                                        filters.tier) && (
+                                        <button
+                                            onClick={() => {
+                                                setFilters({
+                                                    difficulty: "",
+                                                    subtype: "",
+                                                    tier: "",
+                                                });
+                                                setCurrentPage(1);
+                                            }}
+                                            className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-light-fail dark:text-dark-fail hover:bg-light-fail/10 dark:hover:bg-dark-fail/10 rounded-lg transition-all duration-200">
+                                            <X className="h-4 w-4" />
+                                            Reset
+                                        </button>
+                                    )}
+                                    <Popover.Button
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-sm transition-all duration-200
                                             ${
                                                 open
                                                     ? "bg-light-primary/10 dark:bg-dark-primary/10 text-light-primary dark:text-dark-primary"
@@ -249,122 +267,117 @@ const AptitudeAllQuestionHomepage = ({
                                                 "ring-2 ring-light-primary dark:ring-dark-primary"
                                             }
                                         `}>
-                                            <Filter className="h-4 w-4" />
-                                            <span className="text-sm font-medium">
-                                                {filters.difficulty ||
-                                                filters.subtype ||
-                                                filters.tier
-                                                    ? `Filters (${
-                                                          [
-                                                              filters.difficulty,
-                                                              filters.subtype,
-                                                              filters.tier,
-                                                          ].filter(Boolean)
-                                                              .length
-                                                      })`
-                                                    : "Filters"}
-                                            </span>
-                                        </Popover.Button>
-                                    </div>
-                                    <Transition
-                                        as={React.Fragment}
-                                        enter="transition duration-200 ease-out"
-                                        enterFrom="transform scale-95 opacity-0"
-                                        enterTo="transform scale-100 opacity-100"
-                                        leave="transition duration-150 ease-in"
-                                        leaveFrom="transform scale-100 opacity-100"
-                                        leaveTo="transform scale-95 opacity-0">
-                                        <Popover.Panel className="absolute right-0 z-50 mt-2 w-80 origin-top-left">
-                                            <div className="bg-white dark:bg-dark-bg rounded-xl shadow-lg ring-1 ring-black/5 p-6 space-y-4">
-                                                {/* Difficulty Filter */}
-                                                <div className="space-y-2">
-                                                    <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
-                                                        Difficulty
-                                                    </label>
-                                                    <select
-                                                        name="difficulty"
-                                                        value={
-                                                            filters.difficulty
-                                                        }
-                                                        onChange={
-                                                            handleFilterChange
-                                                        }
-                                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
-                                                        <option value="">
-                                                            All Difficulties
+                                        <Filter className="h-4 w-4" />
+                                        <span className="text-sm font-medium">
+                                            {filters.difficulty ||
+                                            filters.subtype ||
+                                            filters.tier
+                                                ? `Filters (${
+                                                      [
+                                                          filters.difficulty,
+                                                          filters.subtype,
+                                                          filters.tier,
+                                                      ].filter(Boolean).length
+                                                  })`
+                                                : "Filters"}
+                                        </span>
+                                    </Popover.Button>
+                                </div>
+                                <Transition
+                                    as={React.Fragment}
+                                    enter="transition duration-200 ease-out"
+                                    enterFrom="transform scale-95 opacity-0"
+                                    enterTo="transform scale-100 opacity-100"
+                                    leave="transition duration-150 ease-in"
+                                    leaveFrom="transform scale-100 opacity-100"
+                                    leaveTo="transform scale-95 opacity-0">
+                                    <Popover.Panel className="absolute right-0 z-50 mt-2 w-80 origin-top-left">
+                                        <div className="bg-white dark:bg-dark-bg rounded-xl shadow-lg ring-1 ring-black/5 p-6 space-y-4">
+                                            {/* Difficulty Filter */}
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
+                                                    Difficulty
+                                                </label>
+                                                <select
+                                                    name="difficulty"
+                                                    value={filters.difficulty}
+                                                    onChange={
+                                                        handleFilterChange
+                                                    }
+                                                    className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                                    <option value="">
+                                                        All Difficulties
+                                                    </option>
+                                                    {difficulties.map((d) => (
+                                                        <option
+                                                            key={d}
+                                                            value={d}>
+                                                            Difficulty {d}
                                                         </option>
-                                                        {difficulties.map(
-                                                            (d) => (
-                                                                <option
-                                                                    key={d}
-                                                                    value={d}>
-                                                                    Difficulty{" "}
-                                                                    {d}
-                                                                </option>
-                                                            )
-                                                        )}
-                                                    </select>
-                                                </div>
-                                                {/* Subtype Filter */}
-                                                <div className="space-y-2">
-                                                    <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
-                                                        Subtype
-                                                    </label>
-                                                    <select
-                                                        name="subtype"
-                                                        value={filters.subtype}
-                                                        onChange={
-                                                            handleFilterChange
-                                                        }
-                                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
-                                                        <option value="">
-                                                            All Subtypes
-                                                        </option>
-                                                        {subtypes.map((s) => (
-                                                            <option
-                                                                key={s}
-                                                                value={s}>
-                                                                {s}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                                {/* Tier Filter */}
-                                                <div className="space-y-2">
-                                                    <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
-                                                        Tier
-                                                    </label>
-                                                    <select
-                                                        name="tier"
-                                                        value={filters.tier}
-                                                        onChange={
-                                                            handleFilterChange
-                                                        }
-                                                        className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
-                                                        <option value="">
-                                                            All Tiers
-                                                        </option>
-                                                        {tiers.map((t) => (
-                                                            <option
-                                                                key={t}
-                                                                value={t}>
-                                                                {t
-                                                                    .charAt(0)
-                                                                    .toUpperCase() +
-                                                                    t.slice(1)}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </div>
+                                                    ))}
+                                                </select>
                                             </div>
-                                        </Popover.Panel>
-                                    </Transition>
-                                </>
-                            )}
-                        </Popover>
-                    </div>
+                                            {/* Subtype Filter */}
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
+                                                    Subtype
+                                                </label>
+                                                <select
+                                                    name="subtype"
+                                                    value={filters.subtype}
+                                                    onChange={
+                                                        handleFilterChange
+                                                    }
+                                                    className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                                    <option value="">
+                                                        All Subtypes
+                                                    </option>
+                                                    {subtypes.map((s) => (
+                                                        <option
+                                                            key={s}
+                                                            value={s}>
+                                                            {s}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            {/* Tier Filter */}
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text">
+                                                    Tier
+                                                </label>
+                                                <select
+                                                    name="tier"
+                                                    value={filters.tier}
+                                                    onChange={
+                                                        handleFilterChange
+                                                    }
+                                                    className="w-full px-3 py-2 text-sm rounded-lg bg-light-surface dark:bg-dark-surface border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-dark-primary">
+                                                    <option value="">
+                                                        All Tiers
+                                                    </option>
+                                                    {tiers.map((t) => (
+                                                        <option
+                                                            key={t}
+                                                            value={t}>
+                                                            {t
+                                                                .charAt(0)
+                                                                .toUpperCase() +
+                                                                t.slice(1)}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </Popover.Panel>
+                                </Transition>
+                            </>
+                        )}
+                    </Popover>
+                </motion.div>
+                <div className="flex flex-col gap-4">
                     {currentQuestions.length === 0 ? (
-                        <div className="w-full flex flex-col items-center justify-center py-20 text-center">
+                        <motion.div variants={childVariants} className="w-full flex flex-col items-center justify-center py-20 text-center">
                             <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-8">
                                 <ListFilter className="h-12 w-12 mx-auto text-neutral-400 mb-3" />
                                 <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text mb-2">
@@ -375,7 +388,7 @@ const AptitudeAllQuestionHomepage = ({
                                     interview
                                 </p>
                             </div>
-                        </div>
+                        </motion.div>
                     ) : (
                         currentQuestions.map((q, idx) => {
                             const answered = answers[q.id] !== undefined;
@@ -385,8 +398,8 @@ const AptitudeAllQuestionHomepage = ({
                                 solvedQuestions[q.id]?.correct;
                             const isPaid = q.tier === "paid";
                             return (
-                                <div
-                                    key={q.id}
+                                <motion.div
+                                    key={q.id} variants={childVariants}
                                     className={`relative rounded-xl p-4 w-[100%] mx-auto bg-light-surface dark:bg-dark-bg md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
                                         isCorrect || alreadySolved,
                                         answered || alreadySolved
@@ -528,11 +541,12 @@ const AptitudeAllQuestionHomepage = ({
                                             )}
                                         </div>
                                     )}
-                                </div>
+                                </motion.div>
                             );
                         })
                     )}
                 </div>
+            </div>
 
             {/* Pagination Controls */}
 
@@ -559,7 +573,7 @@ const AptitudeAllQuestionHomepage = ({
                     </button>
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 };
 

@@ -13,7 +13,10 @@ const QUESTION_TYPES = [
     "curveball",
 ];
 
-export default function PerformanceAnalysisSection({ typeStats, questionTypes = QUESTION_TYPES }) {
+export default function PerformanceAnalysisSection({
+    typeStats,
+    questionTypes = QUESTION_TYPES,
+}) {
     return (
         <div className="md:w-[49%] w-full bg-light-surface dark:bg-dark-bg rounded-xl md:p-6 p-4 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
             <div className="flex items-center gap-4">
@@ -38,18 +41,18 @@ export default function PerformanceAnalysisSection({ typeStats, questionTypes = 
                             return (
                                 <li
                                     key={type}
-                                    className="flex items-center justify-between p-4 bg-light-bg dark:bg-dark-surface rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
-                                >
+                                    className="flex items-center justify-between p-4 bg-light-bg dark:bg-dark-surface rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
                                     <div className="flex items-center gap-3">
                                         <Gauge size={24} />
                                         <div>
-                                            <p className="font-semibold capitalize">
+                                            <p className="font-semibold md:text-base text-sm capitalize">
                                                 {type.replace("_", " ")}
                                             </p>
                                             <p className="text-sm text-gray-500 dark:text-gray-400">
                                                 Total: {typeStat.total ?? 0}
                                                 <br />
-                                                Attempted: {typeStat.attempted ?? 0}
+                                                Attempted:{" "}
+                                                {typeStat.attempted ?? 0}
                                             </p>
                                         </div>
                                     </div>
@@ -57,7 +60,7 @@ export default function PerformanceAnalysisSection({ typeStats, questionTypes = 
                                         <span className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-1">
                                             Avg Score: {avg}%
                                         </span>
-                                        <div className="w-full h-3 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                                        <div className="w-full h-3 bg-light-surface dark:bg-dark-bg rounded-full overflow-hidden">
                                             <div
                                                 className={`
                                                     h-full rounded-full transition-all duration-300

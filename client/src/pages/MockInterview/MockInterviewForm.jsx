@@ -156,6 +156,8 @@ const MockInterviewForm = ({ setIsCreateModalOpen }) => {
                                 id="username"
                                 name="interviewName"
                                 type="text"
+                                min={3}
+                                maxLength={20}
                                 placeholder="Enter the name of the interview"
                                 value={formState.interviewName}
                                 onChange={handleInputChange}

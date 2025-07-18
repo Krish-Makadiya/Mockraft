@@ -1,5 +1,11 @@
 import React from "react";
-import { Clock4, FileText, CheckCircle, Clock, ChevronRight } from "lucide-react";
+import {
+    Clock4,
+    FileText,
+    CheckCircle,
+    Clock,
+    ChevronRight,
+} from "lucide-react";
 
 /**
  * RecentInterviewsSection
@@ -7,7 +13,11 @@ import { Clock4, FileText, CheckCircle, Clock, ChevronRight } from "lucide-react
  * - The recent interviews data is passed as a prop.
  * - The navigate and userId functions are passed as props for navigation.
  */
-export default function RecentInterviewsSection({ recentInterviews = [], userId, navigate }) {
+export default function RecentInterviewsSection({
+    recentInterviews = [],
+    userId,
+    navigate,
+}) {
     return (
         <div className="md:w-[49%] w-full bg-light-surface dark:bg-dark-bg rounded-xl md:p-6 p-4 flex flex-col shadow-md transition-transform duration-300 hover:scale-[1.005] hover:shadow-lg">
             <div className="flex items-center gap-4">
@@ -15,9 +25,7 @@ export default function RecentInterviewsSection({ recentInterviews = [], userId,
                     <Clock4 size={24} />
                 </div>
                 <div className="flex flex-col">
-                    <p className="text-xl font-semibold">
-                        Recent Interviews
-                    </p>
+                    <p className="text-xl font-semibold">Recent Interviews</p>
                     <p className="text-light-secondary-text">
                         Your latest mock interview sessions
                     </p>
@@ -42,11 +50,11 @@ export default function RecentInterviewsSection({ recentInterviews = [], userId,
                                 <div className="flex items-center gap-3">
                                     <FileText size={24} />
                                     <div>
-                                        <p className="font-semibold">
+                                        <p className="font-semibold md:text-base text-sm">
                                             {interview.interviewName ||
                                                 "Mock Interview"}
                                         </p>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        <p className="md:text-sm text-xs text-gray-500 dark:text-gray-400">
                                             {interview.createdAt?.toDate
                                                 ? interview.createdAt
                                                       .toDate()
@@ -66,18 +74,22 @@ export default function RecentInterviewsSection({ recentInterviews = [], userId,
                                     {/* Status indicator */}
                                     {interview.isCompleted ? (
                                         <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 text-xs font-semibold">
-                                            <CheckCircle className="w-4 h-4" />
-                                            Completed
+                                            <CheckCircle className="md:w-4 md:h-4 w-5 h-5" />
+                                            <p className="md:block hidden">
+                                                Completed
+                                            </p>
                                         </span>
                                     ) : (
                                         <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 text-xs font-semibold">
-                                            <Clock className="w-4 h-4" />
-                                            Ongoing
+                                            <Clock className="md:w-4 md:h-4 w-5 h-5" />
+                                            <p className="md:block hidden">
+                                                Ongoing
+                                            </p>
                                         </span>
                                     )}
 
-                                    <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                                        Score:{" "}
+                                    <span className="text-sm flex gap-1 font-medium text-blue-600 dark:text-blue-400">
+                                        <p className="md:block hidden">Score: </p>
                                         {interview.analysis?.overallScore
                                             ? `${interview.analysis.overallScore}%`
                                             : "N/A"}

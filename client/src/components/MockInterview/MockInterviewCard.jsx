@@ -6,12 +6,7 @@ import { Briefcase, Code, Layers, Clock, Star } from "lucide-react";
 import { db } from "../../config/firebase";
 import toast from "react-hot-toast";
 
-/**
- * MockInterviewCard
- * - All label text, icons, and layout are static.
- * - The interview data is passed as a prop.
- */
-const MockInterviewCard = ({ interview }) => {
+const MockInterviewCard = ({ interview, onBookmarkToggle }) => {
     const { user } = useUser();
     const [isBookmarked, setIsBookmarked] = useState(interview.isBookmarked);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -31,6 +26,7 @@ const MockInterviewCard = ({ interview }) => {
                 isBookmarked: !isBookmarked,
             });
             setIsBookmarked(!isBookmarked);
+            if (onBookmarkToggle) onBookmarkToggle(interview.id, !isBookmarked);
             toast.success(
                 !isBookmarked ? "Added to favorites" : "Removed from favorites"
             );
@@ -65,8 +61,7 @@ const MockInterviewCard = ({ interview }) => {
     return (
         <div
             onClick={interviewCardHandler}
-            className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface md:p-4 p-3 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer"
-        >
+            className="group w-full bg-white dark:bg-dark-bg rounded-lg shadow-sm border border-light-surface dark:border-dark-surface md:p-4 p-3 hover:shadow-md duration-200 transition-all hover:scale-[100.5%] cursor-pointer">
             <div className="flex items-start gap-4">
                 <div className="bg-gradient-to-br from-light-primary/20 to-light-primary/10 dark:from-dark-primary/20 dark:to-dark-primary/10 p-3 rounded-lg">
                     <Briefcase className="w-5 h-5 text-light-primary dark:text-dark-primary" />
@@ -78,8 +73,9 @@ const MockInterviewCard = ({ interview }) => {
                         </h3>
                         <span
                             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
-                                ${getLevelClass(interview.experienceLevel)} bg-opacity-10 backdrop-blur-sm`}
-                        >
+                                ${getLevelClass(
+                                    interview.experienceLevel
+                                )} bg-opacity-10 backdrop-blur-sm`}>
                             {interview.experienceLevel || "Mid"} Level
                         </span>
                     </div>
@@ -91,15 +87,17 @@ const MockInterviewCard = ({ interview }) => {
                             <div className="mt-3 flex flex-wrap gap-2">
                                 <div className="inline-flex items-center text-xs bg-gradient-to-r from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 px-2 py-1 rounded-md">
                                     <Code className="w-3 h-3 mr-1 text-light-primary dark:text-dark-primary" />
-                                    {interview.programmingLanguage || "Not specified"}
+                                    {interview.programmingLanguage ||
+                                        "Not specified"}
                                 </div>
                                 <span className="inline-flex items-center text-xs bg-gradient-to-r from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 px-2 py-1 rounded-md">
                                     <Layers className="w-3 h-3 mr-1 text-light-primary dark:text-dark-primary" />
-                                    {interview.technologyStack || "Not specified"}
+                                    {interview.technologyStack ||
+                                        "Not specified"}
                                 </span>
                             </div>
                             <div className="flex items-center mt-3 gap-3">
-                                <div className="flex items-center text-xs text-light-secondary-text/70 dark:text-dark-secondary-text/70">
+                                <div className="flex items-center md:text-xs text-[10px] text-light-secondary-text/70 dark:text-dark-secondary-text/70">
                                     <Clock className="w-3 h-3 mr-1" />
                                     Created{" "}
                                     {interview.createdAt?.seconds
@@ -134,11 +132,13 @@ const MockInterviewCard = ({ interview }) => {
                                 size={25}
                                 className={`text-yellow-500 dark:text-yellow-400 cursor-pointer
                                     transition-all duration-200 group-hover:opacity-100 group-hover:scale-105 ${
-                                        isUpdating ? "opacity-50" : "hover:scale-110"
+                                        isUpdating
+                                            ? "opacity-50"
+                                            : "hover:scale-110"
                                     } ${
-                                        isBookmarked &&
-                                        "fill-yellow-500 dark:fill-yellow-400 opacity-100"
-                                    }`}
+                                    isBookmarked &&
+                                    "fill-yellow-500 dark:fill-yellow-400 opacity-100"
+                                }`}
                             />
                         </div>
                     </div>
