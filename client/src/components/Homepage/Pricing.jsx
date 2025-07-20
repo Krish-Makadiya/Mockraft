@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CheckCircle, Star, Mail } from "lucide-react";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const plans = [
     {
@@ -17,7 +18,7 @@ const plans = [
     },
     {
         name: "Pro",
-        price: { monthly: 20, annual: 16 },
+        price: { monthly: 200, annual: 180 },
         features: [
             "Everything in Starter",
             "AI-powered feedback",
@@ -43,6 +44,15 @@ const cardVariants = {
         },
     }),
 };
+
+const paymentHandler = async(price) => {
+    console.log(`Proceeding to payment for Rs. ${price}`);
+
+    const response = await axios.post("http://localhost:4000/payment/create-order", {
+        amount: price,
+    });
+    console.log("Payment order response:", response.data);
+}
 
 export default function Pricing() {
     const [billing, setBilling] = useState("monthly");
@@ -207,8 +217,8 @@ export default function Pricing() {
                                                 className="flex items-end gap-1 mb-1">
                                                 <span className="text-3xl font-extrabold text-light-primary dark:text-dark-primary">
                                                     {plan.price[billing] === 0
-                                                        ? "$0"
-                                                        : `$${plan.price[billing]}`}
+                                                        ? "Rs. 0"
+                                                        : `Rs. ${plan.price[billing]}`}
                                                 </span>
                                                 <span className="text-sm text-light-secondary-text dark:text-dark-secondary-text mb-0.5">
                                                     /month
@@ -233,6 +243,7 @@ export default function Pricing() {
                                                 whileTap={{
                                                     scale: 0.9,
                                                 }}
+                                                onClick={() => paymentHandler(plan.price[billing])}
                                                 className={`
                         w-full md:w-auto px-5 py-2 rounded-lg text-sm font-semibold transition
                         ${
