@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CheckCircle, Star, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { useRazorpay } from "react-razorpay";
 
 const plans = [
     {
@@ -45,17 +46,45 @@ const cardVariants = {
     }),
 };
 
-const paymentHandler = async(price) => {
-    console.log(`Proceeding to payment for Rs. ${price}`);
-
-    const response = await axios.post("http://localhost:4000/payment/create-order", {
-        amount: price,
-    });
-    console.log("Payment order response:", response.data);
-}
-
 export default function Pricing() {
     const [billing, setBilling] = useState("monthly");
+    const { Razorpay } = useRazorpay();
+
+    const paymentHandler = async (price) => {
+        console.log(`Proceeding to payment for Rs. ${price}`);
+
+        const response = await axios.post(
+            "http://localhost:4000/payment/create-order",
+            {
+                amount: price,
+            }
+        );
+        console.log("Payment order response:", response.data);
+
+        var options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: response.data.amount,
+            currency: "INR",
+            name: "Mockraft",
+            description: "Placement Preparation Platform",
+            image: "/logo-light.png",
+            order_id: response.data.id,
+            callback_url: "http://localhost:4000/payment/capture-payment",
+            prefill: {
+                name: "Gaurav Kumar", 
+                email: "gaurav.kumar@example.com",
+                contact: "+919876543210",
+            },
+            notes: {
+                address: "Razorpay Corporate Office",
+            },
+            theme: {
+                color: "#3399cc",
+            },
+        };
+        const razorpay = new Razorpay(options);
+        razorpay.open();
+    };
 
     return (
         <div className="min-h-screen relative bg-light-bg dark:bg-dark-bg flex flex-col items-center py-12 px-2">
@@ -197,7 +226,13 @@ export default function Pricing() {
                                                     duration: 0.4,
                                                 }}
                                                 className="flex items-center gap-2 mb-2">
-                                                <span className={`text-xs font-semibold ${plan.name.toUpperCase() === "STARTER" ? "bg-gray-100 dark:bg-gray-800 text-light-secondary-text dark:text-dark-secondary-text" : "bg-gradient-to-br dark:from-yellow-500 from-yellow-400 dark:to-yellow-600 to-yellow-500 text-white"}  px-2 py-0.5 rounded`}>
+                                                <span
+                                                    className={`text-xs font-semibold ${
+                                                        plan.name.toUpperCase() ===
+                                                        "STARTER"
+                                                            ? "bg-gray-100 dark:bg-gray-800 text-light-secondary-text dark:text-dark-secondary-text"
+                                                            : "bg-gradient-to-br dark:from-yellow-500 from-yellow-400 dark:to-yellow-600 to-yellow-500 text-white"
+                                                    }  px-2 py-0.5 rounded`}>
                                                     {plan.name.toUpperCase()}
                                                 </span>
                                             </motion.div>
@@ -243,7 +278,11 @@ export default function Pricing() {
                                                 whileTap={{
                                                     scale: 0.9,
                                                 }}
-                                                onClick={() => paymentHandler(plan.price[billing])}
+                                                onClick={() =>
+                                                    paymentHandler(
+                                                        plan.price[billing]
+                                                    )
+                                                }
                                                 className={`
                         w-full md:w-auto px-5 py-2 rounded-lg text-sm font-semibold transition
                         ${

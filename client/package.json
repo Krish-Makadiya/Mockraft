@@ -26,6 +26,7 @@
     "react-dom": "^19.0.0",
     "react-hook-speech-to-text": "^0.8.0",
     "react-hot-toast": "^2.5.2",
+    "react-razorpay": "^3.0.1",
     "react-router-dom": "^7.5.2",
     "react-speech-recognition": "^4.0.1",
     "react-tooltip": "^5.29.1",
