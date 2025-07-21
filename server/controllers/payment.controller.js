@@ -6,15 +6,13 @@ const paymentOrderController = async (req, res) => {
         key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
 
-    console.log("Request body:", req.body);
-
     const options = {
         amount: req.body.amount * 100,
         currency: "INR",
         receipt: "receipt#1",
     };
     
-    console.log("Creating Razorpay order with options:", options);
+    // console.log("Creating Razorpay order with options:", options);
     try {
         const order = await razorpay.orders.create(options);
         console.log("Razorpay order created successfully:", order);

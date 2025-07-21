@@ -3,6 +3,7 @@ import { CheckCircle, Star, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useRazorpay } from "react-razorpay";
+import { useUser } from "@clerk/clerk-react";
 
 const plans = [
     {
@@ -48,6 +49,8 @@ const cardVariants = {
 
 export default function Pricing() {
     const [billing, setBilling] = useState("monthly");
+    const {user} = useUser();
+    console.log("User data:", user.emailAddresses[0].emailAddress);
     const { Razorpay } = useRazorpay();
 
     const paymentHandler = async (price) => {
@@ -57,7 +60,12 @@ export default function Pricing() {
             "http://localhost:4000/payment/create-order",
             {
                 amount: price,
-            }
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            },
         );
         console.log("Payment order response:", response.data);
 
@@ -67,14 +75,18 @@ export default function Pricing() {
             currency: "INR",
             name: "Mockraft",
             description: "Placement Preparation Platform",
-            image: "/logo-light.png",
+            image: "/logo-dark-bnw.png",
             order_id: response.data.id,
-            callback_url: "http://localhost:4000/payment/capture-payment",
-            prefill: {
-                name: "Gaurav Kumar", 
-                email: "gaurav.kumar@example.com",
-                contact: "+919876543210",
+            handler: function (response) {
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature);
             },
+            // prefill: {
+            //     name: user.fullName || user.firstName,
+            //     email: user.emailAddresses[0].emailAddress,
+            //     contact: "",
+            // },
             notes: {
                 address: "Razorpay Corporate Office",
             },
