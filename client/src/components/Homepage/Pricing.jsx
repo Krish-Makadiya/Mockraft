@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { useRazorpay } from "react-razorpay";
 import { useUser } from "@clerk/clerk-react";
+import { db } from "../../config/firebase"; // adjust path as needed
+import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 const plans = [
     {
@@ -49,25 +51,84 @@ const cardVariants = {
 
 export default function Pricing() {
     const [billing, setBilling] = useState("monthly");
-    const {user} = useUser();
-    console.log("User data:", user.emailAddresses[0].emailAddress);
+    const { user } = useUser();
     const { Razorpay } = useRazorpay();
 
-    const paymentHandler = async (price) => {
-        console.log(`Proceeding to payment for Rs. ${price}`);
-
-        const response = await axios.post(
-            "http://localhost:4000/payment/create-order",
+    const paymentSignatureValidation = async (
+        response,
+        orderId,
+        amount,
+        createdAt
+    ) => {
+        const isValid = await axios.post(
+            "http://localhost:4000/payment/verify-signature",
             {
-                amount: price,
+                order_id: orderId,
+                payment_id: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
             },
             {
                 headers: {
                     "Content-Type": "application/json",
                 },
-            },
+            }
+        );
+        console.log("Payment signature validation response:", isValid.data);
+
+        // Update payment status in Firebase
+        const userRef = doc(db, "users", user.id);
+
+        // Remove the pending payment and add the updated one
+        const oldPayment = {
+            orderId: orderId,
+            amount: amount,
+            status: "pending",
+            createdAt: createdAt,
+        };
+        const newPayment = {
+            orderId: orderId,
+            amount: amount,
+            status: isValid.data.success ? "success" : "failed",
+            createdAt: createdAt,
+            updatedAt: new Date().toISOString(),
+        };
+        await updateDoc(userRef, {
+            payments: arrayRemove(oldPayment),
+        });
+        await updateDoc(userRef, {
+            payments: arrayUnion(newPayment),
+        });
+
+        if (isValid.data.success) {
+            await updateDoc(userRef, {
+                plan: "paid",
+            });
+            alert("Payment verified successfully!");
+        } else {
+            alert("Payment verification failed. Please try again.");
+        }
+        return isValid.data;
+    };
+
+    const paymentHandler = async (price) => {
+        const response = await axios.post(
+            "http://localhost:4000/payment/create-order",
+            { amount: price },
+            { headers: { "Content-Type": "application/json" } }
         );
         console.log("Payment order response:", response.data);
+
+        // Add pending payment to Firebase
+        const paymentData = {
+            orderId: response.data.id,
+            amount: response.data.amount,
+            status: "pending",
+            createdAt: new Date().toISOString(),
+        };
+        const userRef = doc(db, "users", user.id);
+        await updateDoc(userRef, {
+            payments: arrayUnion(paymentData),
+        });
 
         var options = {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -77,18 +138,46 @@ export default function Pricing() {
             description: "Placement Preparation Platform",
             image: "/logo-dark-bnw.png",
             order_id: response.data.id,
-            handler: function (response) {
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature);
+            handler: (res) =>
+                paymentSignatureValidation(
+                    res,
+                    response.data.id,
+                    response.data.amount,
+                    paymentData.createdAt // pass createdAt
+                ),
+            prefill: {
+                name: user.fullName || user.firstName,
+                email: user.emailAddresses[0].emailAddress,
+                contact: "",
             },
-            // prefill: {
-            //     name: user.fullName || user.firstName,
-            //     email: user.emailAddresses[0].emailAddress,
-            //     contact: "",
-            // },
             notes: {
                 address: "Razorpay Corporate Office",
+            },
+            modal: {
+                ondismiss: async function () {
+                    // Find the pending payment to remove
+                    const pendingPayment = {
+                        orderId: response.data.id,
+                        amount: response.data.amount,
+                        status: "pending",
+                        createdAt: paymentData.createdAt, // Use the same createdAt as when you added it
+                    };
+                    const failedPayment = {
+                        orderId: response.data.id,
+                        amount: response.data.amount,
+                        status: "failed",
+                        createdAt: paymentData.createdAt,
+                        updatedAt: new Date().toISOString(),
+                    };
+                    // Remove pending, then add failed
+                    await updateDoc(userRef, {
+                        payments: arrayRemove(pendingPayment),
+                    });
+                    await updateDoc(userRef, {
+                        payments: arrayUnion(failedPayment),
+                    });
+                    alert("Payment was cancelled or failed.");
+                },
             },
             theme: {
                 color: "#3399cc",
