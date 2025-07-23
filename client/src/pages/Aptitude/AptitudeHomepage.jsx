@@ -9,6 +9,7 @@ import {
     updateDoc,
     increment,
     serverTimestamp,
+    getDoc,
 } from "firebase/firestore";
 import {
     Check,
@@ -84,6 +85,7 @@ const AptitudeAllQuestionHomepage = ({
         subtype: "",
         tier: "",
     });
+    const [userTier, setUserTier] = useState(false);
 
     // Extract unique subtypes from questions
     const subtypes = Array.from(new Set(questions.map((q) => q.subtype)));
@@ -120,6 +122,25 @@ const AptitudeAllQuestionHomepage = ({
                 setQuestions(arr);
                 setLoading(false);
             });
+
+        // Fetch user plan
+        if (user && user.id) {
+            const userRef = doc(db, "users", user.id);
+            const fetchUserPlan = async () => {
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    console.log("User data:", userData.plan);
+                    // setUserTier(userData.plan || "free");
+                    if (userData.plan === "paid") {
+                        setUserTier(true);
+                    }
+                } else {
+                    console.log("No such document!");
+                }
+            };
+            fetchUserPlan();
+        }
     }, []);
 
     useEffect(() => {
@@ -231,7 +252,9 @@ const AptitudeAllQuestionHomepage = ({
             </motion.div>
 
             <div className="flex flex-col gap-4">
-                <motion.div variants={childVariants} className="flex justify-end">
+                <motion.div
+                    variants={childVariants}
+                    className="flex justify-end">
                     <Popover className="relative">
                         {({ open, close }) => (
                             <>
@@ -377,7 +400,9 @@ const AptitudeAllQuestionHomepage = ({
                 </motion.div>
                 <div className="flex flex-col gap-4">
                     {currentQuestions.length === 0 ? (
-                        <motion.div variants={childVariants} className="w-full flex flex-col items-center justify-center py-20 text-center">
+                        <motion.div
+                            variants={childVariants}
+                            className="w-full flex flex-col items-center justify-center py-20 text-center">
                             <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-8">
                                 <ListFilter className="h-12 w-12 mx-auto text-neutral-400 mb-3" />
                                 <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text mb-2">
@@ -396,20 +421,21 @@ const AptitudeAllQuestionHomepage = ({
                                 answered && answers[q.id] === q.ans;
                             const alreadySolved =
                                 solvedQuestions[q.id]?.correct;
-                            const isPaid = q.tier === "paid";
+                            const userPlan = q.tier === "paid";
                             return (
                                 <motion.div
-                                    key={q.id} variants={childVariants}
+                                    key={q.id}
+                                    variants={childVariants}
                                     className={`relative rounded-xl p-4 w-[100%] mx-auto bg-light-surface dark:bg-dark-bg md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
                                         isCorrect || alreadySolved,
                                         answered || alreadySolved
                                     )} ${
-                                        isPaid
+                                        userPlan && !userTier
                                             ? "opacity-60 pointer-events-none"
                                             : ""
                                     }`}>
                                     {/* Premium overlay for paid questions */}
-                                    {isPaid && (
+                                    {(userPlan && !userTier) && (
                                         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gradient-to-b from-yellow-100 to-yellow-300 dark:from-yellow-800 dark:to-yellow-600 rounded-xl">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Lock className="text-yellow-600 dark:text-yellow-200 h-6 w-6" />
@@ -471,7 +497,7 @@ const AptitudeAllQuestionHomepage = ({
                                                     : "border-gray-200 dark:border-gray-700 hover:border-light-primary dark:hover:border-dark-primary"
                                             }
                                             ${
-                                                isPaid
+                                                userPlan && !userTier
                                                     ? "opacity-60 pointer-events-none"
                                                     : ""
                                             }
@@ -483,7 +509,7 @@ const AptitudeAllQuestionHomepage = ({
                                                     disabled={
                                                         answered ||
                                                         alreadySolved ||
-                                                        isPaid
+                                                        userPlan && !userTier
                                                     }
                                                     checked={
                                                         alreadySolved
@@ -505,7 +531,7 @@ const AptitudeAllQuestionHomepage = ({
                                             </label>
                                         ))}
                                     </div>
-                                    {(answered || alreadySolved) && !isPaid && (
+                                    {(answered || alreadySolved) && !userPlan && !userTier && (
                                         <div className="mt-2">
                                             <button
                                                 className="text-xs underline text-light-primary dark:text-dark-primary focus:outline-none"

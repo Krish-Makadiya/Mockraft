@@ -10,10 +10,11 @@ import {
     Award,
     Trophy,
     CheckCircle,
+    Crown,
 } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { redirect, useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/main/Loader";
 import Drawer from "../../components/MockInterview/Drawer";
 import { db } from "../../config/firebase";
@@ -35,6 +36,7 @@ const GetAllQuestionInfo = () => {
     });
     const [isInfoOpen, setIsInfoOpen] = useState(true);
     const { questions, expandedQuestions, isLoading } = analysisState;
+    const [userPlan, setUserPlan] = useState("free");
 
     const { theme, setTheme } = useTheme();
     const { showAlert, AlertComponent } = useAlert();
@@ -42,10 +44,11 @@ const GetAllQuestionInfo = () => {
     const navigate = useNavigate();
 
     const { user_id, id } = useParams();
-    const {user} = useUser();
+    const { user } = useUser();
 
     useEffect(() => {
         fetchMockInterviewDetails();
+        getUserPlan();
     }, []);
 
     const fetchMockInterviewDetails = async () => {
@@ -80,6 +83,26 @@ const GetAllQuestionInfo = () => {
             console.error("Error fetching interview:", error);
             toast.error("Failed to fetch interview details");
             setAnalysisState((prev) => ({ ...prev, isLoading: false, error }));
+        }
+    };
+
+    const getUserPlan = async () => {
+        try {
+            if (user && user.id) {
+                console.log("Fetching user plan for:", user.id);
+                const userRef = doc(db, "users", user.id);
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    console.log("User data:", userData.plan);
+                    setUserPlan(userData.plan || "free");
+                } else {
+                    console.log("No such document!");
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user plan:", error);
+            toast.error("Failed to fetch user plan");
         }
     };
 
@@ -353,7 +376,7 @@ const GetAllQuestionInfo = () => {
                                             <h4 className="md:text-sm text-xs font-medium text-light-secondary-text dark:text-dark-secondary-text mb-2">
                                                 Your Answer
                                             </h4>
-                                            <p className="text-light-primary-text dark:text-dark-primary-text/80 text-sm">
+                                            <div className="text-light-primary-text dark:text-dark-primary-text/80 text-sm">
                                                 {question.answer ? (
                                                     question.answer
                                                 ) : (
@@ -361,7 +384,7 @@ const GetAllQuestionInfo = () => {
                                                         No answer provided
                                                     </p>
                                                 )}
-                                            </p>
+                                            </div>
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4 gap-2">
@@ -405,13 +428,27 @@ const GetAllQuestionInfo = () => {
                                                     </svg>
                                                     Areas for Improvement
                                                 </h4>
-                                                <p className="text-amber-600 dark:text-amber-200/80 text-sm">
-                                                    {
+                                                <div
+                                                    className={`text-amber-600 dark:text-amber-200/80 text-sm `}>
+                                                    {userPlan === "paid" ? (
                                                         question.analysis
                                                             .feedback
                                                             .improvements
-                                                    }
-                                                </p>
+                                                    ) : (
+                                                        <div
+                                                            onClick={() =>
+                                                                navigate(
+                                                                    "/pricing"
+                                                                )
+                                                            }
+                                                            className="text-white cursor-pointer flex gap-2 justify-center items-center py-12 rounded-md bg-amber-300 dark:bg-amber-900">
+                                                            <Crown />
+                                                            <p className="font-semibold">
+                                                                Upgrade to view Feedback
+                                                            </p>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
 
                                             <div className="bg-blue-100 dark:bg-blue-900/20 rounded-lg p-3 md:p-4">
@@ -460,11 +497,24 @@ const GetAllQuestionInfo = () => {
                                                     Suggestions for Improvement
                                                 </h4>
                                                 <p className="text-purple-600 dark:text-purple-200/80 text-sm">
-                                                    {
+                                                    {userPlan === "paid" ? (
                                                         question.analysis
                                                             .feedback
                                                             .suggestions
-                                                    }
+                                                    ) : (
+                                                        <div
+                                                            onClick={() =>
+                                                                navigate(
+                                                                    "/pricing"
+                                                                )
+                                                            }
+                                                            className="text-white cursor-pointer flex gap-2 justify-center items-center py-5 rounded-md bg-purple-400 dark:bg-purple-900">
+                                                            <Crown />
+                                                            <p className="font-semibold">
+                                                                Upgrade to view Feedback
+                                                            </p>
+                                                        </div>
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>

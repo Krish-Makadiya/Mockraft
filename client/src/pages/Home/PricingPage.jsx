@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Crown } from "lucide-react";
 import Navbar from "../../components/main/Navbar";
 import { useTheme } from "../../context/ThemeProvider";
 import { useUser } from "@clerk/clerk-react";
@@ -131,9 +131,9 @@ const PricingPage = () => {
                                 </div>
 
                                 {userPlan === "paid" ? (
-                                    <button
-                                        className="w-full px-4 py-2 bg-light-primary hover:bg-light-primary-hover text-white rounded-lg transition-colors">
-                                        Already Subscribed
+                                    <button className="w-full px-4 py-2 bg-yellow-400 dark:bg-yellow-500    cursor-not-allowed text-white rounded-lg transition-colors flex items-center gap-2 justify-center">
+                                        <p>Subscribed</p>
+                                        <Crown />
                                     </button>
                                 ) : (
                                     <button
