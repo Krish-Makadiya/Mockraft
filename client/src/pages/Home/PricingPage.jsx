@@ -1,10 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Check, ArrowRight } from "lucide-react";
 import Navbar from "../../components/main/Navbar";
 import { useTheme } from "../../context/ThemeProvider";
+import { useUser } from "@clerk/clerk-react";
+import { paymentHandler } from "../../config/PaymentHandlers";
+import { doc, getDoc } from "@firebase/firestore";
+import { db } from "../../config/firebase";
+import { useRazorpay } from "react-razorpay";
+
+const plan = [
+    {
+        name: "Professional",
+        features: [
+            "All Basic Services",
+            "Unlimited Requests",
+            "Unlimited Revisions",
+            "Cancel Anytime",
+            "A-Sync Collaboration",
+        ],
+        price: 200,
+        validity: "Month",
+        highlight: "false",
+    },
+    {
+        name: "Unlimited",
+        features: [
+            "All Basic Services",
+            "Unlimited Requests",
+            "Unlimited Revisions",
+            "Cancel Anytime",
+            "A-Sync Collaboration",
+        ],
+        price: 1920,
+        validity: "Year",
+        highlight: "true",
+    },
+];
 
 const PricingPage = () => {
     const { theme } = useTheme(); // optional if root sets dark class
+    const [userPlan, setUserPlan] = useState("free");
+    const { user } = useUser();
+    const { Razorpay } = useRazorpay();
+
+    useEffect(() => {
+        try {
+            if (user && user.id) {
+                const userRef = doc(db, "users", user.id);
+                const fetchUserPlan = async () => {
+                    const docSnap = await getDoc(userRef);
+                    if (docSnap.exists()) {
+                        console.log("User data:", docSnap.data());
+                        const userData = docSnap.data();
+                        setUserPlan(userData.plan || "free");
+                    } else {
+                        console.log("No such document!");
+                    }
+                };
+                fetchUserPlan();
+            }
+        } catch (error) {
+            console.error("Error fetching user plan:", error);
+        }
+    }, [user]);
+
+    const paymentClickHandler = async (amount) => {
+        console.log("Payment response:");
+        const response = await paymentHandler(amount, user, setUserPlan);
+        console.log("Payment response:", response);
+    };
 
     return (
         <>
@@ -30,114 +94,58 @@ const PricingPage = () => {
                     </div>
 
                     {/* Pricing Cards */}
-                    <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                        {/* Professional Plan */}
-                        <div className="rounded-2xl p-8 border bg-light-surface border-neutral-200 dark:bg-dark-bg dark:border-neutral-700 transition-all duration-300">
-                            <h2 className="text-2xl font-bold mb-8 text-light-primary-text dark:text-dark-primary-text">
-                                Professional
-                            </h2>
-
-                            <div className="space-y-4 mb-8">
-                                {[
-                                    "All Basic Services",
-                                    "Unlimited Requests",
-                                    "Unlimited Revisions",
-                                    "Cancel Anytime",
-                                    "A-Sync Collaboration",
-                                ].map((item) => (
-                                    <div
-                                        className="flex items-center gap-3"
-                                        key={item}>
-                                        <Check className="w-5 h-5 text-green-500 dark:text-green-400" />
-                                        <span className="text-slate-600 dark:text-neutral-300">
-                                            {item}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="mb-8">
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-3xl font-bold text-slate-800 dark:text-neutral-100">
-                                        3.990€
-                                    </span>
-                                    <span className="text-lg text-slate-600 dark:text-neutral-400">
-                                        / month
-                                    </span>
+                    <div className="grid w-4/5 mx-auto md:grid-cols-2 gap-8">
+                        {plan.map((item, index) => (
+                            <div
+                                key={index}
+                                className={`p-6 rounded-lg shadow-lg transition-transform transform hover:scale-101 ${
+                                    item.highlight === "true"
+                                        ? "bg-gradient-to-br from-yellow-100 via-yellow-50 to-white dark:from-yellow-900/40 dark:via-yellow-900/10 dark:to-gray-900 border-2 border-yellow-300 dark:border-yellow-800"
+                                        : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                                }`}>
+                                <div className="flex items-center justify-between mb-4">
+                                    <h2 className="text-2xl font-semibold mb-4 text-light-primary-text dark:text-dark-primary-text">
+                                        {item.name}
+                                    </h2>
+                                    <p className="text-xs text-white px-3 py-1 rounded-xl mb-4 bg-dark-primary">
+                                        {item.highlight === "true"
+                                            ? "Most Popular"
+                                            : "Best for small teams"}
+                                    </p>
                                 </div>
-                            </div>
-
-                            <button className="w-full py-3 px-6 rounded-lg font-medium transition-colors bg-slate-900 hover:bg-slate-800 text-white dark:bg-neutral-700 dark:hover:bg-neutral-600">
-                                Start now
-                            </button>
-                        </div>
-
-                        {/* Unlimited Plan */}
-                        <div className="relative rounded-2xl p-8 border-2 bg-slate-900 border-blue-600 dark:bg-neutral-800 dark:border-indigo-500 transition-all duration-300">
-                            {/* Popular Badge */}
-                            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                                <span className="px-4 py-2 rounded-full text-sm font-medium bg-blue-600 dark:bg-indigo-500 text-white">
-                                    MOST POPULAR
-                                </span>
-                            </div>
-
-                            <h2 className="text-2xl font-bold mb-8 text-white">
-                                Unlimited
-                            </h2>
-
-                            <div className="grid grid-cols-2 gap-4 mb-8">
-                                <div className="space-y-4">
-                                    {[
-                                        "All Basic Services",
-                                        "All Advanced Services",
-                                        "Cancel anytime",
-                                        "Art Direction",
-                                        "Concept and Ideation",
-                                    ].map((item) => (
-                                        <div
-                                            className="flex items-center gap-3"
-                                            key={item}>
-                                            <Check className="w-5 h-5 text-green-400" />
-                                            <span className="text-neutral-300 text-sm">
-                                                {item}
-                                            </span>
-                                        </div>
+                                <ul className="mb-6">
+                                    {item.features.map((feature, idx) => (
+                                        <li
+                                            key={idx}
+                                            className="flex items-center gap-2 mb-2 text-light-secondary-text dark:text-dark-secondary-text">
+                                            <Check className="w-4 h-4 text-green-500" />
+                                            {feature}
+                                        </li>
                                     ))}
-                                </div>
-                                <div className="space-y-4">
-                                    {[
-                                        "Unlimited Requests",
-                                        "Unlimited Revisions",
-                                        "A-Sync Collaboration",
-                                        "Weekly Updates",
-                                    ].map((item) => (
-                                        <div
-                                            className="flex items-center gap-3"
-                                            key={item}>
-                                            <Check className="w-5 h-5 text-green-400" />
-                                            <span className="text-neutral-300 text-sm">
-                                                {item}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="mb-8">
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-3xl font-bold text-white">
-                                        5.990€
-                                    </span>
-                                    <span className="text-lg text-neutral-400">
-                                        / month
+                                </ul>
+                                <div className="text-4xl font-bold mb-4">
+                                    Rs.{item.price}{" "}
+                                    <span className="text-lg text-gray-400 font-normal">
+                                        /{item.validity}
                                     </span>
                                 </div>
-                            </div>
 
-                            <button className="w-full py-3 px-6 rounded-lg font-medium transition-colors bg-lime-400 hover:bg-lime-500 text-black dark:bg-lime-500 dark:hover:bg-lime-400">
-                                Start now
-                            </button>
-                        </div>
+                                {userPlan === "paid" ? (
+                                    <button
+                                        className="w-full px-4 py-2 bg-light-primary hover:bg-light-primary-hover text-white rounded-lg transition-colors">
+                                        Already Subscribed
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() =>
+                                            paymentClickHandler(item.price)
+                                        }
+                                        className="w-full px-4 py-2 bg-light-primary hover:bg-light-primary-hover text-white rounded-lg transition-colors">
+                                        Upgrade Plan
+                                    </button>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

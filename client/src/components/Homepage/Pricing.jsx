@@ -1,11 +1,22 @@
-import React, { useState } from "react";
-import { CheckCircle, Star, Mail } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { CheckCircle, Star, Mail, Crown } from "lucide-react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useRazorpay } from "react-razorpay";
 import { useUser } from "@clerk/clerk-react";
 import { db } from "../../config/firebase"; // adjust path as needed
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import {
+    doc,
+    updateDoc,
+    arrayUnion,
+    arrayRemove,
+    getDoc,
+} from "firebase/firestore";
+import toast from "react-hot-toast";
+import {
+    paymentHandler,
+    paymentSignatureValidation,
+} from "../../config/PaymentHandlers"; // Adjust the import path as needed
 
 const plans = [
     {
@@ -51,140 +62,34 @@ const cardVariants = {
 
 export default function Pricing() {
     const [billing, setBilling] = useState("monthly");
+    const [userPlan, setUserPlan] = useState("free");
     const { user } = useUser();
     const { Razorpay } = useRazorpay();
 
-    const paymentSignatureValidation = async (
-        response,
-        orderId,
-        amount,
-        createdAt
-    ) => {
-        const isValid = await axios.post(
-            "http://localhost:4000/payment/verify-signature",
-            {
-                order_id: orderId,
-                payment_id: response.razorpay_payment_id,
-                signature: response.razorpay_signature,
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
+    useEffect(() => {
+        try {
+            if (user && user.id) {
+                const userRef = doc(db, "users", user.id);
+                // Fetch user plan from Firestore
+                const fetchUserPlan = async () => {
+                    const docSnap = await getDoc(userRef);
+                    if (docSnap.exists()) {
+                        console.log("User data:", docSnap.data());
+                        const userData = docSnap.data();
+                        setUserPlan(userData.plan || "free");
+                    } else {
+                        console.log("No such document!");
+                    }
+                };
+                fetchUserPlan();
             }
-        );
-        console.log("Payment signature validation response:", isValid.data);
-
-        // Update payment status in Firebase
-        const userRef = doc(db, "users", user.id);
-
-        // Remove the pending payment and add the updated one
-        const oldPayment = {
-            orderId: orderId,
-            amount: amount,
-            status: "pending",
-            createdAt: createdAt,
-        };
-        const newPayment = {
-            orderId: orderId,
-            amount: amount,
-            status: isValid.data.success ? "success" : "failed",
-            createdAt: createdAt,
-            updatedAt: new Date().toISOString(),
-        };
-        await updateDoc(userRef, {
-            payments: arrayRemove(oldPayment),
-        });
-        await updateDoc(userRef, {
-            payments: arrayUnion(newPayment),
-        });
-
-        if (isValid.data.success) {
-            await updateDoc(userRef, {
-                plan: "paid",
-            });
-            alert("Payment verified successfully!");
-        } else {
-            alert("Payment verification failed. Please try again.");
+        } catch (error) {
+            console.error("Error fetching user plan:", error);
         }
-        return isValid.data;
-    };
+    }, [user]);
 
-    const paymentHandler = async (price) => {
-        const response = await axios.post(
-            "http://localhost:4000/payment/create-order",
-            { amount: price },
-            { headers: { "Content-Type": "application/json" } }
-        );
-        console.log("Payment order response:", response.data);
-
-        // Add pending payment to Firebase
-        const paymentData = {
-            orderId: response.data.id,
-            amount: response.data.amount,
-            status: "pending",
-            createdAt: new Date().toISOString(),
-        };
-        const userRef = doc(db, "users", user.id);
-        await updateDoc(userRef, {
-            payments: arrayUnion(paymentData),
-        });
-
-        var options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-            amount: response.data.amount,
-            currency: "INR",
-            name: "Mockraft",
-            description: "Placement Preparation Platform",
-            image: "/logo-dark-bnw.png",
-            order_id: response.data.id,
-            handler: (res) =>
-                paymentSignatureValidation(
-                    res,
-                    response.data.id,
-                    response.data.amount,
-                    paymentData.createdAt // pass createdAt
-                ),
-            prefill: {
-                name: user.fullName || user.firstName,
-                email: user.emailAddresses[0].emailAddress,
-                contact: "",
-            },
-            notes: {
-                address: "Razorpay Corporate Office",
-            },
-            modal: {
-                ondismiss: async function () {
-                    // Find the pending payment to remove
-                    const pendingPayment = {
-                        orderId: response.data.id,
-                        amount: response.data.amount,
-                        status: "pending",
-                        createdAt: paymentData.createdAt, // Use the same createdAt as when you added it
-                    };
-                    const failedPayment = {
-                        orderId: response.data.id,
-                        amount: response.data.amount,
-                        status: "failed",
-                        createdAt: paymentData.createdAt,
-                        updatedAt: new Date().toISOString(),
-                    };
-                    // Remove pending, then add failed
-                    await updateDoc(userRef, {
-                        payments: arrayRemove(pendingPayment),
-                    });
-                    await updateDoc(userRef, {
-                        payments: arrayUnion(failedPayment),
-                    });
-                    alert("Payment was cancelled or failed.");
-                },
-            },
-            theme: {
-                color: "#3399cc",
-            },
-        };
-        const razorpay = new Razorpay(options);
-        razorpay.open();
+    const paymentClickHandler = async (amount) => {
+        await paymentHandler(amount, user, setUserPlan);
     };
 
     return (
@@ -379,20 +284,41 @@ export default function Pricing() {
                                                 whileTap={{
                                                     scale: 0.9,
                                                 }}
-                                                onClick={() =>
-                                                    paymentHandler(
+                                                onClick={() => {
+                                                    if (
+                                                        userPlan === "paid" &&
+                                                        plan.cta === "Buy Now"
+                                                    ) {
+                                                        toast.success(
+                                                            "Already subscribed to this plan."
+                                                        );
+                                                        return;
+                                                    }
+                                                    paymentClickHandler(
                                                         plan.price[billing]
-                                                    )
-                                                }
+                                                    );
+                                                }}
                                                 className={`
                         w-full md:w-auto px-5 py-2 rounded-lg text-sm font-semibold transition
                         ${
                             plan.highlight
-                                ? "bg-light-primary text-white hover:bg-light-primary-hover dark:bg-dark-primary dark:hover:bg-dark-primary-hover"
-                                : "bg-gray-100 text-light-primary-text hover:bg-gray-200 dark:bg-gray-800 dark:text-dark-primary-text dark:hover:bg-gray-700"
+                                ? ` text-white  ${
+                                      userPlan === "paid"
+                                          ? "bg-yellow-400 dark:bg-yellow-500"
+                                          : "dark:bg-dark-primary bg-light-primary hover:bg-light-primary-hover  dark:hover:bg-dark-primary-hover"
+                                  }`
+                                : `bg-gray-100 text-light-primary-text hover:bg-gray-200 dark:bg-gray-800 dark:text-dark-primary-text dark:hover:bg-gray-700`
                         }
                       `}>
-                                                {plan.cta}
+                                                {userPlan === "paid" &&
+                                                plan.cta === "Buy Now" ? (
+                                                    <span className="flex gap-2 items-center">
+                                                        <p>Subscribed</p>
+                                                        <Crown />
+                                                    </span>
+                                                ) : (
+                                                    plan.cta
+                                                )}
                                             </motion.button>
                                         </motion.div>
                                     </div>

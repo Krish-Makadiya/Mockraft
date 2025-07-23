@@ -1,18 +1,25 @@
-import React from "react";
+import React, { use } from "react";
 import { Crown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 /**
  * PremiumHighlightCard
  * - All content is static except for the button label, which can be customized via prop.
  * - If you want to customize the features, pass an array as the `features` prop.
  */
-export default function PremiumHighlightCard({ buttonLabel = "Upgrade Now", onUpgrade }) {
+export default function PremiumHighlightCard({ buttonLabel = "Upgrade Now" }) {
+    const redirect = useNavigate();
+
     // Static features list
     const features = [
         "Unlimited mock interviews & AI feedback",
         "Priority support & early feature access",
         "Exclusive resources and community",
     ];
+
+    const onUpgrade = () => {
+        redirect("/pricing");
+    }
 
     return (
         <div className="md:w-[49%] w-full bg-gradient-to-br from-yellow-100 via-yellow-50 to-white dark:from-yellow-900/40 dark:via-yellow-900/10 dark:to-gray-900 border-2 border-yellow-300 dark:border-yellow-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">

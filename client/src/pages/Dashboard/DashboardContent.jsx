@@ -231,7 +231,7 @@ const DashboardContent = () => {
                 <motion.div
                     className="flex md:flex-row flex-col md:gap-[2%] gap-4"
                     variants={fadeUp}>
-                    <PremiumHighlightCard />
+                    <PremiumHighlightCard buttonLabel="Upgrade to Premium" />
                     <SupportContactCard />
                 </motion.div>
             </motion.div>
