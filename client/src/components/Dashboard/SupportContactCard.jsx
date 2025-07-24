@@ -8,11 +8,11 @@ import { MailCheck } from "lucide-react";
  */
 export default function SupportContactCard() {
     return (
-        <div className="md:w-[49%] w-full bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-900/40 dark:via-blue-900/10 dark:to-gray-900 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+        <div className="md:w-[49%] w-full bg-gradient-to-br from-light-primary/10 via-white to-light-primary/30 dark:from-dark-primary/20 dark:via-dark-primary/10 dark:to-dark-primary/30 rounded-xl p-6 shadow-xl flex flex-col justify-between">
             <div>
                 <div className="flex items-center gap-3 mb-2">
-                    <MailCheck className="w-8 h-8 text-blue-500" />
-                    <span className="text-xl font-bold text-blue-800 dark:text-blue-200">
+                    <MailCheck className="w-8 h-8 text-light-primary dark:text-dark-primary" />
+                    <span className="text-xl font-bold text-light-primary dark:text-dark-primary">
                         Need Help? Contact Us!
                     </span>
                 </div>
@@ -23,26 +23,26 @@ export default function SupportContactCard() {
                     <span>
                         <span className="font-semibold">Email:</span>{" "}
                         <a
-                            href="mailto:support@Mockraft.com"
-                            className="text-blue-600 hover:underline"
+                            href="mailto:mockraft.official@gmail.com"
+                            className="text-light-primary dark:text-dark-primary font-semibold hover:underline"
                         >
-                            support@Mockraft.com
+                            mockraft.official@gmail.com
                         </a>
                     </span>
                     <span>
                         <span className="font-semibold">Phone:</span>{" "}
                         <a
                             href="tel:+1234567890"
-                            className="text-blue-600 hover:underline"
+                            className="text-light-primary dark:text-dark-primary font-semibold hover:underline"
                         >
-                            +1 234 567 890
+                            +91 12345 67890
                         </a>
                     </span>
                     <span>
                         <span className="font-semibold">Live Chat:</span>{" "}
                         <a
                             href="/support"
-                            className="text-blue-600 hover:underline"
+                            className="text-light-primary dark:text-dark-primary font-semibold hover:underline"
                         >
                             Start Chat
                         </a>

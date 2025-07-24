@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { User, BrainCircuit, Star, ChartPie, Users, MoveRight } from "lucide-react";
+import { User, BrainCircuit, Star, ChartPie, Users, MoveRight, ArrowRight } from "lucide-react";
+import toast from "react-hot-toast";
 
 const howItWorksSteps = [
     {
@@ -71,11 +72,10 @@ export default function HowItWorksSection() {
                     us:
                 </p>
                 {/* Timeline */}
-                <div className="relative flex flex-col md:flex-row items-center md:items-start justify-between gap-8 md:gap-10 px-2">
+                <div className="relative flex flex-col md:flex-row items-center md:items-start justify-between md:gap-10 px-2">
                     {/* Line */}
                     <div
-                        className="hidden md:block absolute left-0 right-0 top-10 h-[6px] rounded-full bg-light-secondary-text/20 dark:bg-dark-secondary-text/20 opacity-60 z-0"
-                        style={{ top: 60 }}
+                        className="hidden md:block absolute left-0 right-0 top-15 h-[6px] rounded-full bg-light-secondary-text/20 dark:bg-dark-secondary-text/20 opacity-60 z-0"
                     />
                     {howItWorksSteps.map((step, idx) => (
                         <motion.div
@@ -128,11 +128,14 @@ export default function HowItWorksSection() {
                             scale: 0.95,
                         }}
                         className="flex items-center gap-2 px-4 py-3 rounded-full bg-light-secondary dark:bg-dark-secondary shadow"
+                        onClick={()=>{
+                            toast.success("More features coming soon!");
+                        }}
                     >
                         <span className="font-semibold text-white text-sm">
                             More features & updates coming soon!
                         </span>
-                        <MoveRight className="w-6 h-6 text-white" />
+                        <ArrowRight className="w-6 h-6 text-white" />
                     </motion.div>
                 </div>
             </div>

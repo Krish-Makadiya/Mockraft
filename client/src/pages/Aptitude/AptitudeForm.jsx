@@ -331,7 +331,7 @@ const AptitudeForm = ({ IsCreateModalOpen, setIsCreateModalOpen }) => {
             <div className="flex items-center md:gap-5 gap-2 md:ml-0 ml-12">
                 <CircleArrowLeft
                     onClick={cancleHandler}
-                    className="size-8 text-light-fail md:block hidden dark:text-dark-fail hover:text-light-fail-hover dark:hover:text-dark-fail-hover"
+                    className="size-8 text-light-fail dark:text-dark-fail hover:text-light-fail-hover dark:hover:text-dark-fail-hover"
                 />
                 <div>
                     <h2 className="md:text-3xl text-xl font-semibold">

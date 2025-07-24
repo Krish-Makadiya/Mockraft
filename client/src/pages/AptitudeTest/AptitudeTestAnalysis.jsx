@@ -159,7 +159,7 @@ const AptitudeTestAnalysis = () => {
                 </div>
 
                 {/* Questions List */}
-                <div className="flex max-w-4xl mx-auto flex-col gap-4 mt-8">
+                <div className="flex max-w-4xl mx-auto flex-col gap-4 py-8">
                     {/* <p>Answers</p> */}
                     {test.map((q, idx) => {
                         const isCorrect = q.userAnswer === q.ans;
@@ -168,7 +168,7 @@ const AptitudeTestAnalysis = () => {
                                 key={q.id || idx}
                                 className={`p-4 rounded-lg border shadow-sm bg-white dark:bg-dark-bg border-light-surface dark:border-dark-surface`}>
                                 <div className="mb-3 flex items-center justify-between gap-2">
-                                    <div className="flex items-center w-[80%] gap-2">
+                                    <div className="flex items-center md:w-[80%] w-full gap-2">
                                         <span
                                             className={`text-xs self-baseline font-semibold text-white p-2 rounded-md flex items-center gap-2 ${
                                                 isCorrect
@@ -181,7 +181,7 @@ const AptitudeTestAnalysis = () => {
                                             {q.ques}
                                         </span>
                                     </div>
-                                    <span className="text-[12px] bg-light-bg dark:bg-dark-surface/60 self-baseline rounded-sm px-2 py-1">
+                                    <span className="text-[12px] md:block hidden bg-light-bg dark:bg-dark-surface/60 self-baseline rounded-sm px-2 py-1">
                                         {q.type}
                                     </span>
                                 </div>

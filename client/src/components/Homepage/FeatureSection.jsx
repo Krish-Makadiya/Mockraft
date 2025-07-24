@@ -40,7 +40,7 @@ const featureItemVariants = {
 
 export default function FeatureSection() {
     return (
-        <section
+        <section id="features"
             className="
                 relative py-20 px-4 md:px-0 flex justify-center items-center
                 bg-gradient-to-b from-[#ffffff] via-[#ffffff] to-[#f4f4f9] dark:from-[#262626] dark:via-[#181818] dark:to-[#181818]
@@ -125,8 +125,8 @@ export default function FeatureSection() {
                             shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 flex flex-col items-center
                         ">
                         {/* Replace with your own SVG/Chart/Illustration */}
-                        <div className="w-full h-80 bg-gradient-to-br from-blue-900/40 via-purple-900/30 to-emerald-900/20 rounded-xl flex items-center justify-center">
-                            <span className="text-blue-200/60 text-lg"></span>
+                        <div className="w-full h-70 bg-gradient-to-br from-blue-900/40 via-purple-900/30 to-emerald-900/20 rounded-xl flex items-center justify-center">
+                            <img src="/Capture.PNG" alt="" className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>

@@ -33,7 +33,7 @@ const QUESTIONS_PER_PAGE = 5;
 const getColorClass = (isCorrect, answered) => {
     if (!answered) return "";
     if (isCorrect)
-        return "border-light-success dark:border-dark-success bg-light-success/10 dark:bg-dark-success/10";
+        return "border-light-success dark:border-dark-success bg-dark-success/10 dark:bg-dark-success/10";
     return "border-light-fail dark:border-dark-fail bg-light-fail/10 dark:bg-dark-fail/10";
 };
 
@@ -87,6 +87,8 @@ const AptitudeAllQuestionHomepage = ({
     });
     const [userTier, setUserTier] = useState(false);
 
+    console.log(solvedQuestions)
+
     // Extract unique subtypes from questions
     const subtypes = Array.from(new Set(questions.map((q) => q.subtype)));
     const difficulties = [1, 2, 3, 4, 5];
@@ -120,7 +122,6 @@ const AptitudeAllQuestionHomepage = ({
                 setTypeCounts(counts);
                 const arr = data["questions"] || [];
                 setQuestions(arr);
-                setLoading(false);
             });
 
         // Fetch user plan
@@ -146,6 +147,7 @@ const AptitudeAllQuestionHomepage = ({
     useEffect(() => {
         if (!user) return;
         // Fetch solved questions for this user
+
         const fetchSolved = async () => {
             const solvedRef = collection(
                 db,
@@ -166,6 +168,7 @@ const AptitudeAllQuestionHomepage = ({
             });
             setAnswers((prev) => ({ ...preAnswers, ...prev }));
             setShowExplanation((prev) => ({ ...preExplanations, ...prev }));
+            setLoading(false);
         };
         fetchSolved();
     }, [user]);
@@ -426,7 +429,7 @@ const AptitudeAllQuestionHomepage = ({
                                 <motion.div
                                     key={q.id}
                                     variants={childVariants}
-                                    className={`relative rounded-xl p-4 w-[100%] mx-auto bg-light-surface dark:bg-dark-bg md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
+                                    className={`relative rounded-xl p-4 w-[100%] mx-auto md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
                                         isCorrect || alreadySolved,
                                         answered || alreadySolved
                                     )} ${
@@ -475,11 +478,11 @@ const AptitudeAllQuestionHomepage = ({
                                                 <Check className="inline-block text-light-success dark:text-dark-success h-6 w-6" />
                                             )}
                                         </div>
-                                        <span className="text-xs font-semibold text-white bg-light-bg dark:bg-dark-surface p-2 rounded-md flex items-center gap-1">
+                                        <span className="text-[10px] md:text-xs font-semibold text-black/80 dark:text-white/80 bg-light-bg dark:bg-dark-surface p-2 rounded-md flex items-center gap-1">
                                             {q.type}
                                         </span>
                                     </div>
-                                    <div className="font-medium max-w-[80%] mb-3 text-base md:text-lg">
+                                    <div className="font-medium md:max-w-[80%] mb-3 md:text-lg text-sm">
                                         {q.ques}
                                     </div>
                                     <div className="flex flex-col gap-2 mb-2">
@@ -531,7 +534,7 @@ const AptitudeAllQuestionHomepage = ({
                                             </label>
                                         ))}
                                     </div>
-                                    {(answered || alreadySolved) && !userPlan && !userTier && (
+                                    {(answered || alreadySolved) && (
                                         <div className="mt-2">
                                             <button
                                                 className="text-xs underline text-light-primary dark:text-dark-primary focus:outline-none"

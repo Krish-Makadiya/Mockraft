@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, PhoneCall } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "../../context/ThemeProvider";
 
@@ -32,7 +32,7 @@ export default function Footer() {
     const { theme } = useTheme();
 
     return (
-        <footer className="relative w-full bg-light-bg dark:bg-dark-bg py-16 pt-30 px-4">
+        <footer className="relative w-full bg-light-bg dark:bg-dark-bg md:py-16 pb-16 pt-6 md:pt-30 px-4">
             <motion.div
                 className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-8"
                 variants={footerStagger}
@@ -55,8 +55,7 @@ export default function Footer() {
                         <motion.span
                             className="text-xl font-bold text-light-primary-text dark:text-dark-primary-text"
                             whileHover={{
-                                letterSpacing: "0.08em",
-                                color: "#2d5ded",
+                                letterSpacing: "0.05em",
                             }}
                             transition={{ type: "spring", stiffness: 200 }}>
                             Mockraft
@@ -71,16 +70,16 @@ export default function Footer() {
                 </motion.div>
                 {/* Links */}
                 <motion.div
-                    className="flex flex-col md:flex-row gap-8"
+                    className="flex md:gap-16 gap-20"
                     variants={fadeUp}>
                     <motion.div
-                        className="flex flex-col gap-2"
+                        className="flex flex-col gap-2 items-center"
                         variants={fadeUp}>
                         <span className="font-semibold text-light-primary-text dark:text-dark-primary-text mb-1">
                             Product
                         </span>
                         <motion.a
-                            href="/features"
+                            href="#features"
                             className="hover:underline text-light-secondary-text dark:text-dark-secondary-text"
                             whileHover={{ color: "#2d5ded" }}>
                             Features
@@ -92,26 +91,26 @@ export default function Footer() {
                             Pricing
                         </motion.a>
                         <motion.a
-                            href="/faq"
+                            href="#faq"
                             className="hover:underline text-light-secondary-text dark:text-dark-secondary-text"
                             whileHover={{ color: "#2d5ded" }}>
                             FAQ
                         </motion.a>
                     </motion.div>
                     <motion.div
-                        className="flex flex-col gap-2"
+                        className="flex flex-col gap-2 items-center"
                         variants={fadeUp}>
                         <span className="font-semibold text-light-primary-text dark:text-dark-primary-text mb-1">
                             Company
                         </span>
                         <motion.a
-                            href="/about"
+                            href="/about-us"
                             className="hover:underline text-light-secondary-text dark:text-dark-secondary-text"
                             whileHover={{ color: "#2d5ded" }}>
-                            About
+                            About Us
                         </motion.a>
                         <motion.a
-                            href="/privacy"
+                            href="#"
                             className="hover:underline text-light-secondary-text dark:text-dark-secondary-text"
                             whileHover={{ color: "#2d5ded" }}>
                             Privacy Policy
@@ -126,15 +125,15 @@ export default function Footer() {
                 </motion.div>
                 {/* CTA */}
                 <motion.div
-                    className="flex flex-col items-center md:items-end gap-4"
+                    className="flex flex-col items-center gap-4 md:mt-0 mt-8"
                     variants={fadeUp}>
                     <motion.a
-                        href="/signup"
+                        href="/contact-us"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-light-primary text-white dark:bg-dark-primary font-semibold text-base shadow transition"
                         {...buttonAnim}>
-                        Get Started Free
+                        Contact Us{" "}
                         <motion.span {...iconAnim}>
-                            <ArrowRight className="w-5 h-5" />
+                            <PhoneCall className="w-5 h-5" />
                         </motion.span>
                     </motion.a>
                     <motion.span

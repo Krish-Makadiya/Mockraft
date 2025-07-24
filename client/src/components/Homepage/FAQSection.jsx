@@ -261,7 +261,7 @@ export default function FAQSection() {
     };
 
     return (
-        <section className="relative w-full py-20 px-4 flex justify-center bg-light-bg dark:bg-dark-bg">
+        <section id="faq" className="relative w-full py-20 px-4 flex justify-center bg-light-bg dark:bg-dark-bg">
             <div className="max-w-3xl w-full mx-auto">
                 <motion.h2
                     initial={{ opacity: 0, y: 30 }}

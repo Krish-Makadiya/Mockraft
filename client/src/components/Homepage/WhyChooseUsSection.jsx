@@ -7,6 +7,8 @@ import {
     CheckCircle,
     ArrowRight,
 } from "lucide-react";
+import { SignUpButton, useAuth } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 const whyChooseUs = [
     {
@@ -61,6 +63,9 @@ const whyChooseHighlightVariants = {
 };
 
 export default function WhyChooseUsSection() {
+    const { isSignedIn } = useAuth();
+    const navigate = useNavigate();
+
     return (
         <section className="relative w-full bg-light-bg dark:bg-dark-bg py-20 px-4 flex justify-center z-10">
             <div className="max-w-6xl w-full">
@@ -156,14 +161,27 @@ export default function WhyChooseUsSection() {
                                 {whyChooseUs[3].desc}
                             </p>
                         </div>
-                        <motion.a
-                            href="/signup"
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            className="mt-4 w-fit bg-white text-light-primary font-semibold px-5 py-2 flex gap-2 rounded-full transition">
-                            <p>Start Free Trial</p>
-                            <ArrowRight />
-                        </motion.a>
+                        <motion.div>
+                            {isSignedIn ? (
+                                <button
+                                    className="mt-4 w-fit bg-white text-light-primary font-semibold px-5 py-2 flex gap-2 rounded-full transition"
+                                    mode="modal"
+                                    onClick={() => {
+                                        navigate("/dashboard");
+                                    }}>
+                                    <p>Start Free Trial</p>
+                                    <ArrowRight />
+                                </button>
+                            ) : (
+                                <SignUpButton
+                                    className="mt-4 w-fit bg-white text-light-primary font-semibold px-5 py-2 flex gap-2 rounded-full transition"
+                                    mode="modal"
+                                    navigate="/sign-up">
+                                    Start Free Trial
+                                    {/* <ArrowRight /> */}
+                                </SignUpButton>
+                            )}
+                        </motion.div>
                     </motion.div>
                 </motion.div>
             </div>

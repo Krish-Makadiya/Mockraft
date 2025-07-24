@@ -4,9 +4,13 @@ import { ArrowRight } from "lucide-react";
 import CTAGradientLight from "../../config/CTAGradient/CTAGradientLight";
 import CTAGradientDark from "../../config/CTAGradient/CTAGradientDark";
 import { useTheme } from "../../context/ThemeProvider";
+import { SignUpButton, useAuth } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 export default function CTASection() {
     const { theme } = useTheme();
+    const { isSignedIn } = useAuth();
+    const navigate = useNavigate();
 
     return (
         <section className="relative w-full bg-light-bg dark:bg-dark-bg px-6 py-12 flex justify-center items-center overflow-hidden">
@@ -34,19 +38,32 @@ export default function CTASection() {
                             delay: 0.1,
                             ease: "easeOut",
                         }}
-                        className="text-lg text-dark-primary-text mb-6 max-w-md">
+                        className="md:text-lg text-base text-dark-primary-text mb-6 max-w-md">
                         Join Mockraft today and unlock your full potential with
                         AI-powered practice, instant feedback, and a supportive
                         community.
                     </motion.p>
-                    <motion.a
-                        href="/signup"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.97 }}
-                        className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-light-bg to-light-surface  text-black font-semibold transition">
-                        Get Started Free
-                        <ArrowRight className="w-5 h-5" />
-                    </motion.a>
+                    <motion.div>
+                        {isSignedIn ? (
+                            <button
+                                className="inline-flex items-center gap-2 md:px-7 px-4 md:py-3 py-2 rounded-full bg-gradient-to-r from-light-bg to-light-surface  text-black font-semibold transition"
+                                mode="modal"
+                                onClick={() => {
+                                    navigate("/dashboard");
+                                }}>
+                                <p className="text-xs md:text-base">Go to Dashboard</p>
+                                <ArrowRight />
+                            </button>
+                        ) : (
+                            <SignUpButton
+                                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-light-bg to-light-surface  text-black font-semibold transition"
+                                mode="modal"
+                                navigate="/sign-up">
+                                Get Started Free
+                                {/* <ArrowRight /> */}
+                            </SignUpButton>
+                        )}
+                    </motion.div>
                 </div>
                 {/* Right: (Optional illustration or empty for concise look) */}
                 <div className="flex-1 hidden md:block" />
