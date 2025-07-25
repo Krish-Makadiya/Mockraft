@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc, increment, updateDoc, setDoc, doc as firestoreDoc } from "firebase/firestore";
-import { db } from "../../config/firebase";
-import Loader from "../../components/main/Loader";
+import { doc, doc as firestoreDoc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
+import { Info, Trash } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AptitudeDrawer from "../../components/Aptitude/AptitudeDrawer";
-import { Check, Info, Trash } from "lucide-react";
+import Loader from "../../components/main/Loader";
+import { db } from "../../config/firebase";
 
 function Timer({ initialSeconds, onTimeUp }) {
     const [display, setDisplay] = useState(initialSeconds);

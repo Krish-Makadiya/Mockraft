@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../config/firebase"; // adjust path as needed
 import {
     Award,
     Check,
@@ -10,14 +7,15 @@ import {
     Info,
     Moon,
     Sun,
-    Trash,
     Trophy,
-    X,
+    X
 } from "lucide-react";
-import AptitudeDrawer from "../../components/Aptitude/AptitudeDrawer";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AptitudeAnalysisDrawer from "../../components/Aptitude/AptitudeAnalysisDrawer";
-import { useTheme } from "../../context/ThemeProvider";
 import Loader from "../../components/main/Loader";
+import { db } from "../../config/firebase"; // adjust path as needed
+import { useTheme } from "../../context/ThemeProvider";
 
 const AptitudeTestAnalysis = () => {
     const { user_id, testId } = useParams();

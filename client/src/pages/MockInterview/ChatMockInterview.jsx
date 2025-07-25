@@ -292,7 +292,7 @@ const MockInterviewTest = ({ user_id, id }) => {
 
 Output Requirements:
 -Return ONLY a valid JSON object — no additional commentary, explanation, or text.
--Structure the interview as a realistic sequence of 5 questions in the following proportions:
+-Structure the interview as a realistic sequence of 6 questions in the following proportions:
 -40% technical questions (specific to language/framework/tools)
 -30% system design or applied scenario-based questions (avoid any "draw a diagram" or visual design questions; ask only those that can be answered in text)
 -20% behavioral questions (STAR format: Situation, Task, Action, Result)
@@ -307,7 +307,7 @@ Each question must include:
 Additional Guidelines:
 -Begin the sequence with a professional and conversational opener like "Tell me about yourself, your background, and what led you to apply for this role."
 -Avoid any questions that require drawing, whiteboarding, or designing interfaces/architectures visually. Only include questions that can be answered in text form.
--Ensure question difficulty increases from easy (1) to hard (5) across the 8 questions.
+-Ensure question difficulty increases from easy (1) to hard (5) across the 6 questions.
 -Make the overall tone and content suitable for a real senior technical interview.`;
 
             await toast.promise(

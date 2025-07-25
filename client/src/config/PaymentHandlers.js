@@ -34,7 +34,6 @@ const paymentSignatureValidation = async (
         );
         console.log("Payment signature validation response:", isValid.data);
 
-        // Update payment status in Firebase
         const userRef = doc(db, "users", user.id);
 
         // Remove the pending payment and add the updated one

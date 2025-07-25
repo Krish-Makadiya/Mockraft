@@ -1,38 +1,33 @@
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import {
-    LayoutDashboard,
-    UserRoundSearch,
-    ChartColumnIncreasing,
-    FileText,
-    BrainCircuit,
-    Puzzle,
-    Calculator,
     Book,
-    Sigma,
     Brain,
+    ChartColumnIncreasing,
+    DollarSign,
+    FileText,
+    LayoutDashboard
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Loader from "./components/main/Loader";
-import Navbar from "./components/main/Navbar";
 import { db } from "./config/firebase"; // adjust the import
-import Dashboard from "./pages/Dashboard/Dashboard";
-import ErrorPage from "./pages/ErrorPage";
-import Homepage from "./pages/Home/Homepage";
-import ChatMockInterview from "./pages/MockInterview/ChatMockInterview";
-import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
-import MockInterview from "./pages/MockInterview/MockInterview";
-import Leaderboard from "./pages/Leaderboard/Leaderboard";
-import AboutUsPage from "./pages/Home/AboutUsPage";
-import Pricing from "./components/Homepage/Pricing";
-import PricingPage from "./pages/Home/PricingPage";
-import ContactUsPage from "./pages/Home/ContactUsPage";
 import AptitudeAllQuestions from "./pages/Aptitude/AptitudeAllQuestions";
 import Aptitude from "./pages/AptitudeTest/Aptitude";
 import AptitudeTest from "./pages/AptitudeTest/AptitudeTest";
-import AptitudeTestAnalysis from "./pages/AptitudeTest/AptitudeTestAnalysis"
+import AptitudeTestAnalysis from "./pages/AptitudeTest/AptitudeTestAnalysis";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import ErrorPage from "./pages/ErrorPage";
+import AboutUsPage from "./pages/Home/AboutUsPage";
+import ContactUsPage from "./pages/Home/ContactUsPage";
+import Homepage from "./pages/Home/Homepage";
+import PricingPage from "./pages/Home/PricingPage";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
+import ChatMockInterview from "./pages/MockInterview/ChatMockInterview";
+import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
+import MockInterview from "./pages/MockInterview/MockInterview";
+import Payments from "./pages/Payments/Payments";
 
 const tabs = [
     {
@@ -64,6 +59,12 @@ const tabs = [
         name: "Leaderboard",
         icon: ChartColumnIncreasing,
         path: "/leaderboard",
+    },
+    {
+        id: 6,
+        name: "Payments",
+        icon: DollarSign,
+        path: "/payments",
     },
 ];
 
@@ -211,6 +212,19 @@ const App = () => {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+                    path="/payments"
+                    element={
+                        <ProtectedRoute>
+                            <Payments
+                                tabs={tabs}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
+                        </ProtectedRoute>
+                    }
+                />
+
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
         </div>
