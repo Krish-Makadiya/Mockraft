@@ -6,7 +6,7 @@ import {
     ChartColumnIncreasing,
     DollarSign,
     FileText,
-    LayoutDashboard
+    LayoutDashboard,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -28,6 +28,7 @@ import ChatMockInterview from "./pages/MockInterview/ChatMockInterview";
 import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
 import MockInterview from "./pages/MockInterview/MockInterview";
 import Payments from "./pages/Payments/Payments";
+import Community from "./pages/Community/Community";
 
 const tabs = [
     {
@@ -65,6 +66,12 @@ const tabs = [
         name: "Payments",
         icon: DollarSign,
         path: "/payments",
+    },
+    {
+        id: 7,
+        name: "Community",
+        icon: DollarSign,
+        path: "/community",
     },
 ];
 
@@ -217,6 +224,18 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <Payments
+                                tabs={tabs}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/community"
+                    element={
+                        <ProtectedRoute>
+                            <Community
                                 tabs={tabs}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}
