@@ -6,6 +6,7 @@ import {
     ChartColumnIncreasing,
     DollarSign,
     FileText,
+    Headset,
     LayoutDashboard,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -70,7 +71,7 @@ const tabs = [
     {
         id: 7,
         name: "Community",
-        icon: DollarSign,
+        icon: Headset,
         path: "/community",
     },
 ];
