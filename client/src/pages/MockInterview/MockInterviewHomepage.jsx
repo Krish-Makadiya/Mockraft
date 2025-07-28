@@ -153,56 +153,46 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
                 </button>
             </motion.div>
 
-            {allInterviews.length > 0 ? (
-                <div className="flex flex-col gap-4 items-center">
+            <div className="flex flex-col gap-4 items-center">
+                <motion.div
+                    variants={childVariants}
+                    className="w-full flex justify-end gap-2">
+                    <FilterMenuSection
+                        filters={filters}
+                        setFilters={setFilters}
+                        isStarred={isStarred}
+                        setIsStarred={setIsStarred}
+                    />
+                </motion.div>
+                {getFilteredInterviews().length > 0 ? (
                     <motion.div
                         variants={childVariants}
-                        className="w-full flex justify-end gap-2">
-                        <FilterMenuSection
-                            filters={filters}
-                            setFilters={setFilters}
-                            isStarred={isStarred}
-                            setIsStarred={setIsStarred}
-                        />
+                        className="w-full space-y-3">
+                        {getFilteredInterviews().map((interview) => (
+                            <MockInterviewCard
+                                key={interview.id}
+                                interview={interview}
+                                onBookmarkToggle={handleBookmarkToggle}
+                            />
+                        ))}
                     </motion.div>
-                    {getFilteredInterviews().length > 0 ? (
-                        <motion.div
-                            variants={childVariants}
-                            className="w-full space-y-3">
-                            {getFilteredInterviews().map((interview) => (
-                                <MockInterviewCard
-                                    key={interview.id}
-                                    interview={interview}
-                                    onBookmarkToggle={handleBookmarkToggle}
-                                />
-                            ))}
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            variants={childVariants}
-                            className="w-full flex flex-col items-center justify-center py-20 text-center">
-                            <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-8">
-                                <ListFilter className="h-12 w-12 mx-auto text-neutral-400 mb-3" />
-                                <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text mb-2">
-                                    No matches found
-                                </h3>
-                                <p className="text-sm text-light-secondary-text dark:text-dark-secondary-text">
-                                    Try adjusting your filters or create a new
-                                    interview
-                                </p>
-                            </div>
-                        </motion.div>
-                    )}
-                </div>
-            ) : (
-                <div className="w-full mt-40 flex justify-center items-center">
-                    <EmptyDialog
-                        icon={<FileUser size={60} />}
-                        text="Create a new Mock Interview"
-                        onClick={() => setIsCreateModalOpen(true)}
-                    />
-                </div>
-            )}
+                ) : (
+                    <motion.div
+                        variants={childVariants}
+                        className="w-full flex flex-col items-center justify-center py-20 text-center">
+                        <div className="bg-light-surface/50 dark:bg-dark-surface/50 rounded-lg p-8">
+                            <ListFilter className="h-12 w-12 mx-auto text-neutral-400 mb-3" />
+                            <h3 className="text-lg font-medium text-light-primary-text dark:text-dark-primary-text mb-2">
+                                No matches found
+                            </h3>
+                            <p className="text-sm text-light-secondary-text dark:text-dark-secondary-text">
+                                Try adjusting your filters or create a new
+                                interview
+                            </p>
+                        </div>
+                    </motion.div>
+                )}
+            </div>
         </motion.div>
     );
 };

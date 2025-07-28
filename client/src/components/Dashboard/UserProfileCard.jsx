@@ -1,5 +1,11 @@
 import React from "react";
-import { MailCheck, Crown, Gift, TrophyIcon, WalletMinimal } from "lucide-react";
+import {
+    MailCheck,
+    Crown,
+    Gift,
+    TrophyIcon,
+    WalletMinimal,
+} from "lucide-react";
 
 export default function UserProfileCard({ userData }) {
     return (
@@ -23,13 +29,12 @@ export default function UserProfileCard({ userData }) {
                     <span
                         className={`inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full font-semibold shadow-sm
                             ${
-                                userData?.plan === "premium"
+                                userData?.plan === "paid"
                                     ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200"
                                     : "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200"
                             }
-                        `}
-                    >
-                        {userData?.plan === "premium" ? (
+                        `}>
+                        {userData?.plan === "paid" ? (
                             <>
                                 <Crown className="w-6 h-6 text-yellow-500" />
                                 Premium

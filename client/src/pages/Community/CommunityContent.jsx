@@ -11,6 +11,7 @@ import {
 } from "stream-chat-react";
 import "./layout.css";
 import { useTheme } from "../../context/ThemeProvider";
+import Loader from "../../components/main/Loader";
 
 const CustomChannelHeader = () => {
     const { channel } = useChannelStateContext();
@@ -78,7 +79,7 @@ const CommunityContent = () => {
         setChannel(channel);
     }, [client]);
 
-    if (!client) return <div>Setting up client & connection...</div>;
+    if (!client) return <Loader />;
 
     return (
         <div className="md:h-screen h-[94%]">

@@ -161,7 +161,7 @@ const DashboardContent = () => {
     const [userData, setUserData] = useState(null);
     const [isUserDataLoading, setIsUserDataLoading] = useState(true);
     const navigate = useNavigate();
-
+    console.log(user);
     useEffect(() => {
         const fetchUserData = async () => {
             if (!user?.id) return;

@@ -11,15 +11,63 @@ import {
 } from "lucide-react";
 
 // Static rank data and icons
-const RANKS = [
-    { level: 1, name: "Seedling", icon: "Sprout", minPoints: 0, maxPoints: 99 },
-    { level: 2, name: "Writer", icon: "NotebookPen", minPoints: 100, maxPoints: 299 },
-    { level: 3, name: "Miner", icon: "Pickaxe", minPoints: 300, maxPoints: 599 },
-    { level: 4, name: "Designer", icon: "LayoutTemplate", minPoints: 600, maxPoints: 999 },
-    { level: 5, name: "Scientist", icon: "Atom", minPoints: 1000, maxPoints: 1499 },
-    { level: 6, name: "Champion", icon: "Medal", minPoints: 1500, maxPoints: 1999 },
-    { level: 7, name: "Guardian", icon: "ShieldCheck", minPoints: 2000, maxPoints: 2999 },
-    { level: 8, name: "Legend", icon: "Trophy", minPoints: 3000, maxPoints: Infinity },
+export const RANKS = [
+    {
+        level: 1,
+        name: "Beginner",
+        minPoints: 0,
+        maxPoints: 99,
+        icon: "Sprout", // new user, just started
+    },
+    {
+        level: 2,
+        name: "Learner",
+        minPoints: 100,
+        maxPoints: 249,
+        icon: "NotebookPen", // actively studying
+    },
+    {
+        level: 3,
+        name: "Skilled",
+        minPoints: 250,
+        maxPoints: 499,
+        icon: "Pickaxe", // building skills
+    },
+    {
+        level: 4,
+        name: "Proficient",
+        minPoints: 500,
+        maxPoints: 799,
+        icon: "LayoutTemplate", // structured, methodical
+    },
+    {
+        level: 5,
+        name: "Expert",
+        minPoints: 800,
+        maxPoints: 1199,
+        icon: "Atom", // deep understanding
+    },
+    {
+        level: 6,
+        name: "Champion",
+        minPoints: 1200,
+        maxPoints: 1599,
+        icon: "Medal", // winning, top performer
+    },
+    {
+        level: 7,
+        name: "Master",
+        minPoints: 1600,
+        maxPoints: 1999,
+        icon: "ShieldCheck", // strong, reliable
+    },
+    {
+        level: 8,
+        name: "Legend",
+        minPoints: 2000,
+        maxPoints: Infinity,
+        icon: "Trophy", // ultimate achievement
+    },
 ];
 
 const ICONS = {
@@ -58,8 +106,7 @@ export default function RankLevelSection({ userPoints }) {
                                                 ? "border-green-400 bg-green-100 dark:bg-green-900/40"
                                                 : "border-gray-300 bg-gray-100 dark:bg-gray-800"
                                         }
-                                    `}
-                                >
+                                    `}>
                                     <Icon
                                         className={`md:w-10 md:h-10 w-6 h-6
                                             ${
@@ -81,8 +128,7 @@ export default function RankLevelSection({ userPoints }) {
                                                 ? "text-green-600 dark:text-green-300"
                                                 : "text-gray-400 dark:text-gray-500"
                                         }
-                                    `}
-                                >
+                                    `}>
                                     {rank.name}
                                 </span>
                             </div>
@@ -112,8 +158,8 @@ export default function RankLevelSection({ userPoints }) {
                 <span className="font-bold text-yellow-600 dark:text-yellow-300">
                     {RANKS[currentRankIndex]?.name}
                 </span>{" "}
-                rank with{" "}
-                <span className="font-bold">{userPoints}</span> points.
+                rank with <span className="font-bold">{userPoints}</span>{" "}
+                points.
             </div>
         </div>
     );

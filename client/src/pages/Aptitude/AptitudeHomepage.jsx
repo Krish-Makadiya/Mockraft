@@ -402,7 +402,7 @@ const AptitudeAllQuestionHomepage = ({}) => {
                                 <motion.div
                                 key={q.id}
                                     variants={childVariants}
-                                    className={`relative rounded-xl p-4 w-[100%] mx-auto md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
+                                    className={`relative rounded-xl bg-dark-bg p-4 w-[100%] mx-auto md:p-6 shadow-sm transition-colors duration-200 ${getColorClass(
                                     isCorrect || alreadySolved,
                                     answered || alreadySolved
                                 )} ${

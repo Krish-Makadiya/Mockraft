@@ -63,6 +63,7 @@ const paymentSignatureValidation = async (
             });
             if (setUserPlan) setUserPlan("paid");
             toast.success("Payment successful!");
+            user.plan = "paid";
         } else {
             toast.error("Payment failed. Please try again.");
             return;
