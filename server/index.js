@@ -10,7 +10,7 @@ const cors = require("cors");
 const paymentRoutes = require("./routes/payment.routes");
 const webhookRoutes = require("./routes/webhook.routes");
 const { StreamChat } = require("stream-chat");
-const { clerkClient } = require("@clerk/express");
+const client = require("./config/redisClient");
 
 // app.use(express.raw({ type: "application/json" }));
 app.use(cors());
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/", userRoutes);
 app.use("/ai", aiRoutes);
 app.use("/payment", paymentRoutes);
-app.use("/webhooks", webhookRoutes)
+app.use("/webhooks", webhookRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
