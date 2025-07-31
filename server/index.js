@@ -22,6 +22,7 @@ app.use("/ai", aiRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/webhooks", webhookRoutes);
 
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

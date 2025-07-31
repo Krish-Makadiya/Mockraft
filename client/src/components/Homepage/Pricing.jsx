@@ -67,25 +67,23 @@ export default function Pricing() {
     const { Razorpay } = useRazorpay();
 
     useEffect(() => {
-        try {
-            if (user && user.id) {
-                const userRef = doc(db, "users", user.id);
-                // Fetch user plan from Firestore
-                const fetchUserPlan = async () => {
-                    const docSnap = await getDoc(userRef);
-                    if (docSnap.exists()) {
-                        console.log("User data:", docSnap.data());
-                        const userData = docSnap.data();
-                        setUserPlan(userData.plan || "free");
-                    } else {
-                        console.log("No such document!");
-                    }
-                };
-                fetchUserPlan();
+        const fetchUserPlan = async () => {
+            if (!user || !user.id) return;
+
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_SERVER_URL}/payment/user-plan/${
+                        user.id
+                    }`
+                );
+                console.log(response.data);
+                setUserPlan(response.data.plan);
+            } catch (err) {
+                console.error("Failed to fetch user plan:", err);
             }
-        } catch (error) {
-            console.error("Error fetching user plan:", error);
-        }
+        };
+
+        fetchUserPlan();
     }, [user]);
 
     const paymentClickHandler = async (amount) => {

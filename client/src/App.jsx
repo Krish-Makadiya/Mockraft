@@ -30,6 +30,7 @@ import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
 import MockInterview from "./pages/MockInterview/MockInterview";
 import Payments from "./pages/Payments/Payments";
 import Community from "./pages/Community/Community";
+import axios from "axios";
 
 const tabs = [
     {
@@ -76,39 +77,40 @@ const tabs = [
     },
 ];
 
-const useInitializeUser = () => {
+
+const App = () => {
+    const { isLoaded } = useAuth();
+    const [activeTab, setActiveTab] = useState(tabs[0].name);
     const { user } = useUser();
 
     useEffect(() => {
         const initializeUser = async () => {
             if (!user) return;
-            const userRef = doc(db, "users", user.id);
-            const userSnap = await getDoc(userRef);
 
-            if (!userSnap.exists()) {
-                await setDoc(userRef, {
-                    plan: "free",
-                    points: 0,
-                    email: user.emailAddresses[0]?.emailAddress || "",
-                    firstname: user.firstName,
-                    fullname: user.fullName,
-                    lastname: user.lastName,
-                    id: user.id,
-                    avtaar: user.imageUrl,
-                    createdAt: user.createdAt,
-                });
+            try {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_SERVER_URL}/initialize-user`,
+                    {
+                        user: {
+                            id: user.id,
+                            emailAddresses: user.emailAddresses,
+                            firstName: user.firstName,
+                            fullName: user.fullName,
+                            lastName: user.lastName,
+                            imageUrl: user.imageUrl,
+                            createdAt: user.createdAt,
+                        },
+                    }
+                );
+
+                console.log("User Init Response:", response.data);
+            } catch (error) {
+                console.error("User initialization failed:", error);
             }
         };
 
         initializeUser();
     }, [user]);
-};
-
-const App = () => {
-    const { isLoaded } = useAuth();
-    const [activeTab, setActiveTab] = useState(tabs[0].name);
-
-    useInitializeUser();
 
     if (!isLoaded) {
         return <Loader />;

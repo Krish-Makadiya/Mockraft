@@ -74,6 +74,18 @@ const paymentSignatureValidation = async (
     }
 };
 
+const addPaymentToUser = async (userId, paymentData) => {
+    try {
+        const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/payment/add-payment`, {
+            userId,
+            paymentData,
+        });
+        console.log("Payment added:", response.data);
+    } catch (err) {
+        console.error("Failed to add payment:", err);
+    }
+};
+
 const paymentHandler = async (price, user, setUserPlan) => {
     console.log("Payment amount:", price);
     console.log("User data:", user);
@@ -97,10 +109,7 @@ const paymentHandler = async (price, user, setUserPlan) => {
             status: "pending",
             createdAt: new Date().toISOString(),
         };
-        const userRef = doc(db, "users", user.id);
-        await updateDoc(userRef, {
-            payments: arrayUnion(paymentData),
-        });
+        addPaymentToUser(user.id, paymentData);
 
         var options = {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID,
