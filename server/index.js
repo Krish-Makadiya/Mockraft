@@ -11,6 +11,7 @@ const paymentRoutes = require("./routes/payment.routes");
 const webhookRoutes = require("./routes/webhook.routes");
 const { StreamChat } = require("stream-chat");
 const client = require("./config/redisClient");
+const mockInterviewRoutes = require('./routes/mockinterview.routes')
 
 // app.use(express.raw({ type: "application/json" }));
 app.use(cors());
@@ -21,6 +22,7 @@ app.use("/", userRoutes);
 app.use("/ai", aiRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/webhooks", webhookRoutes);
+app.use('/mock-interview', mockInterviewRoutes);
 
 
 const PORT = process.env.PORT || 4000;

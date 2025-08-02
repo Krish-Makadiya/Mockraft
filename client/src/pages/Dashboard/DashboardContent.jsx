@@ -13,6 +13,7 @@ import UserProfileCard from "../../components/Dashboard/UserProfileCard";
 import Loader from "../../components/main/Loader";
 import { db } from "../../config/firebase";
 import { motion } from "framer-motion"; // <-- Add this import
+import axios from "axios";
 
 const QUESTION_TYPES = [
     "technical",
@@ -52,116 +53,42 @@ const useMockInterviewStats = () => {
         typeStats: {},
     });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!user) return;
-            const ref = collection(db, "users", user.id, "mock-interviews");
-            const snap = await getDocs(ref);
-            const data = [];
-            snap.forEach((doc) => data.push({ id: doc.id, ...doc.data() }));
-            setMockInterviews(data);
-
-            // Calculate stats
-            const now = new Date();
-            const weekAgo = new Date(now);
-            weekAgo.setDate(now.getDate() - 7);
-
-            // 1. Total interviews
-            const total = data.length;
-
-            // 2. Interviews in past 7 days
-            const last7Days = data.filter((mi) =>
-                mi.createdAt?.toDate ? mi.createdAt.toDate() >= weekAgo : false
-            ).length;
-
-            // 3. Average score of all interviews
-            const scores = data
-                .map((mi) => mi.analysis?.overallScore)
-                .filter((score) => typeof score === "number");
-            const avgScore = scores.length
-                ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
-                : 0;
-
-            // 4. Total points earned
-            const totalPoints = data
-                .map((mi) => mi.points || 0)
-                .reduce((a, b) => a + b, 0);
-
-            // 5. Recent 3 interviews
-            const recent = [...data]
-                .sort((a, b) =>
-                    b.createdAt?.toDate && a.createdAt?.toDate
-                        ? b.createdAt.toDate() - a.createdAt.toDate()
-                        : 0
-                )
-                .slice(0, 3);
-
-            // 6. Type stats
-            const typeStats = {};
-            QUESTION_TYPES.forEach((type) => {
-                typeStats[type] = {
-                    total: 0,
-                    attempted: 0,
-                    avgScore: 0,
-                    scoreSum: 0,
-                };
-            });
-
-            data.forEach((mi) => {
-                if (Array.isArray(mi.questions)) {
-                    mi.questions.forEach((q) => {
-                        const type = (q.type || "")
-                            .toLowerCase()
-                            .replace(" ", "_");
-                        if (typeStats[type]) {
-                            typeStats[type].total += 1;
-                            if (q.answer && q.answer.trim() !== "") {
-                                typeStats[type].attempted += 1;
-                                if (typeof q.analysis?.score === "number") {
-                                    typeStats[type].scoreSum +=
-                                        q.analysis.score;
-                                }
-                            }
-                        }
-                    });
-                }
-            });
-
-            // Calculate avgScore for each type
-            QUESTION_TYPES.forEach((type) => {
-                typeStats[type].avgScore =
-                    typeStats[type].attempted > 0
-                        ? Math.round(
-                              typeStats[type].scoreSum /
-                                  typeStats[type].attempted
-                          )
-                        : 0;
-                delete typeStats[type].scoreSum; // Remove temp field
-            });
-
-            setStats({
-                total,
-                last7Days,
-                avgScore,
-                totalPoints,
-                recent,
-                typeStats,
-            });
-        };
-
-        fetchData();
-    }, [user]);
-
     return { mockInterviews, stats };
 };
 
 const DashboardContent = () => {
-    const { mockInterviews, stats } = useMockInterviewStats();
     const { user } = useUser();
     const [userData, setUserData] = useState(null);
     const [isUserDataLoading, setIsUserDataLoading] = useState(true);
     const navigate = useNavigate();
-    console.log(user);
+    const [mockInterviews, setMockInterviews] = useState([]);
+    const [stats, setStats] = useState({
+        total: 0,
+        last7Days: 0,
+        avgScore: 0,
+        totalPoints: 0,
+        recent: [],
+        typeStats: {},
+    });
+
+    useEffect(() => {
+        if (!user.id) return;
+
+        const fetchStats = async () => {
+            try {
+                const res = await axios.get(
+                    `http://localhost:4000/mock-interview/mock-stats/${user.id}`
+                );
+                console.log(res.data);
+                setStats(res.data);
+            } catch (err) {
+                console.error("Failed to fetch mock stats:", err);
+            }
+        };
+
+        fetchStats();
+    }, [user.id]);
+
     useEffect(() => {
         const fetchUserData = async () => {
             if (!user?.id) return;
