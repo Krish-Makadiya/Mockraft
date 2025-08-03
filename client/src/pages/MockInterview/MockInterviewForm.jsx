@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { db } from "../../config/firebase";
 import { useAlert } from "../../hooks/useAlert";
+import axios from 'axios';
 
 const MockInterviewForm = ({ setIsCreateModalOpen }) => {
     const [formState, setFormState] = useState({
@@ -52,43 +53,26 @@ const MockInterviewForm = ({ setIsCreateModalOpen }) => {
     };
 
     // Handle form submission
-    const setMockInterviewInfo = async () => {
+    const setMockInterviewInfo = async (formState) => {
+        if (!user?.id) return;
+
         try {
-            toast.promise(
-                async () => {
-                    const docRef = await addDoc(
-                        collection(db, `users/${user.id}/mock-interviews`),
-                        {
-                            interviewName: formState.interviewName,
-                            jobDescription: formState.jobDescription,
-                            programmingLanguage: formState.programmingLanguage,
-                            technologyStack: formState.technologyStack,
-                            experienceLevel: formState.experienceLevel,
-                            notifications: formState.notifications,
-                            createdAt: serverTimestamp(),
-                            userId: user.id,
-                            isBookmarked: false,
-                        }
-                    );
-
-                    // Increment interviewsCreated for the user
-                    const userRef = doc(db, "users", user.id);
-                    await updateDoc(userRef, {
-                        interviewsCreated: increment(1),
-                    });
-
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                    return docRef;
-                },
+            await toast.promise(
+                axios.post("http://localhost:4000/mock-interview/create-mock-interview", {
+                    userId: user.id,
+                    formState,
+                }),
                 {
                     loading: "Analyzing job description...",
                     success: "Your practice arena is ready!",
                     error: "Oops, pieces didn't connect - retry?",
                 }
             );
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
             setIsCreateModalOpen(false);
-        } catch (error) {
-            console.error("Error adding document: ", error);
+        } catch (err) {
+            console.error("Error creating mock interview:", err);
         }
     };
 
@@ -102,7 +86,7 @@ const MockInterviewForm = ({ setIsCreateModalOpen }) => {
                 "This will generate a mock interview based on your provided details.",
             type: "info",
             onConfirm: () => {
-                setMockInterviewInfo();
+                setMockInterviewInfo(formState);
             },
             confirmText: "Create Interview",
             cancelText: "Review Details",

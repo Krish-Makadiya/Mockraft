@@ -8,6 +8,7 @@ import FilterMenuSection from "../../components/MockInterview/FilterMenuSection"
 import MockInterviewCard from "../../components/MockInterview/MockInterviewCard";
 import { db } from "../../config/firebase";
 import { motion, stagger } from "framer-motion";
+import axios from 'axios';
 
 const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
     const [allInterviews, setAllInterviews] = useState([]);
@@ -24,26 +25,21 @@ const MockInterviewHomepage = ({ isCreateModalOpen, setIsCreateModalOpen }) => {
     const { user } = useUser();
 
     useEffect(() => {
-        fetchInterviews();
-    }, []);
+        if (user?.id) {
+            fetchInterviews();
+        }
+    }, [user?.id]);
 
     const fetchInterviews = async () => {
+        setIsLoading(true);
         try {
-            const response = await getDocs(
-                query(
-                    collection(db, `users/${user.id}/mock-interviews`),
-                    orderBy("createdAt", "desc")
-                )
+            const res = await axios.get(
+                `http://localhost:4000/mock-interview/all-interviews/${user.id}`
             );
 
-            const interviews = response.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-                createdAtMs: doc.data().createdAt?.seconds * 1000 || Date.now(),
-            }));
-            console.log(interviews);
-            setAllInterviews(interviews);
-        } catch (error) {
+            setAllInterviews(res.data.data || []);
+        } catch (err) {
+            console.error("Error fetching interviews:", err);
             setError("Failed to fetch interviews. Please try again later.");
         } finally {
             setIsLoading(false);

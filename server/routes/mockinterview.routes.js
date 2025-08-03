@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { db } = require("../config/firebase");
+const { db, admin } = require("../config/firebase");
 const client = require("../config/redisClient");
 
 const router = Router();
@@ -110,6 +110,76 @@ router.get("/mock-stats/:userId", async (req, res) => {
     } catch (err) {
         console.error("Error fetching mock stats:", err);
         return res.status(500).json({ error: "Server Error" });
+    }
+});
+
+router.get("/all-interviews/:userId", async (req, res) => {
+    const { userId } = req.params;
+    const cacheKey = `interviews:${userId}`;
+
+    try {
+        // Try to get data from Redis
+        const cachedData = await client.get(cacheKey);
+        if (cachedData) {
+            return res.status(200).json({ source: "cache", data: JSON.parse(cachedData) });
+        }
+
+        // Fetch from Firestore
+        const ref = db.collection("users").doc(userId).collection("mock-interviews").orderBy("createdAt", "desc");
+        const snapshot = await ref.get();
+
+        const interviews = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+            createdAtMs: doc.data().createdAt?.toDate?.().getTime() || Date.now(),
+        }));
+
+        // Cache the data for 3 hours
+        await client.set(cacheKey, JSON.stringify(interviews), "EX", 60 * 60 * 1);
+
+        res.status(200).json({ source: "firestore", data: interviews });
+    } catch (err) {
+        console.error("Error fetching interviews:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.post("/create-mock-interview", async (req, res) => {
+    const { userId, formState } = req.body;
+
+    if (!userId || !formState) {
+        return res.status(400).json({ error: "Missing userId or formState" });
+    }
+
+    try {
+        const newDocRef = await db
+            .collection("users")
+            .doc(userId)
+            .collection("mock-interviews")
+            .add({
+                interviewName: formState.interviewName,
+                jobDescription: formState.jobDescription,
+                programmingLanguage: formState.programmingLanguage,
+                technologyStack: formState.technologyStack,
+                experienceLevel: formState.experienceLevel,
+                notifications: formState.notifications,
+                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                userId: userId,
+                isBookmarked: false,
+            });
+
+        await db.collection("users").doc(userId).update({
+            interviewsCreated: admin.firestore.FieldValue.increment(1),
+        });
+
+        // Invalidate the user's interview cache
+        await client.del(`interviews:${userId}`);
+        await client.del(`mock_stats:${userId}`);
+
+        res.status(200).json({ status: "Interview created", docId: newDocRef.id });
+    } catch (err) {
+        console.error("Error creating interview:", err);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 

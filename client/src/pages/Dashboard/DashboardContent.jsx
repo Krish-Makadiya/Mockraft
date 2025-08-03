@@ -77,7 +77,7 @@ const DashboardContent = () => {
         const fetchStats = async () => {
             try {
                 const res = await axios.get(
-                    `http://localhost:4000/mock-interview/mock-stats/${user.id}`
+                    `${import.meta.env.VITE_SERVER_URL}/mock-interview/mock-stats/${user.id}`
                 );
                 console.log(res.data);
                 setStats(res.data);
