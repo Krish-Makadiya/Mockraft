@@ -30,6 +30,7 @@ import GetAllQuestionInfo from "./pages/MockInterview/GetAllQuestionInfo";
 import MockInterview from "./pages/MockInterview/MockInterview";
 import Payments from "./pages/Payments/Payments";
 import Community from "./pages/Community/Community";
+import Call from "./pages/Call/Call";
 import axios from "axios";
 
 const tabs = [
@@ -74,6 +75,12 @@ const tabs = [
         name: "Community",
         icon: Headset,
         path: "/community",
+    },
+    {
+        id: 8,
+        name: "Call",
+        icon: Headset,
+        path: "/call",
     },
 ];
 
@@ -242,6 +249,20 @@ const App = () => {
                                 tabs={tabs}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}
+                            />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/call"
+                    element={
+                        <ProtectedRoute>
+                            <Call
+                                tabs={tabs}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                                apiKey = ""
+                                assistantId = ""
                             />
                         </ProtectedRoute>
                     }
