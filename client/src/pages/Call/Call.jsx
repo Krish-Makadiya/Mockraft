@@ -8,7 +8,7 @@ const Call = ({ apiKey, assistantId, config = {} }) => {
     const [transcript, setTranscript] = useState([]);
 
     useEffect(() => {
-        const vapiInstance = new Vapi(apiKey);
+        const vapiInstance = new Vapi({apiKey});
         setVapi(vapiInstance);
         // Event listeners
         vapiInstance.on("call-start", () => {
