@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Vapi from "@vapi-ai/web";
 
 const CallContent = ({ apiKey, assistantId }) => {
@@ -7,10 +7,18 @@ const CallContent = ({ apiKey, assistantId }) => {
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [transcript, setTranscript] = useState([]);
 
-    useEffect(() => {
-        const vapiInstance = new Vapi({ apiKey });
-        setVapi(vapiInstance);
+    const scrollRef = useRef(null);
 
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [transcript]);
+
+    useEffect(() => {
+        const vapiInstance = new Vapi(apiKey);
+        setVapi(vapiInstance);
+        // Event listeners
         vapiInstance.on("call-start", () => {
             console.log("Call started");
             setIsConnected(true);
@@ -20,39 +28,48 @@ const CallContent = ({ apiKey, assistantId }) => {
             setIsConnected(false);
             setIsSpeaking(false);
         });
-        vapiInstance.on("speech-start", () => setIsSpeaking(true));
-        vapiInstance.on("speech-end", () => setIsSpeaking(false));
-
+        vapiInstance.on("speech-start", () => {
+            console.log("Assistant started speaking");
+            setIsSpeaking(true);
+        });
+        vapiInstance.on("speech-end", () => {
+            console.log("Assistant stopped speaking");
+            setIsSpeaking(false);
+        });
         vapiInstance.on("message", (message) => {
-            if (message.role == "user") {
-                console.log(message);
-            }
-            if (message.type === "transcript" && message.transcriptType == 'final') {
-                setTranscript((prev) => [
-                    ...prev,
-                    {
-                        role: message.role,
-                        text: message.transcript,
-                    },
-                ]);
+            if (message.type === "transcript") {
+                if (
+                    message.type === "transcript" &&
+                    message.transcriptType == "final"
+                ) {
+                    setTranscript((prev) => [
+                        ...prev,
+                        {
+                            role: message.role,
+                            text: message.transcript,
+                        },
+                    ]);
+                }
             }
         });
-
-        vapiInstance.on("error", (error) =>
-            console.error("Vapi error:", error)
-        );
-
+        vapiInstance.on("error", (error) => {
+            console.error("Vapi error:", error);
+        });
         return () => {
             vapiInstance?.stop();
         };
     }, [apiKey]);
 
     const startCall = () => {
-        if (vapi) vapi.start(assistantId);
+        if (vapi) {
+            vapi.start(assistantId);
+        }
     };
-
     const endCall = () => {
-        if (vapi) vapi.stop();
+        if (vapi) {
+            vapi.stop();
+            setTranscript([]);
+        }
     };
 
     return (
@@ -65,7 +82,6 @@ const CallContent = ({ apiKey, assistantId }) => {
                     contact us directly through other channels.
                 </p>
 
-                {/* AI Assistant Warning */}
                 <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-6">
                     ⚠️ <strong>Note:</strong> This is an AI-powered assistant.
                     While it’s helpful for most queries, it may occasionally
@@ -75,26 +91,76 @@ const CallContent = ({ apiKey, assistantId }) => {
                 </div>
 
                 {/* Call Interface */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+                <div className="bg-light-bg dark:bg-dark-bg rounded-lg flex justify-center shadow-lg p-6 mb-8">
                     {!isConnected ? (
-                        <div className="text-center">
-                            <button
-                                onClick={startCall}
-                                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-transform hover:scale-105">
-                                🎤 Talk to Support AI
-                            </button>
-                        </div>
+                        <button
+                            onClick={startCall}
+                            style={{
+                                background: "#12A594",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "50px",
+                                padding: "16px 24px",
+                                fontSize: "16px",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                boxShadow: "0 4px 12px rgba(18, 165, 148, 0.3)",
+                                transition: "all 0.3s ease",
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.transform =
+                                    "translateY(-2px)";
+                                e.currentTarget.style.boxShadow =
+                                    "0 6px 16px rgba(18, 165, 148, 0.4)";
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.transform =
+                                    "translateY(0)";
+                                e.currentTarget.style.boxShadow =
+                                    "0 4px 12px rgba(18, 165, 148, 0.3)";
+                            }}>
+                            🎤 Talk to Assistant
+                        </button>
                     ) : (
-                        <div>
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-2">
+                        <div
+                            style={{
+                                background: "#fff",
+                                borderRadius: "12px",
+                                padding: "20px",
+                                width: "320px",
+                                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
+                                border: "1px solid #e1e5e9",
+                            }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    marginBottom: "16px",
+                                }}>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                    }}>
                                     <div
-                                        className={`w-3 h-3 rounded-full ${
-                                            isSpeaking
-                                                ? "bg-red-500 animate-pulse"
-                                                : "bg-green-500"
-                                        }`}></div>
-                                    <span className="font-semibold">
+                                        style={{
+                                            width: "12px",
+                                            height: "12px",
+                                            borderRadius: "50%",
+                                            background: isSpeaking
+                                                ? "#ff4444"
+                                                : "#12A594",
+                                            animation: isSpeaking
+                                                ? "pulse 1s infinite"
+                                                : "none",
+                                        }}></div>
+                                    <span
+                                        style={{
+                                            fontWeight: "bold",
+                                            color: "#333",
+                                        }}>
                                         {isSpeaking
                                             ? "Assistant Speaking..."
                                             : "Listening..."}
@@ -102,31 +168,62 @@ const CallContent = ({ apiKey, assistantId }) => {
                                 </div>
                                 <button
                                     onClick={endCall}
-                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold">
+                                    style={{
+                                        background: "#ff4444",
+                                        color: "#fff",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        padding: "6px 12px",
+                                        fontSize: "12px",
+                                        cursor: "pointer",
+                                    }}>
                                     End Call
                                 </button>
                             </div>
 
-                            <div className="max-h-60 overflow-y-auto bg-gray-100 dark:bg-gray-700 rounded-md p-4">
+                            <div
+                                ref={scrollRef}
+                                style={{
+                                    maxHeight: "200px",
+                                    overflowY: "auto",
+                                    marginBottom: "12px",
+                                    padding: "8px",
+                                    background: "#f8f9fa",
+                                    borderRadius: "8px",
+                                }}>
                                 {transcript.length === 0 ? (
-                                    <p className="text-gray-500 text-sm">
+                                    <p
+                                        style={{
+                                            color: "#666",
+                                            fontSize: "14px",
+                                            margin: 0,
+                                        }}>
                                         Conversation will appear here...
                                     </p>
                                 ) : (
                                     transcript.map((msg, i) => (
                                         <div
                                             key={i}
-                                            className={`mb-2 ${
-                                                msg.role === "user"
-                                                    ? "text-right"
-                                                    : "text-left"
-                                            }`}>
-                                            <span
-                                                className={`inline-block px-3 py-2 rounded-lg text-sm text-white ${
+                                            style={{
+                                                marginBottom: "8px",
+                                                textAlign:
                                                     msg.role === "user"
-                                                        ? "bg-green-600"
-                                                        : "bg-gray-800"
-                                                }`}>
+                                                        ? "right"
+                                                        : "left",
+                                            }}>
+                                            <span
+                                                style={{
+                                                    background:
+                                                        msg.role === "user"
+                                                            ? "#12A594"
+                                                            : "#333",
+                                                    color: "#fff",
+                                                    padding: "8px 12px",
+                                                    borderRadius: "12px",
+                                                    display: "inline-block",
+                                                    fontSize: "14px",
+                                                    maxWidth: "80%",
+                                                }}>
                                                 {msg.text}
                                             </span>
                                         </div>
@@ -138,7 +235,7 @@ const CallContent = ({ apiKey, assistantId }) => {
                 </div>
 
                 {/* Other Contact Details */}
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div className="bg-light-bg dark:bg-dark-bg rounded-lg shadow-md p-6">
                     <h2 className="text-xl font-bold mb-4">
                         Other Ways to Contact Us
                     </h2>
