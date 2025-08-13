@@ -234,7 +234,7 @@ const Call = ({ apiKey, assistantId, tabs }) => {
             <Sidebar tabs={tabs} getActiveTab={getActiveTab} />
 
             <div className="h-screen w-full bg-light-bg dark:bg-dark-surface md:py-10 py-6 md:px-8 px-2">
-                <CallContent apiKey={""} assistantId={""} />
+                <CallContent apiKey={"8dde8525-ed25-48c4-93bb-e84ab4183572"} assistantId={"f5bc50a9-14f9-4cbb-94b6-81fd59c45722"} />
             </div>
         </div>
     );
